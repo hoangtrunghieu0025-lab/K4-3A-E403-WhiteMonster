@@ -1,92 +1,92 @@
-# AI SPEC — Bản tin cuối ngày cho TA · Nhóm WhiteMonster · Zone E403
+# AI SPEC — Agent QA kịch bản video tiếng Việt · Nhóm WhiteMonster · Zone E403
 
-Hướng: [ ] A — VLearn  [x] B — Trợ lý Học viên  [ ] C — Làn mở
-Loại: [x] Tối ưu tính năng có sẵn  [ ] Tính năng mới
+Hướng: [ ] A — VLearn  [ ] B — Trợ lý Học viên  [x] C — Lesson Studio (đề C2)
+Loại: [ ] Tối ưu tính năng có sẵn  [x] Tính năng mới
 
 *(Draft từ Canvas CP1 — chưa đầy đủ, hoàn thiện dần đến hạn chốt spec 21:00 17/9 tại CP4. Phần còn thiếu đánh dấu `⟵`.)*
 
 - **Đội trưởng:** Hoàng Trung Hiếu — MSSV 2A202602945 (mã học viên nộp cả 5 mốc phải là người này)
 - **Phòng / cụm:** E403 / cụm C1
 - **Thành viên:** Nguyễn Thọ Đạt (2A202602484) · Đinh Trường An (2A202602393) · Phan Đức Duy (2A202602397)
-- **Track/đề:** B2 — Trợ lý Discord, tính năng mới cho TA (cải tiến trên nền bản tin "Học viên đang hỏi gì" đang chạy thật)
+- **Track/đề:** C2 — Vietnamese Spoken-Script QA (agent review kịch bản video trước khi thu âm/dựng hình)
 
 ## §1. User & Job
 
-- **Job executor + workflow:** TA/Mod trực các kênh Discord public của khoá — người cuối mỗi ngày cần biết câu nào học viên hỏi mà **chưa ai trả lời**, để chủ động vào trả lời trước khi ảnh hưởng đến deadline/tiến độ của học viên. *(Không phải "học viên nói chung": job ở đây là của người trực, không phải của người hỏi.)*
-- **Core JTBD:** Rà lại các kênh cuối ngày để tìm và trả lời những câu hỏi còn bị bỏ sót.
-- **Problem statement (không chữ AI):** TA/Mod cuối ngày — đang rà lại hàng trăm tin rải trên nhiều kênh song song để tìm câu học viên hỏi mà chưa ai trả lời — không có cách lọc nhanh nên dễ bỏ sót — học viên phải tự hỏi lại hoặc chờ lâu, mất niềm tin vào kênh hỗ trợ ngay tuần onboarding.
-- **Evidence (chuẩn B — mining; chuẩn A sẽ bổ sung bằng khảo sát trước hạn chốt spec):**
-  - **Số liệu mining:** trên `k4_messages.csv` (779 tin của học viên, 12–14/9/2026, 2 server). Phương pháp: lọc `content` chứa dấu `"?"` → **107 câu hỏi** (n = 107); đối chiếu `msg_id` của từng câu hỏi với toàn bộ giá trị cột `reply_to` trong file → **23/107 (21,5%)** không có bất kỳ tin nào trong pack trỏ `reply_to` về nó trong suốt 3 ngày. Cách đếm lại: `eval/mining_unanswered_questions.py <path/to/k4_messages.csv>` (không commit data pack kèm repo theo đúng quy định bảo mật).
-  - **≥5 quote/ví dụ nguyên văn** (đã ẩn danh theo pack, trích ≤2 câu/ví dụ, dẫn `msg_id` thay vì chép dài):
-    1. `M88027` — *"cho em hỏi Lab2 có được extend thời gian submit thêm không v ạ? Em lỡ nộp muộn 1 phút không submit bài được ạ"* — không có phản hồi trong pack; liên quan trực tiếp deadline.
-    2. `M99769` — *"cho mình hỏi một team mấy bạn?"* — không có phản hồi.
-    3. `M27566` — *"cho em hỏi khóa mình có cấp giấy chứng nhận sinh viên cho học viên không ạ?"* — không có phản hồi.
-    4. `M83398` — *"đủ chỗ ở đây hiểu như thế nào [HV] nhỉ?"* — không có phản hồi.
-    5. **Câu hỏi lặp vì chưa được trả lời:** cùng một tác giả (`D1253`) hỏi lại **y nguyên nội dung** sau 3 giờ 24 phút vì không thấy ai trả lời — `M30246` (19:51) *"Tại e thấy trong sổ tay phải có xác nhận của giám đốc, nên là k biết e có phải chờ mail phản hồi k ạ???"* → `M48859` (23:15) lặp lại gần như nguyên văn.
-  - **Baseline sản phẩm đang chạy** (`k4_daily_reports.md`, 4/4 bản tin mẫu): mục "Đã có phản hồi, chưa xác nhận đã xử lý" lặp lại nhưng **không kèm link tới tin gốc** để TA bấm vào theo dõi; cả 4/4 bản tin còn dính lỗi chèn chuỗi "nguồn tham chiếu" vào giữa từ (vd. "khi" → "nguồn tham chiếuhi").
-  - ⟵ Khảo sát chuẩn A (≥20 người ngoài nhóm, ≥50% xác nhận, log đầy đủ câu hỏi + từng câu trả lời) — bổ sung trước CP4.
+- **Job executor + workflow:** Biên tập viên/người viết kịch bản của Studio team; giảng viên duyệt kịch bản trước khi kịch bản được chuyển sang thu âm.
+- **Core JTBD:** Đọc lại kịch bản trước khi duyệt để tìm câu nghe sượng/khó đọc thành lời trước khi đưa vào thu âm.
+- **Problem statement (không chữ AI):** Biên tập viên — đang tự đọc thành tiếng từng kịch bản trước khi duyệt để bắt câu "sượng" (dịch cứng, sai sắc thái, quá dài để đọc một hơi, số/viết tắt chưa chuẩn hoá) — không có công cụ chỉ đúng câu và loại lỗi, phải đọc hết cả bài mới phát hiện — dễ bỏ sót, phát hiện muộn thì phải thu lại giọng và dựng lại cảnh, tốn thời gian và tiền hơn nhiều so với sửa ngay ở bước kịch bản.
+- **Evidence — điểm yếu cần nhóm tự bổ sung, chưa đạt chuẩn A/B đầy đủ:**
+  - **Không có** dữ liệu "kịch bản lỗi" thật trong pack để đếm số (khác các track khác) — `data/studio-pack/c2/` (nếu có) hoặc mẫu kịch bản chung chỉ để tham khảo định dạng, chưa có kịch bản gắn nhãn lỗi.
+  - **Có thật, dùng làm mốc so sánh (không phải bằng chứng pain):** 6 transcript bản sạch (`data/vlearn-pack/transcript/`, ~700 đoạn mã `[Txx-NNN]`) là văn nói tự nhiên thật của giảng viên — dùng làm chuẩn "nghe được".
+  - **Minh hoạ khác biệt phong cách** (không phải bằng chứng đếm được): câu trả lời viết của AI tutor (`data/vlearn-pack/chatlog/tutor_turns.csv`) thường liệt kê bullet, câu ghép nhiều mệnh đề — khác cách giảng viên nói tự nhiên trong transcript (câu ngắn, có từ đệm, lặp ý khi giải thích, vd. đoạn `[T01-016]` về "tư duy nhanh/chậm"). Chỉ gợi ý *loại* khác biệt văn viết/văn nói, chưa chứng minh pain của Studio team.
+  - ⟵ **Bằng chứng thật đúng chuẩn track C2** phải đến từ **phỏng vấn ≥3 người** (Mom Test, `02-guide.md` §1.3), trong đó **≥1 người thuộc Studio team/lab coach** vì đó mới là người dùng cuối. Khung câu hỏi + bảng log nguyên văn đã dựng sẵn tại **[`interview-log.md`](interview-log.md)** (P1 Nguyễn Đức Thái, P2 Trần Hồng Sơn đã nhận lời; P3 chờ đầu mối BTC) — **chưa phỏng vấn**, phải hoàn thành và chép số liệu + quote về mục này trước hạn chốt spec CP4.
 
 ## §2. Impact & quyết định chọn
 
 | Ứng viên | Bao nhiêu người gặp | Tần suất | Mỗi lần tốn gì | Khả thi trong sự kiện? |
 |---|---|---|---|---|
-| **A. Bản tin cuối ngày liệt kê câu hỏi chưa trả lời sau 4h kèm link** *(đã chọn)* | 23/107 câu hỏi trong pack 3 ngày không có phản hồi; nhân rộng ra cả khoá ~1.000 học viên × nhiều kênh mỗi ngày | Lặp lại mỗi ngày trong suốt build phase | Học viên chờ/hỏi lại (vd. `D1253` phải hỏi lại sau 3h24'); TA tốn thời gian dò lại lịch sử kênh cuối ca | Có — đã có bản tin baseline chạy thật để cải tiến, chỉ cần thêm bước lọc "chưa trả lời sau N giờ" + link |
-| B. Bot trả lời logistics chỉ từ nguồn thông báo chính thức (B1) | Chỉ 4/107 câu hỏi trong pack liên quan trực tiếp deadline, nhưng mỗi thông báo sai ảnh hưởng nhiều người cùng lúc | Thấp hơn về tần suất câu hỏi nhưng hậu quả nặng khi sai | Học viên nộp trễ mất điểm; TA phải xử lý khiếu nại | Khó hơn — cần nguồn "thông báo chính thức" làm căn cứ, không có sẵn trong data pack |
-| C. Sửa lỗi hiển thị của bản tin hiện tại (chuỗi "nguồn tham chiếu" chèn giữa từ, tóm tắt cắt cụt) | Toàn bộ người đọc 4 bản tin mẫu (TA/Mod, xuất hiện ở 4/4 bản tin) | Xảy ra ở mọi bản tin đã đăng | TA mất thời gian đoán nghĩa, giảm độ tin cậy, có thể bỏ qua không dùng bản tin nữa | Có, nhưng đây là bug hiển thị (không cần quyết định AI) — không đủ để làm lát cắt riêng |
-| D. Chủ động phát hiện học viên "stuck" (nhắn lặp lại nhiều lần chưa được trả lời) để TA hỗ trợ sớm | Bằng chứng hiện có: 1 case rõ (`D1253`) trong 3 ngày — mẫu còn nhỏ để khẳng định quy mô | Không đủ dữ liệu ước lượng tần suất đáng tin | Học viên mất kiên nhẫn, cảm giác bị bỏ rơi | Rủi ro cao: ranh giới "chủ động" và "phiền" (an toàn track B2) chưa rõ, dễ làm quá phạm vi |
+| **A. Agent QA kịch bản trước thu âm, chỉ đúng câu sượng + gợi ý sửa tối thiểu (C2 — đã chọn)** | ⟵ cần phỏng vấn Studio team để có số — ước tính toàn bộ kịch bản video của khoá đều qua tay một nhóm biên tập nhỏ | Mỗi kịch bản trước khi thu (tần suất theo lịch sản xuất video của Studio team — ⟵ xác nhận) | Đọc thành tiếng lại cả kịch bản; phát hiện muộn thì tốn công thu lại giọng + dựng lại cảnh | Trung bình — cần tự viết + gắn nhãn tay ≥10 case kịch bản lỗi làm golden set (pack không có sẵn) |
+| B. Sinh graph tri thức + quiz có trích nguồn từ transcript (C1) | Giảng viên soạn quiz + học viên toàn khoá | Mỗi bài giảng mới | Giảng viên tự soạn tay câu hỏi; học viên học theo lộ trình tuyến tính dù đã hiểu một phần | Khó hơn — cần xây graph tri thức từ đầu, phạm vi rộng hơn nhiều so với 3 buổi build |
+| C. ScriptScout — agent tự tìm tài liệu viết kịch bản có dẫn nguồn (C3) | Người viết kịch bản Studio team | Mỗi video mới cần kịch bản từ đầu | Nhiều ngày tự đọc tài liệu + viết + không ai kiểm được câu nào lấy từ đâu | Khó hơn — agent phải tự tìm & thẩm định nguồn web, rủi ro cao hơn (prompt injection từ trang lạ, hai nguồn mâu thuẫn) |
+| D. FeedbackRadar — gom góp ý người học thành kế hoạch sửa video (C5) | Đội sản xuất + giảng viên, gián tiếp là người học | Sau mỗi đợt học có video mới | Đọc tay từng góp ý rồi tự quyết định sửa gì, hay làm lại gần cả video dù chỉ vài câu có vấn đề | Trung bình — cần tự thu thập ~100 góp ý thật (khảo sát bạn cùng lớp) để làm golden set |
 
-- **Ứng viên ĐÃ LOẠI + vì sao:** B (thiếu nguồn thông báo chính thức để build kịp trong sự kiện) · C (chỉ là bug hiển thị, không đủ chiều sâu cho một quyết định AI) · D (bằng chứng còn mỏng — 1 case, rủi ro "chủ động thành phiền" chưa kiểm soát được) — cả ba giữ lại làm việc mở rộng sau nếu có thêm evidence.
-- **Ứng viên CHỌN + vì sao (bằng số):** A — có 23/107 (21,5%) case đếm được trong 3 ngày (nhiều hơn hẳn B với 4/107), và build nổi trong sự kiện vì đã có sản phẩm baseline (`k4_daily_reports.md`) để cải tiến trực tiếp thay vì làm từ đầu.
+- **Ứng viên ĐÃ LOẠI + vì sao:** B/C1 (phạm vi quá rộng — xây graph tri thức từ đầu không vừa 3 buổi) · C/C3 (rủi ro kỹ thuật cao hơn — agent tự tìm nguồn web, phạm vi an toàn phức tạp hơn) · D/C5 (cần tự thu thập ~100 góp ý thật mới đủ golden set, khối lượng evidence lớn hơn C2) — cả ba giữ lại nếu nhóm đổi hướng sau phỏng vấn Studio team.
+- **Ứng viên CHỌN + vì sao:** C2 — phạm vi hẹp nhất trong 5 đề Track C (chỉ QA một kịch bản, không phải dựng graph/tự tìm nguồn/gom góp ý), và có sẵn dữ liệu tham chiếu thật (transcript bản sạch) để định nghĩa chuẩn "nghe được" ngay cả khi chưa phỏng vấn xong. **Lưu ý:** quyết định này chưa "bằng số" đúng nghĩa vì thiếu evidence — phải phỏng vấn Studio team trước CP4 để xác nhận hoặc đổi hướng.
 
 ## §3. Giải pháp tương tự đã nghiên cứu
 
-⟵ Mỗi thành viên dùng thử 1 sản phẩm gần giống (vd. Discord "forum post" chưa resolve, GitHub issue triage bot, Intercom "unanswered" filter...) và trả lời 4 câu theo `02-guide.md` §2.2 — bổ sung trước CP4.
+⟵ Mỗi thành viên dùng thử 1 sản phẩm gần giống (vd. Grammarly/Vietnamese proofreading tool, TTS preview trong CapCut/Canva, LanguageTool, editor gợi ý văn phong) và trả lời 4 câu theo `02-guide.md` §2.2 — bổ sung trước CP4.
 
 ## §4. Thiết kế
 
-- **Lát cắt MỘT CÂU:** Một TA trực kênh · cuối ngày · AI liệt kê các câu hỏi của học viên chưa có phản hồi sau 4 giờ kèm link tin gốc · TA không bỏ sót câu nào và trả lời đúng người trước khi qua ngày mới.
+- **Lát cắt MỘT CÂU:** Một biên tập viên · duyệt một kịch bản ~40 câu trước khi thu âm · AI chỉ đúng câu/đoạn nghe sượng kèm loại lỗi + lý do + gợi ý sửa tối thiểu · biên tập accept/reject từng chỗ trước khi chuyển giảng viên duyệt.
 - **Non-goals (≥3 thứ KHÔNG build):**
-  1. Không tự động soạn hoặc gửi câu trả lời thay TA.
-  2. Không xử lý tin nhắn riêng (DM) hay kênh private — chỉ kênh public như data pack.
-  3. Không suy đoán danh tính/định danh học viên ngoài mã ẩn danh có sẵn.
-  4. ⟵ (bổ sung nếu cần)
+  1. Không tự động viết lại hoặc xuất bản toàn bộ kịch bản.
+  2. Không dùng nhãn "AI-generated" để kết luận về tác giả (chỉ chỉ ra câu khó đọc, không phán đoán ai viết).
+  3. Không lưu trữ hay dùng kịch bản ngoài phạm vi buổi duyệt hiện tại.
+  4. Không tự thêm claim/số liệu mới không có trong kịch bản gốc.
 - **Mức prototype nhắm tới:** ⟵ [ ] Sketch [ ] Mock [ ] Working — phần nào mock, phần nào thật (chốt khi build ở CP2/CP3).
-- **Automation:** [x] augment [ ] conditional [ ] automate — **lý do theo cost-of-error:** AI chỉ lọc & xếp danh sách câu hỏi chưa có phản hồi kèm link nguồn; TA đọc lại và tự quyết định trả lời, AI không tự soạn/gửi câu trả lời thay. Bỏ sót hoặc gắn nhầm một câu liên quan deadline/điểm số (như `M88027`) thì hậu quả đến thẳng học viên và đắt (trễ hạn, mất điểm, khiếu nại) — nên bước quyết định cuối phải là người.
+- **Automation:** [x] augment [ ] conditional [ ] automate — **lý do theo cost-of-error:** AI chỉ gắn cờ + giải thích + gợi ý sửa tối thiểu, không tự viết lại/xuất bản. Quy trình Studio là thu giọng trước rồi dựng hình khớp độ dài giọng — bỏ sót lỗi hoặc AI tự sửa sai giọng tác giả thì phải thu lại + dựng lại cảnh, đắt hơn nhiều so với việc người duyệt tự quyết định ngay ở bước kịch bản.
 - **§4b. Nguyên tắc đã áp dụng (≥4 — HAX/PAIR):**
 
   | Nguyên tắc | Áp cụ thể vào đâu trong prototype |
   |---|---|
-  | ⟵ | ⟵ (điền khi có prototype để trỏ vị trí cụ thể — xem `02-guide.md` §2.4) |
+  | ⟵ | ⟵ (điền khi có prototype để trỏ vị trí cụ thể — xem `02-guide.md` §2.4; gợi ý G10 thu hẹp phạm vi khi nghi ngờ, G11 giải thích vì sao, G9 sửa dễ dàng cho accept/reject) |
 
 ## §5. Kiểu lỗi — 4 lớp chỗ khó + kịch bản (≥8)
 
-⟵ Cụ thể hoá ①②③④ theo taxonomy trong `01-challenge-brief.md` + ≥8 kịch bản (guide §2.5) — hoàn thiện trước CP4.
+⟵ Cụ thể hoá ①②③④ theo taxonomy trong `01-challenge-brief.md` + ≥8 kịch bản (guide §2.5) — hoàn thiện trước CP4. Gợi ý riêng cho C2 (từ `tracks/track-c-lesson-studio.md`):
+- ① Nguồn sự thật: câu trơn tru không đủ để kết luận là lỗi — cần tránh "máy đo xác suất văn AI" đoán bừa.
+- ② Mơ hồ: ranh giới lỗi nội dung vs lỗi chỉ liên quan cách đọc TTS.
+- ③ Ngoài phạm vi: người dùng yêu cầu AI viết lại cả đoạn thay vì chỉ gợi ý.
+- ④ Đặc thù domain: giữ đúng giọng tác giả, không tạo false positive trên văn bản người viết tốt.
 
 ## §6. Bốn đường đi của trải nghiệm
 
-⟵ Happy path · Low-confidence (②) · Failure/không căn cứ (①) · Correction (user sửa) · Ngoài phạm vi (③) · Case đặc thù domain (④) — hoàn thiện trước CP4.
+⟵ Happy path (chỉ đúng câu sượng, gợi ý hợp lý) · Low-confidence (② — câu mơ hồ giữa "phong cách riêng" và "lỗi") · Failure/không căn cứ (① — không đủ căn cứ kết luận là lỗi) · Correction (biên tập reject gợi ý, agent không lặp lại) · Ngoài phạm vi (③) · Case đặc thù domain (④) — hoàn thiện trước CP4.
 
 ## §7. Kiểm thử
 
-- ⟵ Chiều chất lượng + định nghĩa kiểm chứng được.
-- ⟵ Golden set (≥20 case theo cơ cấu guide §2.6, file trong `eval/`) — bao gồm mở rộng từ các case thật đã tìm ở §1 (`M88027`, `M99769`, `M30246`/`M48859`, ...).
+- ⟵ Chiều chất lượng + định nghĩa kiểm chứng được (vd. precision trên span/category, false-positive trên đoạn văn sạch).
+- ⟵ Golden set (≥20 case theo cơ cấu guide §2.6, file trong `eval/`) — track C2 yêu cầu riêng: **≥10 case tự viết/gắn nhãn tay lỗi kịch bản** + **≥1 đoạn văn sạch để đo false positive** (theo `tracks/track-c-lesson-studio.md`).
 - ⟵ Quality bar: "Đạt khi ≥ ___% qua bộ, và ___" (chốt tại hạn chốt spec 21:00 17/9, giữ nguyên sau đó).
 - ⟵ Kết quả các lượt chạy (bảng % — cập nhật đến trước CP6).
 
 ## §8. Phân công & kế hoạch
 
-- **Phân công có tên** (spec / evidence / prompt / code / demo — ⟵ điền phần việc cụ thể vào bảng ở đầu `README.md`):
+- **Phân công có tên** (spec / evidence / prompt / code / demo):
   | Họ tên | MSSV | Phần việc |
   |---|---|---|
-  | Hoàng Trung Hiếu (đội trưởng) | 2A202602945 | ⟵ |
-  | Nguyễn Thọ Đạt | 2A202602484 | ⟵ |
-  | Đinh Trường An | 2A202602393 | ⟵ |
-  | Phan Đức Duy | 2A202602397 | ⟵ |
-- **Willing users dự kiến (≥2-3 tên, khai chính thức trước CP5):** ⟵ điền tên thật khi khảo sát TA/Mod trong giờ nghỉ (hỏi về lần gần nhất họ bị bỏ sót câu hỏi, không hỏi "bạn có muốn tính năng X không" — theo `02-guide.md` §1.3).
+  | Hoàng Trung Hiếu (đội trưởng) | 2A202602945 | **Spec + điều phối** — §1 problem statement, §2 bảng impact, §4 lát cắt & non-goals; nộp form cả 5 mốc; dựng slide; mở đầu thuyết trình CP6 |
+  | Nguyễn Thọ Đạt | 2A202602484 | **Evidence** — phỏng vấn theo Mom Test, log nguyên văn trong `interview-log.md`; tổng hợp số liệu + quote vào §1; §3 nghiên cứu giải pháp tương tự; validation CP5 |
+  | Đinh Trường An | 2A202602393 | **Prompt + eval** — prompt cho agent QA; golden set trong `eval/` (≥10 case lỗi gắn nhãn + ≥1 đoạn sạch); chạy eval, bảng kết quả §7; chốt quality bar trước CP4 |
+  | Phan Đức Duy | 2A202602397 | **Prototype + demo** — `codebase/` (flow duyệt, accept/reject từng finding), lời gọi AI thật + log/trace; video CP3 và video dự phòng CP5 |
+- **Willing users dự kiến (≥2-3 tên, khai chính thức trước CP5):** Nguyễn Đức Thái (2A202602648) · Trần Hồng Sơn (2A20262475) — hai người đã đồng ý cho phỏng vấn và thử prototype; ⟵ cần thêm ≥1 đầu mối Studio team/lab coach do BTC giới thiệu (người dùng cuối thật của C2).
 - Multi-prototype: không áp dụng.
 
 ## §9. Changelog
 
 | Thời điểm | Đổi gì | Vì sao (trỏ về feedback/case nào) |
 |---|---|---|
-| CP1 | Chốt hướng B2 + lát cắt + evidence mining ban đầu | Canvas CP1 |
+| CP1 | Chốt hướng B2 (Trợ lý Discord) + lát cắt + evidence mining ban đầu | Canvas CP1 |
+| CP1 (cập nhật) | Đổi sang hướng C2 (Vietnamese Spoken-Script QA) | Nhóm muốn thử hướng Lesson Studio; đánh đổi: mất evidence đếm-được sẵn có của B2, đổi lấy phạm vi kỹ thuật hẹp hơn trong Track C. Cần phỏng vấn Studio team trước CP4 để xác nhận hoặc quay lại B2 |

@@ -4,14 +4,14 @@
 
 ## 👥 Thành viên nhóm & Phân công vai trò
 
-**Lớp:** 3A · **Phòng:** E403 · **Cụm:** C1 · **Track:** B — Trợ lý Discord (đề B2)
+**Lớp:** 3A · **Phòng:** E403 · **Cụm:** C1 · **Track:** C — Lesson Studio (đề C2)
 
 | Họ và Tên | Mã Học Viên | Vai trò chính | Phần việc đảm nhiệm trong dự án |
 |---|---|---|---|
-| Hoàng Trung Hiếu (đội trưởng) | 2A202602945 | ⟵ | ⟵ |
-| Nguyễn Thọ Đạt | 2A202602484 | ⟵ | ⟵ |
-| Đinh Trường An | 2A202602393 | ⟵ | ⟵ |
-| Phan Đức Duy | 2A202602397 | ⟵ | ⟵ |
+| Hoàng Trung Hiếu (đội trưởng) | 2A202602945 | Product owner · chủ spec | Chủ `spec.md` (§1 problem statement, §2 bảng impact, §4 lát cắt & non-goals); nộp form cả 5 mốc; dựng `demo-slides.pdf`; mở đầu phần thuyết trình CP6 |
+| Nguyễn Thọ Đạt | 2A202602484 | Research · evidence | Phỏng vấn Studio team/lab coach theo Mom Test, giữ log nguyên văn trong `interview-log.md`; tổng hợp số liệu + quote vào `spec.md` §1; §3 nghiên cứu giải pháp tương tự; chạy vòng validation `validation/` ở CP5 |
+| Đinh Trường An | 2A202602393 | Prompt · eval | Thiết kế prompt cho agent QA kịch bản; xây golden set trong `eval/` (≥10 case kịch bản lỗi gắn nhãn tay + ≥1 đoạn sạch đo false positive); chạy eval, lập bảng kết quả `spec.md` §7; chốt quality bar trước CP4 |
+| Phan Đức Duy | 2A202602397 | Prototype · demo | Dựng prototype trong `codebase/` (flow duyệt kịch bản, accept/reject từng finding); nối lời gọi AI thật + lưu log/trace; quay video thao tác CP3 và video demo dự phòng CP5 |
 
 > Nhóm copy nguyên file README này về repo của mình, rồi điền bảng trên. Cột **Phần việc đảm nhiệm** ghi càng cụ thể càng tốt.
 
