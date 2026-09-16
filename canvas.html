@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>Canvas CP1 — WhiteMonster</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    background: #f4f5f7;
+    color: #1a1a1f;
+    padding: 44px 48px 52px;
+    width: 1600px;
+  }
+  .badge {
+    display: inline-flex; align-items: center; gap: 9px;
+    background: #ebedf1; border-radius: 999px;
+    padding: 9px 18px; margin-bottom: 20px;
+    font-size: 13px; font-weight: 700; letter-spacing: .13em;
+    text-transform: uppercase; color: #4a4a55;
+  }
+  .badge::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: #f97316; }
+  h1 { font-size: 46px; font-weight: 800; letter-spacing: -.01em; text-transform: uppercase; }
+  .sub { margin-top: 10px; font-size: 19px; color: #5c5c68; }
+  .meta {
+    margin-top: 16px; font-size: 15px; color: #40404c; line-height: 1.75;
+    border-left: 3px solid #d3d6dc; padding-left: 16px;
+  }
+  .meta b { color: #1a1a1f; }
+  .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 26px; margin-top: 30px; }
+  .card {
+    background: #fff; border-radius: 14px; overflow: hidden;
+    box-shadow: 0 1px 3px rgba(20,20,40,.08), 0 8px 24px rgba(20,20,40,.05);
+    display: flex; flex-direction: column;
+  }
+  .bar { height: 7px; }
+  .c1 .bar { background: #10a37f; } .c2 .bar { background: #4a5cf0; }
+  .c3 .bar { background: #7c3aed; } .c4 .bar { background: #f59e0b; }
+  .body { padding: 26px 28px 28px; }
+  .label {
+    font-size: 12px; font-weight: 700; letter-spacing: .14em;
+    text-transform: uppercase; color: #8a8a96; margin-bottom: 12px;
+  }
+  h2 { font-size: 23px; font-weight: 700; line-height: 1.3; margin-bottom: 14px; }
+  p { font-size: 14.5px; line-height: 1.62; color: #3d3d49; margin-bottom: 11px; }
+  p b { color: #14141a; }
+  .note {
+    border-radius: 9px; padding: 13px 16px; margin: 12px 0 4px;
+    font-size: 14px; line-height: 1.58; color: #33333f;
+  }
+  .c1 .note { background: #e9f7f2; } .c2 .note { background: #edeefe; }
+  .c3 .note { background: #f2ecfd; } .c4 .note { background: #fef4e4; }
+  table { border-collapse: collapse; width: 100%; margin: 6px 0 12px; font-size: 13.5px; }
+  th, td { text-align: left; padding: 7px 9px; border-bottom: 1px solid #e8e9ee; }
+  th { color: #6c6c7a; font-weight: 600; font-size: 12.5px; text-transform: uppercase; letter-spacing: .05em; }
+  td b { color: #14141a; }
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+  .tag {
+    background: #f1ecfe; color: #6d28d9; border-radius: 6px;
+    padding: 5px 11px; font-size: 12px; font-weight: 700; letter-spacing: .06em;
+  }
+  ol, ul { margin: 2px 0 8px 19px; }
+  li { font-size: 14.5px; line-height: 1.58; color: #3d3d49; margin-bottom: 5px; }
+  code { font-family: Consolas, monospace; font-size: 13px; background: #f0f1f4; padding: 1px 5px; border-radius: 4px; }
+  .people { font-size: 14px; line-height: 1.72; color: #3d3d49; }
+  .people b { color: #14141a; }
+</style>
+</head>
+<body>
+
+<div class="badge">Mini Hackathon AI · Checkpoint 1</div>
+<h1>Canvas 4 ô · Nhóm WhiteMonster</h1>
+<div class="sub">Track C — Lesson Studio · Đề C2: Agent QA kịch bản video tiếng Việt</div>
+<div class="meta">
+  <b>Lớp</b> 3A · <b>Phòng</b> E403 · <b>Cụm</b> C1 · <b>Đội trưởng</b> Hoàng Trung Hiếu — 2A202602945<br>
+  <b>Repo</b> github.com/hoangtrunghieu0025-lab/K4-3A-E403-WhiteMonster
+</div>
+
+<div class="grid">
+
+  <div class="card c1">
+    <div class="bar"></div>
+    <div class="body">
+      <div class="label">01 · Người dùng &amp; nỗi đau</div>
+      <h2>Biên tập viên cần kịch bản đọc lên nghe trôi, trước khi thu giọng</h2>
+      <p><b>Job:</b> Biên tập viên / người viết kịch bản của Studio team (và giảng viên duyệt) đang rà lại kịch bản video trước khi chuyển sang thu âm.</p>
+      <p><b>Pain:</b> Kịch bản đúng ngữ pháp nhưng đọc lên bị sượng — câu dịch cứng, sai sắc thái, đứt hơi giữa chừng, số và từ viết tắt chưa chuẩn hoá. Phải đọc thành tiếng cả bài mới phát hiện, và vẫn dễ bỏ sót.</p>
+      <div class="note"><b>Hậu quả:</b> quy trình là thu giọng trước rồi dựng hình khớp theo độ dài giọng — một câu lọt xuống khâu sau kéo theo phải thu lại giọng câu đó và dựng lại cảnh đó. Nhờ công cụ viết lại cả bài thì mất giọng văn gốc của tác giả.</div>
+    </div>
+  </div>
+
+  <div class="card c2">
+    <div class="bar"></div>
+    <div class="body">
+      <div class="label">02 · Bằng chứng ban đầu</div>
+      <h2>Mining transcript: số liệu bác bỏ giả thuyết ban đầu của nhóm</h2>
+      <table>
+        <tr><th>Nguồn</th><th>Số câu</th><th>Trung vị</th><th>p90</th><th>p95</th></tr>
+        <tr><td><b>Văn nói</b> — 6 transcript giảng viên</td><td>3.665</td><td>24 từ</td><td>50</td><td>59</td></tr>
+        <tr><td><b>Văn viết</b> — tutor reply K4</td><td>22.191</td><td>27 từ</td><td>46</td><td>—</td></tr>
+      </table>
+      <p><b>699/3.665 câu (19,1%)</b> của giảng viên dài hơn 40 từ mà vẫn là lời giảng nghe được. Văn viết chỉ 2,3% vượt ngưỡng p95 của văn nói — <b>văn viết không hề dài hơn văn nói</b>.</p>
+      <p><b>6 ví dụ nguyên văn</b> (câu dài nhưng tự nhiên): <code>[T01-001]</code> 72 từ · <code>[T01-005]</code> 66 · <code>[T01-012]</code> 91 · <code>[T01-016]</code> 72 · <code>[T01-018]</code> 74 · <code>[T01-020]</code> 72.<br>
+      <b>Phương pháp đếm:</b> <code>eval/mine_sentence_length.py</code> — chạy lại ra đúng số.</p>
+      <div class="note"><b>Kết luận:</b> "câu dài = câu sượng" là SAI. Ngưỡng 40 từ sẽ gắn cờ oan 19,1% lời giảng thật — đúng bài toán false positive của đề C2. Agent phải phân loại + giải thích theo ngữ cảnh, không dùng luật độ dài.<br>
+      <b>Đang làm:</b> phỏng vấn Mom Test ≥3 người (≥1 Studio team/lab coach), khung log sẵn trong <code>interview-log.md</code> — xong trước CP4.</div>
+    </div>
+  </div>
+
+  <div class="card c3">
+    <div class="bar"></div>
+    <div class="body">
+      <div class="label">03 · Lát cắt &amp; automation</div>
+      <h2>Chỉ đúng span sượng, người chốt quyền duyệt</h2>
+      <div class="tags"><span class="tag">HIGHLIGHT_SPAN</span><span class="tag">CLASSIFY + EXPLAIN</span><span class="tag">HUMAN ACCEPT/REJECT</span></div>
+      <p><b>Lát cắt:</b> Một biên tập viên · duyệt một kịch bản ~40 câu trước khi thu âm · AI chỉ đúng câu/đoạn nghe sượng kèm loại lỗi + lý do + gợi ý sửa tối thiểu · biên tập có bản kịch bản đã sạch câu sượng trước khi chuyển thu âm, không phải đọc dò lại cả bài.</p>
+      <div class="note"><b>Augment:</b> AI gắn cờ, phân loại, giải thích, gợi ý sửa tối thiểu — người quyết từng chỗ. <i>Cost-of-error:</i> bỏ sót lỗi hoặc AI tự sửa mất giọng tác giả thì phải thu lại giọng + dựng lại cảnh (đắt); gợi ý sai thì rẻ, bấm Reject là xong.</div>
+      <p style="margin-top:12px"><b>Non-goals:</b></p>
+      <ol>
+        <li>Không tự viết lại hoặc xuất bản toàn bài.</li>
+        <li>Không dùng nhãn "AI-generated" để kết luận về tác giả.</li>
+        <li>Không thêm claim/số liệu mới không có trong kịch bản gốc.</li>
+        <li>Không dùng luật độ dài câu đơn thuần để kết luận lỗi.</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="card c4">
+    <div class="bar"></div>
+    <div class="body">
+      <div class="label">04 · Người thử &amp; phân công</div>
+      <h2>Có người thử đã nhận lời, mỗi phần có người chịu trách nhiệm</h2>
+      <p><b>Willing users:</b> Nguyễn Đức Thái (2A202602648) · Trần Hồng Sơn (2A20262475) — đã đồng ý cho phỏng vấn và thử prototype trước demo. Đang xin BTC đầu mối thêm ≥1 người Studio team / lab coach (người dùng cuối thật).</p>
+      <div class="note people">
+        <b>Hoàng Trung Hiếu</b> — 2A202602945 · <i>Đội trưởng, chủ spec:</i> spec §1/§2/§4, nộp form cả 5 mốc, slide, mở đầu thuyết trình.<br>
+        <b>Nguyễn Thọ Đạt</b> — 2A202602484 · <i>Research &amp; evidence:</i> phỏng vấn Mom Test, log nguyên văn, §3, validation CP5.<br>
+        <b>Đinh Trường An</b> — 2A202602393 · <i>Prompt &amp; eval:</i> prompt agent QA, golden set ≥10 case + đoạn sạch đo false positive, bảng kết quả §7, quality bar.<br>
+        <b>Phan Đức Duy</b> — 2A202602397 · <i>Prototype &amp; demo:</i> codebase, lời gọi AI thật + log/trace, video CP3 và video dự phòng CP5.
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
