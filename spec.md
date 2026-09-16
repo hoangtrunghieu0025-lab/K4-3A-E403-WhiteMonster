@@ -15,11 +15,32 @@ Loại: [ ] Tối ưu tính năng có sẵn  [x] Tính năng mới
 - **Job executor + workflow:** Biên tập viên/người viết kịch bản của Studio team; giảng viên duyệt kịch bản trước khi kịch bản được chuyển sang thu âm.
 - **Core JTBD:** Đọc lại kịch bản trước khi duyệt để tìm câu nghe sượng/khó đọc thành lời trước khi đưa vào thu âm.
 - **Problem statement (không chữ AI):** Biên tập viên — đang tự đọc thành tiếng từng kịch bản trước khi duyệt để bắt câu "sượng" (dịch cứng, sai sắc thái, quá dài để đọc một hơi, số/viết tắt chưa chuẩn hoá) — không có công cụ chỉ đúng câu và loại lỗi, phải đọc hết cả bài mới phát hiện — dễ bỏ sót, phát hiện muộn thì phải thu lại giọng và dựng lại cảnh, tốn thời gian và tiền hơn nhiều so với sửa ngay ở bước kịch bản.
-- **Evidence — điểm yếu cần nhóm tự bổ sung, chưa đạt chuẩn A/B đầy đủ:**
-  - **Không có** dữ liệu "kịch bản lỗi" thật trong pack để đếm số (khác các track khác) — `data/studio-pack/c2/` (nếu có) hoặc mẫu kịch bản chung chỉ để tham khảo định dạng, chưa có kịch bản gắn nhãn lỗi.
-  - **Có thật, dùng làm mốc so sánh (không phải bằng chứng pain):** 6 transcript bản sạch (`data/vlearn-pack/transcript/`, ~700 đoạn mã `[Txx-NNN]`) là văn nói tự nhiên thật của giảng viên — dùng làm chuẩn "nghe được".
-  - **Minh hoạ khác biệt phong cách** (không phải bằng chứng đếm được): câu trả lời viết của AI tutor (`data/vlearn-pack/chatlog/tutor_turns.csv`) thường liệt kê bullet, câu ghép nhiều mệnh đề — khác cách giảng viên nói tự nhiên trong transcript (câu ngắn, có từ đệm, lặp ý khi giải thích, vd. đoạn `[T01-016]` về "tư duy nhanh/chậm"). Chỉ gợi ý *loại* khác biệt văn viết/văn nói, chưa chứng minh pain của Studio team.
-  - ⟵ **Bằng chứng thật đúng chuẩn track C2** phải đến từ **phỏng vấn ≥3 người** (Mom Test, `02-guide.md` §1.3), trong đó **≥1 người thuộc Studio team/lab coach** vì đó mới là người dùng cuối. Khung câu hỏi + bảng log nguyên văn đã dựng sẵn tại **[`interview-log.md`](interview-log.md)** (P1 Nguyễn Đức Thái, P2 Trần Hồng Sơn đã nhận lời; P3 chờ đầu mối BTC) — **chưa phỏng vấn**, phải hoàn thành và chép số liệu + quote về mục này trước hạn chốt spec CP4.
+- **Evidence — chuẩn B (mining `data/vlearn-pack/`, được track C cho phép thay cho khảo sát 20 người):**
+
+  **Số đếm được.** Đo phân bố độ dài câu trên 6 transcript bản sạch (văn nói thật của giảng viên, đã trình bày trơn tru trước lớp) và đối chiếu với văn viết cùng domain (câu trả lời AI tutor, khoá K4):
+
+  | Nguồn | Số câu | Trung vị | p90 | p95 | Dài nhất |
+  |---|---|---|---|---|---|
+  | Văn nói — 6 transcript giảng viên | 3.665 | 24 từ | 50 | 59 | 137 |
+  | Văn viết — tutor reply K4 (3.097 lượt) | 22.191 | 27 từ | 46 | — | — |
+
+  - **699/3.665 = 19,1% câu của giảng viên dài hơn 40 từ** — mà đây là văn nói tự nhiên, người nghe hiểu được bình thường.
+  - 167 câu dài 60–95 từ vẫn là lời giảng trôi chảy.
+  - Văn viết của tutor chỉ có 2,3% câu vượt ngưỡng p95 (59 từ) của văn nói — tức **văn viết không hề dài hơn văn nói**.
+
+  **Phương pháp đếm (kiểm lại được):** `eval/mine_sentence_length.py "<path>/data/vlearn-pack"` — lấy mọi đoạn mã `[Txx-NNN]` (bỏ đoạn `[Hoạt động lớp]`), gỡ markdown ở phía tutor, tách câu theo `. ! ? …`, bỏ mẩu dưới 3 từ, đếm từ theo khoảng trắng. Data pack không commit vào repo theo quy định bảo mật.
+
+  **≥5 ví dụ nguyên văn** (trích ngắn, dẫn mã đoạn theo đúng luật dùng vlearn-pack) — câu rất dài nhưng **vẫn nghe được**, tức là luật độ dài sẽ gắn cờ oan:
+  1. `[T01-001]` — 72 từ — *"Một trong những kỹ năng mình nghĩ quan trọng và đang cần nhất — đặc biệt ở các công ty muốn đưa AI vào ứng dụng…"*
+  2. `[T01-005]` — 66 từ — *"Mình nghĩ một điểm có thể tạo ra sự khác biệt với tất cả các bạn ở đây…"*
+  3. `[T01-012]` — 91 từ — *"Bản thân mình trong quá trình nói chuyện với nhiều bạn và làm ở nhiều môi trường…"*
+  4. `[T01-016]` — 72 từ — *"Đấy là lý do mà muốn thay đổi về mặt tư duy thì các bạn phải xác nhận…"*
+  5. `[T01-018]` — 74 từ — *"Trong quá trình làm sản phẩm AI, bạn phải vừa có năng lực xây dựng sản phẩm…"*
+  6. `[T01-020]` — 72 từ — *"Và cuối cùng người ta cũng không đủ kiên nhẫn để thử sai với sản phẩm của bạn…"*
+
+  **Kết luận rút ra — và nó bác bỏ giả thuyết ban đầu của nhóm.** Nhóm đi vào với giả định "câu quá dài = câu sượng". Số liệu nói ngược: **độ dài câu một mình không phân biệt được "sượng" với "nói tự nhiên có nhịp"** — đặt ngưỡng 40 từ sẽ gắn cờ oan 19,1% lời giảng thật. Đây đúng là bài toán false-positive mà đề C2 nhấn mạnh (*"một câu trơn tru không đủ để kết luận"*, *"kiểm soát tốt false positive trên văn bản do con người viết"*). Hệ quả thiết kế: agent **không được** dùng luật độ dài đơn thuần, phải phân loại lỗi + giải thích lý do gắn với ngữ cảnh (§4), và **phải đo false positive trên chính transcript này** (§7).
+
+  ⟵ **Bổ sung trước CP4 — phỏng vấn ≥3 người** (Mom Test, `02-guide.md` §1.3), trong đó ≥1 người thuộc Studio team/lab coach vì đó mới là người dùng cuối. Khung câu hỏi + bảng log nguyên văn đã dựng sẵn tại **[`interview-log.md`](interview-log.md)** (P1 Nguyễn Đức Thái, P2 Trần Hồng Sơn đã nhận lời; P3 chờ đầu mối BTC). Mining ở trên chứng minh *lỗi khó phân loại tồn tại*; phỏng vấn để xác nhận *biên tập viên có thật sự đau vì nó*.
 
 ## §2. Impact & quyết định chọn
 
@@ -69,6 +90,7 @@ Loại: [ ] Tối ưu tính năng có sẵn  [x] Tính năng mới
 
 - ⟵ Chiều chất lượng + định nghĩa kiểm chứng được (vd. precision trên span/category, false-positive trên đoạn văn sạch).
 - ⟵ Golden set (≥20 case theo cơ cấu guide §2.6, file trong `eval/`) — track C2 yêu cầu riêng: **≥10 case tự viết/gắn nhãn tay lỗi kịch bản** + **≥1 đoạn văn sạch để đo false positive** (theo `tracks/track-c-lesson-studio.md`).
+- **Case đo false positive lấy từ chính evidence §1:** 6 câu nói dài 60–95 từ nhưng tự nhiên (`[T01-001]`, `[T01-005]`, `[T01-012]`, `[T01-016]`, `[T01-018]`, `[T01-020]`) — agent gắn cờ bất kỳ câu nào trong nhóm này là false positive. Đây là bar cứng, vì mining cho thấy 19,1% lời giảng thật dài hơn 40 từ.
 - ⟵ Quality bar: "Đạt khi ≥ ___% qua bộ, và ___" (chốt tại hạn chốt spec 21:00 17/9, giữ nguyên sau đó).
 - ⟵ Kết quả các lượt chạy (bảng % — cập nhật đến trước CP6).
 
