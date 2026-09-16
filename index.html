@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>WhiteMonster — Spoken-Script QA (C2)</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Segoe UI",system-ui,-apple-system,sans-serif;background:#f4f5f7;color:#1a1a1f;
+       line-height:1.6;padding:44px 20px 60px}
+  .wrap{max-width:860px;margin:0 auto}
+  .eyebrow{display:inline-flex;align-items:center;gap:9px;background:#ebedf1;border-radius:999px;
+           padding:8px 16px;font-size:12.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#4a4a55}
+  .eyebrow::before{content:"";width:8px;height:8px;border-radius:50%;background:#f97316}
+  h1{font-size:38px;font-weight:800;letter-spacing:-.015em;margin:18px 0 10px;text-wrap:balance}
+  .sub{font-size:18px;color:#55555f;margin-bottom:8px}
+  .meta{font-size:14.5px;color:#55555f;border-left:3px solid #d3d6dc;padding-left:15px;margin:20px 0 34px}
+  .meta b{color:#1a1a1f}
+  h2{font-size:14px;font-weight:700;letter-spacing:.11em;text-transform:uppercase;color:#82828e;margin:34px 0 14px}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:16px}
+  a.card{display:block;background:#fff;border-radius:12px;padding:20px;text-decoration:none;color:inherit;
+         box-shadow:0 1px 3px rgba(20,20,40,.07);border-top:5px solid;transition:.14s}
+  a.card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(20,20,40,.1)}
+  a.card:focus-visible{outline:2px solid #4a5cf0;outline-offset:3px}
+  .c-mock{border-color:#7c3aed}.c-canvas{border-color:#10a37f}
+  .c-spec{border-color:#4a5cf0}.c-log{border-color:#f59e0b}
+  .card h3{font-size:17px;font-weight:700;margin-bottom:6px}
+  .card p{font-size:14px;color:#55555f}
+  .tag{display:inline-block;font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;
+       background:#fff4e5;color:#b45309;border:1px solid #fcd9a4;border-radius:5px;padding:2px 8px;margin-bottom:9px}
+  .note{background:#fff;border-radius:12px;padding:20px;margin-top:16px;font-size:14.5px;
+        box-shadow:0 1px 3px rgba(20,20,40,.07)}
+  .note b{color:#14141a}
+  code{font-family:Consolas,monospace;font-size:13px;background:#f0f1f4;padding:1px 5px;border-radius:4px}
+  footer{margin-top:40px;font-size:13px;color:#82828e}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="eyebrow">Mini Hackathon AI · Lớp 3A · Phòng E403</span>
+  <h1>Spoken-Script QA</h1>
+  <p class="sub">Agent review kịch bản video tiếng Việt trước khi thu âm — Track C, đề C2.</p>
+  <p class="meta">
+    <b>Nhóm</b> WhiteMonster · <b>Cụm</b> C1 · <b>Đội trưởng</b> Hoàng Trung Hiếu (2A202602945)<br>
+    <b>Thành viên</b> Nguyễn Thọ Đạt · Đinh Trường An · Phan Đức Duy
+  </p>
+
+  <h2>Lát cắt</h2>
+  <div class="note">
+    Một biên tập viên · duyệt một kịch bản ~40 câu trước khi thu âm · AI chỉ đúng câu/đoạn nghe sượng
+    kèm loại lỗi + lý do + gợi ý sửa tối thiểu · biên tập có bản kịch bản đã sạch câu sượng trước khi
+    chuyển thu âm, không phải đọc dò lại cả bài.
+  </div>
+
+  <h2>Xem gì</h2>
+  <div class="cards">
+    <a class="card c-mock" href="codebase/mockup.html">
+      <span class="tag">Mock · CP2</span>
+      <h3>Prototype bấm được</h3>
+      <p>Duyệt kịch bản: xem lý do từng finding, Áp dụng / Sửa tay / Bỏ qua, xuất bản kèm audit trail.</p>
+    </a>
+    <a class="card c-canvas" href="canvas.html">
+      <h3>Canvas 4 ô</h3>
+      <p>Người dùng &amp; nỗi đau · bằng chứng · lát cắt &amp; automation · người thử &amp; phân công.</p>
+    </a>
+    <a class="card c-spec" href="https://github.com/hoangtrunghieu0025-lab/K4-3A-E403-WhiteMonster/blob/main/spec.md">
+      <h3>AI Spec</h3>
+      <p>Bằng chứng mining, bảng impact, thiết kế, kiểm thử — chốt tại CP4.</p>
+    </a>
+    <a class="card c-log" href="https://github.com/hoangtrunghieu0025-lab/K4-3A-E403-WhiteMonster/blob/main/interview-log.md">
+      <h3>Log phỏng vấn</h3>
+      <p>Bộ 7 câu hỏi Mom Test và bảng ghi nguyên văn — đang thu thập.</p>
+    </a>
+  </div>
+
+  <h2>Bằng chứng đang dẫn hướng thiết kế</h2>
+  <div class="note">
+    Đo 3.665 câu văn nói của giảng viên trong 6 transcript: <b>699 câu (19,1%) dài hơn 40 từ</b> mà vẫn
+    nghe được bình thường. Nên luật "câu dài = câu sượng" bị bác bỏ — agent phải phân loại lỗi và giải
+    thích lý do theo ngữ cảnh, không dùng ngưỡng độ dài. Chạy lại số này bằng
+    <code>eval/mine_sentence_length.py</code>.
+  </div>
+
+  <footer>Mức prototype hiện tại: <b>Mock</b> — findings là dữ liệu tĩnh, chưa gọi AI thật. CP3 sẽ nối AI thật vào đúng quyết định trung tâm.</footer>
+</div>
+</body>
+</html>
