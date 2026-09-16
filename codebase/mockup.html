@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spoken-Script QA — Mock CP2 · WhiteMonster</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:"Segoe UI",system-ui,-apple-system,sans-serif;background:#f4f5f7;color:#1a1a1f;font-size:15px}
+  header{background:#fff;border-bottom:1px solid #e4e6ec;padding:14px 26px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;position:sticky;top:0;z-index:20}
+  .logo{font-weight:800;font-size:17px;letter-spacing:-.01em}
+  .mockbadge{background:#fff4e5;color:#b45309;border:1px solid #fcd9a4;border-radius:999px;padding:5px 12px;font-size:12px;font-weight:700;letter-spacing:.04em}
+  .spacer{flex:1}
+  .progress{font-size:13.5px;color:#55555f}
+  .progress b{color:#14141a}
+  button{font-family:inherit;font-size:13.5px;border-radius:7px;border:1px solid transparent;padding:8px 14px;cursor:pointer;font-weight:600}
+  .primary{background:#4a5cf0;color:#fff}
+  .primary:hover{background:#3b4ad6}
+  .ghost{background:#fff;border-color:#d8dae2;color:#33333d}
+  .ghost:hover{background:#f3f4f7}
+  main{display:grid;grid-template-columns:1fr 430px;gap:20px;padding:20px 26px 40px;align-items:start}
+  .pane{background:#fff;border-radius:12px;box-shadow:0 1px 3px rgba(20,20,40,.07)}
+  .pane-head{padding:16px 20px;border-bottom:1px solid #eceef3;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .pane-head h2{font-size:15px;font-weight:700}
+  .pane-head .hint{font-size:12.5px;color:#82828e}
+  .script{padding:8px 20px 24px}
+  .sent{display:flex;gap:12px;padding:9px 6px;border-radius:7px;line-height:1.7}
+  .sent:hover{background:#fafbfd}
+  .num{color:#b4b4bf;font-size:12.5px;min-width:24px;text-align:right;padding-top:3px;font-variant-numeric:tabular-nums}
+  mark{border-radius:4px;padding:1px 3px;cursor:pointer;border-bottom:2px solid}
+  mark.sev-cao{background:#fdeaea;border-color:#e5484d}
+  mark.sev-vua{background:#fef3d8;border-color:#f0a020}
+  mark.sev-thap{background:#e9f2fe;border-color:#5b8def}
+  mark.active{outline:2px solid #4a5cf0;outline-offset:1px}
+  mark.done{background:#e6f6ee;border-color:#12a150;cursor:default}
+  mark.dropped{background:transparent;border-color:transparent;color:inherit;cursor:default}
+  .guard{margin:10px 6px 0;background:#f0f7f4;border-left:3px solid #10a37f;border-radius:0 8px 8px 0;padding:11px 14px;font-size:13px;line-height:1.6;color:#2f4f45}
+  .guard b{color:#155e4a}
+  .filters{display:flex;gap:7px;flex-wrap:wrap;padding:0 20px 14px}
+  .chip{border:1px solid #dcdee6;background:#fff;border-radius:999px;padding:5px 12px;font-size:12.5px;cursor:pointer;color:#4a4a56}
+  .chip.on{background:#1a1a1f;color:#fff;border-color:#1a1a1f}
+  .findings{padding:6px 14px 20px;max-height:none}
+  .f{border:1px solid #e6e8ef;border-radius:10px;padding:14px;margin-bottom:11px;transition:.12s}
+  .f:hover{border-color:#c6c9d6}
+  .f.active{border-color:#4a5cf0;box-shadow:0 0 0 3px #e7eafe}
+  .f.accepted{background:#f4fbf7;border-color:#b8e6cd}
+  .f.rejected{opacity:.5}
+  .f-top{display:flex;align-items:center;gap:8px;margin-bottom:9px;flex-wrap:wrap}
+  .cat{font-size:11.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#5b5b68;background:#f0f1f5;border-radius:5px;padding:3px 8px}
+  .sev{font-size:11.5px;font-weight:700;border-radius:5px;padding:3px 8px}
+  .sev.cao{background:#fdeaea;color:#c62a2f}.sev.vua{background:#fef3d8;color:#a66a06}.sev.thap{background:#e9f2fe;color:#2f5fc4}
+  .conf{font-size:11.5px;color:#82828e;margin-left:auto}
+  .quote{font-size:13.5px;line-height:1.55;color:#33333d;background:#f7f8fa;border-radius:6px;padding:9px 11px;margin-bottom:9px}
+  .why{font-size:13.5px;line-height:1.6;color:#44444f;margin-bottom:10px}
+  .why b{color:#14141a}
+  .sugg{font-size:13.5px;line-height:1.55;background:#eef7f1;border:1px solid #cfe9db;border-radius:7px;padding:9px 11px;margin-bottom:10px;color:#1d4636}
+  .sugg-none{background:#fff8e8;border-color:#f6dfae;color:#7a5410}
+  .acts{display:flex;gap:7px;flex-wrap:wrap}
+  .acts button{padding:7px 12px;font-size:13px}
+  .ok{background:#12a150;color:#fff}.ok:hover{background:#0e8442}
+  .state{font-size:12.5px;font-weight:600;padding:6px 0}
+  .state.a{color:#12a150}.state.r{color:#82828e}
+  textarea{width:100%;font-family:inherit;font-size:13.5px;line-height:1.55;border:1px solid #cdd0da;border-radius:7px;padding:9px;resize:vertical;margin-bottom:9px}
+  .empty{padding:26px 14px;text-align:center;color:#92929e;font-size:13.5px}
+  dialog{border:none;border-radius:14px;padding:0;max-width:680px;width:92vw;box-shadow:0 18px 50px rgba(15,15,35,.28)}
+  dialog::backdrop{background:rgba(18,18,32,.45)}
+  .dlg-head{padding:20px 24px 14px;border-bottom:1px solid #eceef3}
+  .dlg-head h3{font-size:19px;font-weight:700}
+  .dlg-body{padding:18px 24px;max-height:56vh;overflow:auto;font-size:14px;line-height:1.65}
+  .dlg-foot{padding:14px 24px 20px;display:flex;gap:9px;justify-content:flex-end}
+  .aud{font-size:13.5px;line-height:1.7;background:#f7f8fa;border-radius:8px;padding:12px 14px;margin-top:12px}
+  .foot-note{padding:0 26px 34px;font-size:12.5px;color:#82828e;line-height:1.65;max-width:980px}
+  @media(max-width:1080px){main{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header>
+  <span class="logo">Spoken-Script QA</span>
+  <span class="mockbadge">MOCK · CP2 — findings là dữ liệu tĩnh, chưa gọi AI thật</span>
+  <span class="spacer"></span>
+  <span class="progress">Đã xử lý <b id="done">0</b>/<b id="total">7</b> · còn <b id="left">7</b></span>
+  <button class="ghost" id="btn-reset">Đặt lại</button>
+  <button class="primary" id="btn-export">Xuất kịch bản đã duyệt</button>
+</header>
+
+<main>
+  <section class="pane">
+    <div class="pane-head">
+      <h2>Kịch bản — Bài 3: Chọn mức tự động hoá cho sản phẩm AI</h2>
+      <span class="hint">14/40 câu · bấm vào chỗ bôi màu để xem lý do</span>
+    </div>
+    <div class="script" id="script"></div>
+    <div class="guard">
+      <b>Không gắn cờ — câu 5 dài 63 từ.</b> Nhịp ngắt tự nhiên, mỗi mệnh đề một ý, đọc một hơi được.
+      Bằng chứng trong <code>spec.md</code> §1: 19,1% câu nói thật của giảng viên dài hơn 40 từ,
+      nên agent không dùng luật độ dài để kết luận lỗi.
+    </div>
+  </section>
+
+  <section class="pane">
+    <div class="pane-head">
+      <h2>Findings</h2>
+      <span class="hint">AI đề xuất — bạn quyết từng chỗ</span>
+    </div>
+    <div class="filters" id="filters"></div>
+    <div class="findings" id="findings"></div>
+  </section>
+</main>
+
+<p class="foot-note">
+  <b>Mức prototype: Mock.</b> Toàn bộ findings trong trang này là dữ liệu tĩnh viết tay để thử luồng UX —
+  chưa có lời gọi AI thật. CP3 sẽ nối API thật vào đúng chỗ quyết định trung tâm (phát hiện span + phân loại +
+  sinh gợi ý), giữ nguyên luồng Accept/Reject này. Kịch bản mẫu do nhóm tự viết, không lấy từ data pack.
+</p>
+
+<dialog id="dlg">
+  <div class="dlg-head"><h3 id="dlg-title">Kịch bản đã duyệt</h3></div>
+  <div class="dlg-body" id="dlg-body"></div>
+  <div class="dlg-foot"><button class="ghost" id="dlg-close">Đóng</button></div>
+</dialog>
+
+<script>
+const SENTENCES = [
+  "Xin chào các bạn, hôm nay chúng ta sẽ cùng tìm hiểu cách chọn mức tự động hoá phù hợp cho một sản phẩm AI.",
+  "Trước khi đi vào chi tiết, mình muốn nói rõ một điều.",
+  "Theo một nghiên cứu được thực hiện bởi McKinsey vào năm 2024, có tới 70% các dự án AI thất bại vì con người và vận hành.",
+  "Điều đó có nghĩa là công nghệ không phải yếu tố quyết định duy nhất.",
+  "Khi mình đi nói chuyện với các đội sản phẩm, mình để ý một điều khá thú vị là gần như đội nào cũng bắt đầu bằng câu hỏi nên dùng mô hình nào, trong khi câu hỏi đáng hỏi trước tiên lại là nếu hệ thống này trả lời sai một lần thì ai sẽ là người chịu hậu quả, và sửa cái sai đó tốn bao nhiêu.",
+  "Chúng ta có ba mức tự động hoá: augment, conditional và automate.",
+  "Mức augment là khi mà AI sẽ đưa ra gợi ý và con người sẽ là người đưa ra quyết định cuối cùng về việc có chấp nhận gợi ý đó hay là không chấp nhận gợi ý đó.",
+  "Ví dụ, hệ thống sinh quiz đề xuất mười câu hỏi, giảng viên duyệt từng câu.",
+  "Việc chọn mức nào phụ thuộc vào cost-of-error, tức là chi phí của việc sai.",
+  "Nếu sai mà đắt thì bạn nên chọn augment cho chắc.",
+  "Còn nếu sai mà rẻ, người dùng tự thấy và tự sửa được, thì automate là hợp lý.",
+  "Áp dụng đúng nguyên tắc này chắc chắn sẽ giúp đội của bạn tăng gấp đôi hiệu suất trong vòng một quý.",
+  "Những đội không chịu nghĩ về chuyện này thì đúng là tự đâm đầu vào tường.",
+  "Ở phần tiếp theo, chúng ta sẽ xem ba ví dụ thật từ các sản phẩm đang chạy."
+];
+
+const FINDINGS = [
+  { id:"F1", s:2, span:"được thực hiện bởi McKinsey vào năm 2024",
+    cat:"Cú pháp dịch", sev:"vua", conf:"Độ chắc: cao",
+    why:"Cấu trúc bị động <b>“được thực hiện bởi X”</b> là lối viết dịch từ tiếng Anh; văn nói tiếng Việt đảo chủ ngữ lên trước. Đọc lên bị nặng đầu câu.",
+    sugg:"McKinsey công bố năm 2024" },
+  { id:"F2", s:2, span:"70%",
+    cat:"Số & viết tắt", sev:"thap", conf:"Độ chắc: cao · lỗi phát âm, không phải lỗi nội dung",
+    why:"Ký hiệu <b>%</b> không có cách đọc thống nhất khi thu giọng — người đọc có thể đọc “phần trăm” hoặc “phần 100”. Đây là lỗi <b>chỉ liên quan cách đọc</b>, nghĩa của câu không sai.",
+    sugg:"bảy mươi phần trăm" },
+  { id:"F3", s:6, span:"AI sẽ đưa ra gợi ý và con người sẽ là người đưa ra quyết định cuối cùng về việc có chấp nhận gợi ý đó hay là không chấp nhận gợi ý đó",
+    cat:"Lặp ý", sev:"cao", conf:"Độ chắc: cao",
+    why:"Cụm <b>“chấp nhận gợi ý đó hay là không chấp nhận gợi ý đó”</b> lặp nguyên vế chỉ để diễn đạt một lựa chọn nhị phân, và câu chồng 3 mệnh đề danh từ hoá liên tiếp. <b>Không phải vì câu dài</b> — vấn đề là lặp và chồng mệnh đề.",
+    sugg:"AI gợi ý, con người quyết nhận hay bỏ" },
+  { id:"F4", s:8, span:"cost-of-error",
+    cat:"Code-switch", sev:"thap", conf:"Độ chắc: THẤP — cần người xác minh",
+    why:"Cụm tiếng Anh xen giữa câu tiếng Việt thường gây vấp khi đọc. Nhưng <b>đây có thể là thuật ngữ chuẩn của khoá</b> mà người học đã quen — agent không đủ căn cứ để tự quyết.",
+    sugg:null, suggNote:"Không đề xuất sửa. Nếu đây là thuật ngữ khoá dùng thống nhất thì giữ nguyên; nếu không, cân nhắc “chi phí của việc sai”." },
+  { id:"F5", s:9, span:"thì bạn nên chọn augment cho chắc",
+    cat:"Xưng hô", sev:"vua", conf:"Độ chắc: vừa",
+    why:"Câu 1 xưng <b>“các bạn”</b>, câu này đổi sang <b>“bạn”</b> số ít và thêm khẩu ngữ “cho chắc”. Register lệch giữa các câu khiến giọng đọc nghe không liền mạch.",
+    sugg:"thì các bạn nên chọn augment" },
+  { id:"F6", s:11, span:"chắc chắn sẽ giúp đội của bạn tăng gấp đôi hiệu suất trong vòng một quý",
+    cat:"Claim thiếu căn cứ", sev:"cao", conf:"Độ chắc: cao — không tự sửa được",
+    why:"Câu khẳng định một con số cụ thể (<b>gấp đôi</b>, <b>một quý</b>) mà <b>không có nguồn nào trong kịch bản</b> chống lưng. Agent không được tự bịa nguồn, cũng không được tự bỏ số liệu vì đó là quyết định nội dung.",
+    sugg:null, suggNote:"Cần người xác minh: bổ sung nguồn cho con số, hoặc hạ thành phát biểu định tính. Agent không tự sửa claim." },
+  { id:"F7", s:12, span:"thì đúng là tự đâm đầu vào tường",
+    cat:"Sai sắc thái", sev:"vua", conf:"Độ chắc: vừa",
+    why:"Ẩn dụ mang sắc thái chê nặng, lệch với giọng giảng bài trung tính ở các câu trước. Với video bài giảng, câu này dễ làm người học thấy bị phán xét.",
+    sugg:"sẽ khó tránh khỏi việc trả giá" }
+];
+
+const state = {}; // id -> {status:'accepted'|'rejected', applied:string}
+let activeId = null;
+let filter = "all";
+
+const $ = s => document.querySelector(s);
+const scriptEl = $("#script"), findEl = $("#findings"), filtEl = $("#filters");
+
+function esc(t){ return t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+
+function renderScript(){
+  scriptEl.innerHTML = SENTENCES.map((raw, i) => {
+    let text = esc(raw);
+    FINDINGS.filter(f => f.s === i).forEach(f => {
+      const st = state[f.id];
+      let cls = "sev-" + f.sev, shown = esc(f.span);
+      if (st && st.status === "accepted"){ cls = "done"; shown = esc(st.applied); }
+      else if (st && st.status === "rejected"){ cls = "dropped"; }
+      if (activeId === f.id) cls += " active";
+      const target = st && st.status === "accepted" ? esc(f.span) : esc(f.span);
+      text = text.replace(target, `<mark class="${cls}" data-id="${f.id}">${shown}</mark>`);
+    });
+    return `<div class="sent"><span class="num">${i+1}</span><span>${text}</span></div>`;
+  }).join("");
+  scriptEl.querySelectorAll("mark").forEach(m =>
+    m.addEventListener("click", () => select(m.dataset.id)));
+}
+
+function renderFilters(){
+  const cats = ["all", ...new Set(FINDINGS.map(f => f.cat))];
+  filtEl.innerHTML = cats.map(c =>
+    `<span class="chip ${filter===c?"on":""}" data-c="${c}">${c === "all" ? "Tất cả" : c}</span>`).join("");
+  filtEl.querySelectorAll(".chip").forEach(c =>
+    c.addEventListener("click", () => { filter = c.dataset.c; render(); }));
+}
+
+function renderFindings(){
+  const list = FINDINGS.filter(f => filter === "all" || f.cat === filter);
+  if (!list.length){ findEl.innerHTML = `<div class="empty">Không có finding nào ở nhóm này.</div>`; return; }
+  findEl.innerHTML = list.map(f => {
+    const st = state[f.id];
+    const cls = ["f", activeId === f.id ? "active" : "", st ? st.status : ""].join(" ");
+    let acts;
+    if (st && st.status === "accepted")
+      acts = `<div class="state a">✓ Đã áp dụng — “${esc(st.applied)}”</div>
+              <div class="acts"><button class="ghost" data-act="undo" data-id="${f.id}">Hoàn tác</button></div>`;
+    else if (st && st.status === "rejected")
+      acts = `<div class="state r">✕ Đã bỏ qua</div>
+              <div class="acts"><button class="ghost" data-act="undo" data-id="${f.id}">Hoàn tác</button></div>`;
+    else
+      acts = `<div class="acts">
+                ${f.sugg ? `<button class="ok" data-act="accept" data-id="${f.id}">Áp dụng</button>` : ""}
+                <button class="ghost" data-act="edit" data-id="${f.id}">Sửa tay</button>
+                <button class="ghost" data-act="reject" data-id="${f.id}">Bỏ qua</button>
+              </div>`;
+    return `<div class="${cls}" data-id="${f.id}">
+      <div class="f-top">
+        <span class="cat">${f.cat}</span>
+        <span class="sev ${f.sev}">${f.sev === "cao" ? "Nặng" : f.sev === "vua" ? "Vừa" : "Nhẹ"}</span>
+        <span class="conf">${f.conf}</span>
+      </div>
+      <div class="quote">Câu ${f.s+1}: “…${esc(f.span)}…”</div>
+      <div class="why">${f.why}</div>
+      ${f.sugg
+        ? `<div class="sugg"><b>Gợi ý sửa tối thiểu:</b> ${esc(f.sugg)}</div>`
+        : `<div class="sugg sugg-none"><b>Không đủ căn cứ để tự sửa.</b> ${esc(f.suggNote)}</div>`}
+      ${acts}
+    </div>`;
+  }).join("");
+
+  findEl.querySelectorAll(".f").forEach(el =>
+    el.addEventListener("click", e => { if (e.target.tagName !== "BUTTON") select(el.dataset.id); }));
+  findEl.querySelectorAll("button[data-act]").forEach(b =>
+    b.addEventListener("click", e => { e.stopPropagation(); act(b.dataset.act, b.dataset.id); }));
+}
+
+function act(a, id){
+  const f = FINDINGS.find(x => x.id === id);
+  if (a === "accept"){ state[id] = { status:"accepted", applied:f.sugg }; }
+  else if (a === "reject"){ state[id] = { status:"rejected" }; }
+  else if (a === "undo"){ delete state[id]; }
+  else if (a === "edit"){
+    const el = findEl.querySelector(`.f[data-id="${id}"]`);
+    if (el.querySelector("textarea")) return;
+    el.querySelector(".acts").style.display = "none";
+    const ta = document.createElement("textarea");
+    ta.rows = 2; ta.value = f.sugg || f.span;
+    const save = document.createElement("button");
+    save.className = "ok"; save.textContent = "Lưu bản sửa tay";
+    save.addEventListener("click", ev => {
+      ev.stopPropagation();
+      state[id] = { status:"accepted", applied: ta.value.trim() || f.span };
+      render();
+    });
+    const cancel = document.createElement("button");
+    cancel.className = "ghost"; cancel.textContent = "Huỷ";
+    cancel.style.marginLeft = "7px";
+    cancel.addEventListener("click", ev => { ev.stopPropagation(); render(); });
+    const box = document.createElement("div");
+    box.appendChild(ta); box.appendChild(save); box.appendChild(cancel);
+    el.appendChild(box); ta.focus();
+    return;
+  }
+  activeId = id; render();
+}
+
+function select(id){ activeId = activeId === id ? null : id; render(); }
+
+function render(){
+  renderScript(); renderFilters(); renderFindings();
+  const done = Object.keys(state).length;
+  $("#done").textContent = done;
+  $("#total").textContent = FINDINGS.length;
+  $("#left").textContent = FINDINGS.length - done;
+}
+
+$("#btn-reset").addEventListener("click", () => {
+  Object.keys(state).forEach(k => delete state[k]); activeId = null; render();
+});
+
+$("#btn-export").addEventListener("click", () => {
+  const acc = FINDINGS.filter(f => state[f.id]?.status === "accepted");
+  const rej = FINDINGS.filter(f => state[f.id]?.status === "rejected");
+  const open = FINDINGS.filter(f => !state[f.id]);
+  const final = SENTENCES.map((raw, i) => {
+    let t = raw;
+    FINDINGS.filter(f => f.s === i && state[f.id]?.status === "accepted")
+      .forEach(f => { t = t.replace(f.span, state[f.id].applied); });
+    return `${i+1}. ${t}`;
+  }).join("\n");
+  $("#dlg-body").innerHTML =
+    `<div class="aud"><b>Audit trail</b><br>
+      Đã áp dụng: ${acc.length} — ${acc.map(f=>f.id+" ("+f.cat+")").join(", ") || "—"}<br>
+      Đã bỏ qua: ${rej.length} — ${rej.map(f=>f.id).join(", ") || "—"}<br>
+      Chưa xử lý: ${open.length} — ${open.map(f=>f.id).join(", ") || "—"}<br>
+      ${open.length ? '<b style="color:#c62a2f">Còn finding chưa xử lý — chưa nên chuyển thu âm.</b>' : '<b style="color:#12a150">Đã duyệt hết. Sẵn sàng chuyển thu âm.</b>'}
+    </div>
+    <p style="margin-top:14px"><b>Kịch bản sau duyệt</b></p>
+    <pre style="white-space:pre-wrap;font-family:inherit;font-size:13.5px;line-height:1.7;margin-top:8px">${esc(final)}</pre>`;
+  $("#dlg").showModal();
+});
+$("#dlg-close").addEventListener("click", () => $("#dlg").close());
+
+render();
+</script>
+</body>
+</html>
