@@ -4,14 +4,14 @@
 
 ## 👥 Thành viên nhóm & Phân công vai trò
 
-**Lớp:** 3A · **Phòng:** E403 · **Cụm:** ____ · **Track:** B — Trợ lý Discord (đề B2)
+**Lớp:** 3A · **Phòng:** E403 · **Cụm:** C1 · **Track:** B — Trợ lý Discord (đề B2)
 
 | Họ và Tên | Mã Học Viên | Vai trò chính | Phần việc đảm nhiệm trong dự án |
 |---|---|---|---|
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
+| Hoàng Trung Hiếu (đội trưởng) | 2A202602945 | ⟵ | ⟵ |
+| Nguyễn Thọ Đạt | 2A202602484 | ⟵ | ⟵ |
+| Đinh Trường An | 2A202602393 | ⟵ | ⟵ |
+| Phan Đức Duy | 2A202602397 | ⟵ | ⟵ |
 
 > Nhóm copy nguyên file README này về repo của mình, rồi điền bảng trên. Cột **Phần việc đảm nhiệm** ghi càng cụ thể càng tốt.
 

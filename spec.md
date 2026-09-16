@@ -5,8 +5,9 @@ Loại: [x] Tối ưu tính năng có sẵn  [ ] Tính năng mới
 
 *(Draft từ Canvas CP1 — chưa đầy đủ, hoàn thiện dần đến hạn chốt spec 21:00 17/9 tại CP4. Phần còn thiếu đánh dấu `⟵`.)*
 
-- **Đội trưởng:** ⟵ Họ tên — MSSV ⟵ ____ (mã học viên nộp cả 5 mốc phải là người này)
-- **Phòng / cụm:** E403 / cụm ⟵ ____
+- **Đội trưởng:** Hoàng Trung Hiếu — MSSV 2A202602945 (mã học viên nộp cả 5 mốc phải là người này)
+- **Phòng / cụm:** E403 / cụm C1
+- **Thành viên:** Nguyễn Thọ Đạt (2A202602484) · Đinh Trường An (2A202602393) · Phan Đức Duy (2A202602397)
 - **Track/đề:** B2 — Trợ lý Discord, tính năng mới cho TA (cải tiến trên nền bản tin "Học viên đang hỏi gì" đang chạy thật)
 
 ## §1. User & Job
@@ -74,7 +75,13 @@ Loại: [x] Tối ưu tính năng có sẵn  [ ] Tính năng mới
 
 ## §8. Phân công & kế hoạch
 
-- ⟵ Phân công có tên: spec / evidence / prompt / code / demo — theo bảng thành viên ở đầu `README.md`.
+- **Phân công có tên** (spec / evidence / prompt / code / demo — ⟵ điền phần việc cụ thể vào bảng ở đầu `README.md`):
+  | Họ tên | MSSV | Phần việc |
+  |---|---|---|
+  | Hoàng Trung Hiếu (đội trưởng) | 2A202602945 | ⟵ |
+  | Nguyễn Thọ Đạt | 2A202602484 | ⟵ |
+  | Đinh Trường An | 2A202602393 | ⟵ |
+  | Phan Đức Duy | 2A202602397 | ⟵ |
 - **Willing users dự kiến (≥2-3 tên, khai chính thức trước CP5):** ⟵ điền tên thật khi khảo sát TA/Mod trong giờ nghỉ (hỏi về lần gần nhất họ bị bỏ sót câu hỏi, không hỏi "bạn có muốn tính năng X không" — theo `02-guide.md` §1.3).
 - Multi-prototype: không áp dụng.
 
