@@ -13,9 +13,14 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
 
 # Chạy thẳng OpenAI API (không qua OpenRouter) — key OpenAI (sk-proj-...) không xác thực
 # được với openrouter.ai. Chấp nhận cả 2 tên biến để không phải sửa lại .env đã điền.
-API_KEY = os.environ.get("OPENAI_API_KEY") or os.environ.get("OPENROUTER_API_KEY", "")
+API_KEY = os.environ.get("OPENAI_API_KEY")
 MODEL = "gpt-4o"
 URL = "https://api.openai.com/v1/chat/completions"
+
+if not API_KEY and os.environ.get("OPENROUTER_API_KEY"):
+    API_KEY = os.environ["OPENROUTER_API_KEY"]
+    MODEL = "openai/gpt-4o-mini"
+    URL = "https://openrouter.ai/api/v1/chat/completions"
 # OpenCode Go (gói thuê bao, endpoint tương thích OpenAI) — cũng chưa đo trên golden set.
 if not API_KEY and os.environ.get("OPENCODE_API_KEY"):
     API_KEY = os.environ["OPENCODE_API_KEY"]
