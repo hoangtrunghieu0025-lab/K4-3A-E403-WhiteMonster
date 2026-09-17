@@ -13,9 +13,7 @@
 | Đinh Trường An | 2A202602393 | Prompt · eval | Thiết kế prompt cho agent QA kịch bản; xây golden set trong `eval/` (≥10 case kịch bản lỗi gắn nhãn tay + ≥1 đoạn sạch đo false positive); chạy eval, lập bảng kết quả `spec.md` §7; chốt quality bar trước CP4 |
 | Phan Đức Duy | 2A202602397 | Prototype · demo | Dựng prototype trong `codebase/` (flow duyệt kịch bản, accept/reject từng finding); nối lời gọi AI thật + lưu log/trace; quay video thao tác CP3 và video demo dự phòng CP5 |
 
-> Nhóm copy nguyên file README này về repo của mình, rồi điền bảng trên. Cột **Phần việc đảm nhiệm** ghi càng cụ thể càng tốt.
-
-> **CP1 (Canvas):** đã đưa vào `spec.md` (đầu file + §1-§2, §4) — điền nốt các mục còn `⟵` (đội trưởng, willing users, phân công) trước khi nộp.
+> **CP1 (Canvas):** [`canvas.md`](canvas.md) · [`canvas.png`](canvas.png) — đã nộp. Nội dung cũng nằm trong `spec.md` (đầu file + §1–§2, §4).
 
 - Thời lượng: **47,5 giờ** từ phát đề đến thuyết trình (ca 3A) — LAB 5 (phát đề + build) · LEC 6 (tiếp tục build theo ca) · LAB 6 (vòng thi)
 - Nhóm: **3-4 người** · thi theo phòng (E403 / E402), chia cụm rồi chung kết phòng — xem *Thể thức thi*
@@ -39,8 +37,6 @@
 | `data/` | Dữ liệu thật đã ẩn danh: `vlearn-pack/` (chatlog VLearn tutor + 6 transcript bài giảng + 2 bộ slide bản hackathon) và **`discord-pack/` (tin nhắn Discord khoá 4 + bản tin bot)** — dùng để tìm bằng chứng và xây golden set. **Đọc `data/README.md` trước** |
 | `further-reading/` | Tài liệu tham khảo có tóm lược tiếng Việt: **Mom Test** (phỏng vấn), **PAIR Guidebook** (Google, 6 chương), **HAX Toolkit** (Microsoft, 18 nguyên tắc), **JTBD Playbook** + worksheet — bắt đầu từ `further-reading/README.md` |
 
-*(Các file trên thuộc repo đề bài `K4-3A-Day05-06-AI-Product-Hackathon`, chỉ để đọc — không copy vào repo này ngoại trừ `03-ai-spec-template.md` → `spec.md`.)*
-
 ## Lịch — 6 checkpoint (ca 3A · 47,5 giờ)
 
 | Mốc | Cần hoàn thành | Hạn (ca 3A) |
@@ -61,6 +57,7 @@
 repo/
 ├── README.md          ← copy file này, điền bảng thành viên ở đầu
 ├── spec.md            ← AI Spec theo 03-ai-spec-template.md (chốt tại CP4)
+├── jtbd-worksheet.md  ← worksheet JTBD đính kèm §1 (job map 8 bước · job story · alternatives)
 ├── demo-slides.pdf    ← slide 6 trang theo 02-guide.md §5.1
 ├── codebase/          ← prototype (ghi rõ phần nào mock)
 ├── eval/              ← golden set + bảng kết quả các lượt chạy

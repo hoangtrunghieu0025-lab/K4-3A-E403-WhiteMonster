@@ -8,7 +8,7 @@
 | Phát hiện span sượng · phân loại lỗi · sinh lý do · sinh gợi ý sửa | **Mock** — 7 findings là dữ liệu tĩnh viết tay trong `FINDINGS` |
 | Kịch bản mẫu 14 câu | Nhóm tự viết, **không lấy từ data pack** |
 
-**CP3 sẽ thay phần mock:** nối lời gọi AI thật vào đúng quyết định trung tâm (nhận kịch bản → trả về danh sách finding có span, category, severity, lý do, confidence, gợi ý), giữ nguyên luồng Accept/Reject hiện tại. Log/trace của lời gọi sẽ lưu trong thư mục này.
+TODO (CP3): nối lời gọi AI thật vào quyết định trung tâm — nhận kịch bản → trả danh sách finding (span, category, severity, lý do, confidence, gợi ý), giữ nguyên luồng Accept/Reject; lưu log/trace vào thư mục này.
 
 ## Chạy thử
 

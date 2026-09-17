@@ -1,16 +1,14 @@
 # Log phỏng vấn — evidence cho `spec.md` §1
 
-> **Trạng thái: CHƯA PHỎNG VẤN.** Khung câu hỏi đã soạn sẵn, cột "Trả lời nguyên văn" phải chép đúng lời người được hỏi nói (kể cả sai chính tả, kể cả câu cụt). Không diễn giải lại, không viết hộ — rubric R1 chỉ tính khi có log nguyên văn kiểm lại được.
+> **Trạng thái: CHƯA PHỎNG VẤN.** Cột "Trả lời nguyên văn" chép đúng lời người được hỏi, kể cả sai chính tả và câu cụt.
 >
-> Người phụ trách: **Nguyễn Thọ Đạt** · Hạn hoàn thành: trước CP4 (21:00 17/9).
+> Người phụ trách: **Nguyễn Thọ Đạt** · Hạn: trước CP4 (21:00 17/9).
 
-## Cách hỏi — Mom Test (guide §1.3)
+## Cách hỏi
 
-**3 quy tắc:** nói về việc họ đã làm thật, không hỏi dự đoán tương lai · hỏi sự kiện cụ thể đã xảy ra · nói ít, nghe nhiều.
+Nghe "mình thường…" → hỏi "lần gần nhất là khi nào?". Nghe đề xuất tính năng → hỏi "cái đó giúp bạn làm được gì?".
 
-**3 phản xạ:** được khen → cảm ơn rồi quay lại hành vi thật · nghe "mình thường..." → "lần gần nhất là khi nào?" · nghe đề xuất tính năng → "cái đó giúp bạn làm được gì?"
-
-**Tuyệt đối tránh:** "Bạn có muốn một AI tự kiểm tra kịch bản không?" · "Bạn sẽ dùng công cụ này chứ?" — ai cũng gật, không dùng làm evidence được.
+**Tuyệt đối tránh:** "Bạn có muốn một AI tự kiểm tra kịch bản không?" · "Bạn sẽ dùng công cụ này chứ?"
 
 ## Bộ câu hỏi (hỏi đúng thứ tự này cho mọi người)
 
@@ -28,48 +26,58 @@
 
 | Mã | Họ tên | MSSV | Vai trò / vì sao hỏi người này | Ngày hỏi | Người hỏi |
 |---|---|---|---|---|---|
-| P1 | Nguyễn Đức Thái | 2A202602648 | Học viên cùng khoá — có làm nội dung/bài nói, dùng làm người thử prototype (willing user) | ⟵ | Nguyễn Thọ Đạt |
-| P2 | Trần Hồng Sơn | 2A20262475 | Học viên cùng khoá — willing user thứ hai | ⟵ | Nguyễn Thọ Đạt |
-| P3 | ⟵ đầu mối Studio team / lab coach (BTC giới thiệu) | — | **Người dùng cuối thật của C2** — bắt buộc phải có ≥1 người nhóm này thì evidence mới đúng chuẩn track C | ⟵ | ⟵ |
+| P1 | Nguyễn Đức Thái | 2A202602648 | Học viên cùng khoá — có làm nội dung/bài nói, dùng làm người thử prototype (willing user) | `_________` | Nguyễn Thọ Đạt |
+| P2 | Trần Hồng Sơn | 2A20262475 | Học viên cùng khoá — willing user thứ hai | `_________` | Nguyễn Thọ Đạt |
+| P3 | `_________` | `_________` | **Người dùng cuối thật của C2** — Studio team / lab coach, xin BTC giới thiệu | `_________` | `_________` |
 
-## P1 · Nguyễn Đức Thái (2A202602648) — ⟵ ngày hỏi
-
-| # | Câu hỏi | Trả lời nguyên văn |
-|---|---|---|
-| Q1 | Lần gần nhất đọc lại/duyệt kịch bản, làm thế nào? | ⟵ |
-| Q2 | Mất bao lâu, bao nhiêu câu/trang? | ⟵ |
-| Q3 | Có lần nào phát hiện câu sượng muộn không? Kể lại. | ⟵ |
-| Q4 | Xử lý sao, tốn thêm bao lâu? | ⟵ |
-| Q5 | Ví dụ một câu phải sửa vì đọc không xuôi? | ⟵ |
-| Q6 | Có dùng công cụ nào soát trước không? Vì sao chưa bỏ cách cũ? | ⟵ |
-| Q7 | Lặp lại bao nhiêu lần một tuần/tháng? | ⟵ |
-
-**Quan sát thêm (không phải lời họ nói):** ⟵
-
-## P2 · Trần Hồng Sơn (2A20262475) — ⟵ ngày hỏi
+## P1 · Nguyễn Đức Thái (2A202602648) — ngày hỏi: `____/9`
 
 | # | Câu hỏi | Trả lời nguyên văn |
 |---|---|---|
-| Q1 | Lần gần nhất đọc lại/duyệt kịch bản, làm thế nào? | ⟵ |
-| Q2 | Mất bao lâu, bao nhiêu câu/trang? | ⟵ |
-| Q3 | Có lần nào phát hiện câu sượng muộn không? Kể lại. | ⟵ |
-| Q4 | Xử lý sao, tốn thêm bao lâu? | ⟵ |
-| Q5 | Ví dụ một câu phải sửa vì đọc không xuôi? | ⟵ |
-| Q6 | Có dùng công cụ nào soát trước không? Vì sao chưa bỏ cách cũ? | ⟵ |
-| Q7 | Lặp lại bao nhiêu lần một tuần/tháng? | ⟵ |
+| Q1 | Lần gần nhất đọc lại/duyệt kịch bản, làm thế nào? | `_________` |
+| Q2 | Mất bao lâu, bao nhiêu câu/trang? | `_________` |
+| Q3 | Có lần nào phát hiện câu sượng muộn không? Kể lại. | `_________` |
+| Q4 | Xử lý sao, tốn thêm bao lâu? | `_________` |
+| Q5 | Ví dụ một câu phải sửa vì đọc không xuôi? | `_________` |
+| Q6 | Có dùng công cụ nào soát trước không? Vì sao chưa bỏ cách cũ? | `_________` |
+| Q7 | Lặp lại bao nhiêu lần một tuần/tháng? | `_________` |
 
-**Quan sát thêm (không phải lời họ nói):** ⟵
+**Quan sát thêm (không phải lời họ nói):** `_________`
 
-## P3 · ⟵ Studio team / lab coach
+## P2 · Trần Hồng Sơn (2A20262475) — ngày hỏi: `____/9`
 
 | # | Câu hỏi | Trả lời nguyên văn |
 |---|---|---|
-| Q1–Q7 | (cùng bộ câu hỏi trên) | ⟵ |
+| Q1 | Lần gần nhất đọc lại/duyệt kịch bản, làm thế nào? | `_________` |
+| Q2 | Mất bao lâu, bao nhiêu câu/trang? | `_________` |
+| Q3 | Có lần nào phát hiện câu sượng muộn không? Kể lại. | `_________` |
+| Q4 | Xử lý sao, tốn thêm bao lâu? | `_________` |
+| Q5 | Ví dụ một câu phải sửa vì đọc không xuôi? | `_________` |
+| Q6 | Có dùng công cụ nào soát trước không? Vì sao chưa bỏ cách cũ? | `_________` |
+| Q7 | Lặp lại bao nhiêu lần một tuần/tháng? | `_________` |
+
+**Quan sát thêm (không phải lời họ nói):** `_________`
+
+## P3 · `_________` (Studio team / lab coach) — ngày hỏi: `____/9`
+
+| # | Câu hỏi | Trả lời nguyên văn |
+|---|---|---|
+| Q1 | Lần gần nhất đọc lại/duyệt kịch bản, làm thế nào? | `_________` |
+| Q2 | Mất bao lâu, bao nhiêu câu/trang? | `_________` |
+| Q3 | Có lần nào phát hiện câu sượng muộn không? Kể lại. | `_________` |
+| Q4 | Xử lý sao, tốn thêm bao lâu? | `_________` |
+| Q5 | Ví dụ một câu phải sửa vì đọc không xuôi? | `_________` |
+| Q6 | Có dùng công cụ nào soát trước không? Vì sao chưa bỏ cách cũ? | `_________` |
+| Q7 | Lặp lại bao nhiêu lần một tuần/tháng? | `_________` |
+
+**Quan sát thêm (không phải lời họ nói):** `_________`
 
 ## Tổng hợp — chép sang `spec.md` §1 sau khi hỏi xong
 
-- **n = ⟵ người ngoài nhóm** · **⟵/⟵ xác nhận** từng gặp tình huống câu sượng bị phát hiện muộn.
-- **Quote đắt nhất (≥2 câu, nguyên văn):** ⟵
-- **Chi phí mỗi lần (từ Q2/Q4):** ⟵ phút đọc soát · ⟵ phút xử lý khi phát hiện muộn.
-- **Tần suất (từ Q7):** ⟵ lần/tuần.
-- **Kết luận:** pain được xác nhận / không được xác nhận → ⟵ (nếu không xác nhận thì ghi trung thực và đổi hướng — rubric tính đủ điểm cho kết quả âm có log).
+- **n = `_________` người ngoài nhóm** · **`_________`/`_________` xác nhận** từng gặp tình huống câu sượng bị phát hiện muộn.
+- **Quote đắt nhất (≥2 câu, nguyên văn):** `_________`
+- **Chi phí mỗi lần (từ Q2/Q4):** `_________` phút đọc soát · `_________` phút xử lý khi phát hiện muộn.
+- **Tần suất (từ Q7):** `_________` lần/tuần.
+- **Kết luận:** pain được xác nhận / không được xác nhận → `_________`
+
+TODO: không xác nhận được pain thì ghi đúng như thế và đổi hướng, đừng sửa số.
