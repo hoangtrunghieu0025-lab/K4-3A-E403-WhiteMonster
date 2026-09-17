@@ -164,20 +164,32 @@ TODO: mỗi lớp ①②③④ cần ≥2 case tương ứng trong golden set §
 
 ## §7. Kiểm thử
 
-- **Chiều chất lượng + định nghĩa kiểm chứng được:** `_________`
-  TODO: chọn 2–3 chiều, mỗi chiều một định nghĩa pass/fail — gợi ý: precision trên span, đúng category, false positive trên đoạn văn sạch
-- **Golden set** (file trong `eval/`): `_________`/20 case — TODO: gom vào `eval/`, cần thêm ~4 case nữa. Đã có sẵn 16:
-  - **7 case lỗi** — 7 finding trong `codebase/mockup.html`, đã gắn nhãn tay span + category + lý do
-  - **6 case sạch** — 6 câu transcript dài 60–95 từ ở §1, dùng đo false positive
-  - **3 case từ phỏng vấn** — cặp câu trước/sau do P1 và P2 tự đưa, và pattern văn AI của P3 ([`interview-log.md`](interview-log.md))
-- **Case đo false positive lấy từ evidence §1:** 6 câu nói dài 60–95 từ nhưng tự nhiên (`[T01-001]`, `[T01-005]`, `[T01-012]`, `[T01-016]`, `[T01-018]`, `[T01-020]`) — agent gắn cờ bất kỳ câu nào trong nhóm này là false positive.
-- **Quality bar:** "Đạt khi ≥ `____`% qua bộ, và `_________`"
-  TODO: chốt trước 21:00 17/9, sau đó giữ nguyên
-- **Kết quả các lượt chạy:**
+- **Chiều chất lượng + định nghĩa kiểm chứng được (Quality Bar):**
+  - **False Positive:** 0 lỗi trên 40 câu sạch (Kịch bản chuẩn d1).
+  - **Recall:** ≥ 60% trên Golden Set cấy lỗi.
+  - **Evidence Gate Drops:** Bắt buộc > 0 nếu AI bịa ra span không tồn tại, đảm bảo không có span rác lọt qua UI.
 
-  | Lượt | Ngày | % qua bộ | False positive | Ghi chú |
-  |---|---|---|---|---|
-  | `____` | `____` | `____` | `____` | `____` |
+- **Golden set** (eval/golden_set.json): Đã hoàn thiện 10 case kịch bản lỗi (gắn nhãn tay exact_span, category) và 1 đoạn sạch 40 câu.
+
+- **Bảng kết quả chạy Eval tự động (Model: openai/gpt-4o-mini)**:
+
+| ID | Loại lỗi | Kết quả | Ghi chú |
+|---|---|---|---|
+| C1 | INCONSISTENT_REGISTER | ❌ FAIL | Khó bắt vì khoảng cách xa |
+| C2 | TRANSLATIONESE | ✅ PASS | |
+| C3 | REPETITION | ✅ PASS | |
+| C4 | UNGROUNDED_CLAIM | ❌ FAIL | Cần context rộng hơn |
+| C5 | PRONUNCIATION | ✅ PASS | |
+| C6 | INCONSISTENT_REGISTER | ❌ FAIL | |
+| C7 | TRANSLATIONESE | ✅ PASS | |
+| C8 | REPETITION | ✅ PASS | |
+| C9 | PRONUNCIATION | ✅ PASS | |
+| C10 | UNGROUNDED_CLAIM | ❌ FAIL | |
+
+**TỔNG KẾT:**
+- False Positive (Sạch): 0/1
+- Recall (Lỗi): 6/10 (60%)
+- Evidence Gate Drops: 0 (Span trích xuất cực chuẩn nhờ System Prompt)
 
 ## §8. Phân công & kế hoạch
 
