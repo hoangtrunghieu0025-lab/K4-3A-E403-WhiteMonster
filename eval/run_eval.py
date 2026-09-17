@@ -58,7 +58,8 @@ def run_eval():
     print(f"   -> Kết quả: Bắt sai {fp_count} lỗi. (Kỳ vọng: 0)")
     
     # 2. Đo Recall trên Flawed Cases
-    print("\n2. Kiểm tra Recall (Tập cấy lỗi - 10 cases):")
+    total_cases = len(data["flawed_cases"])
+    print(f"\n2. Kiểm tra Recall (Tập cấy lỗi - {total_cases} cases):")
     correct_hits = 0
     gate_drops = 0
     
@@ -95,16 +96,17 @@ def run_eval():
         markdown_table += f"| {case['id']} | {text} | `{gt_span}` | {case['category']} | `{ai_span}` | {status} |\n"
         print(f"   - {case['id']}: {status}")
         
+    recall_pct = round(correct_hits / total_cases * 100) if total_cases else 0
     print("\n=== TỔNG KẾT BÁO CÁO ===")
     print(f"False Positive (Sạch): {fp_count}/1")
-    print(f"Recall (Lỗi): {correct_hits}/10 ({correct_hits*10}%)")
+    print(f"Recall (Lỗi): {correct_hits}/{total_cases} ({recall_pct}%)")
     print(f"Evidence Gate Drops (Chặn ảo giác): {gate_drops}")
-    
+
     # Lưu report
     report = {
         "metrics": {
             "fp": fp_count,
-            "recall": f"{correct_hits}/10",
+            "recall": f"{correct_hits}/{total_cases}",
             "gate_drops": gate_drops
         },
         "markdown_table": markdown_table

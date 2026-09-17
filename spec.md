@@ -171,9 +171,11 @@ TODO: mỗi người thử 1 sản phẩm gần giống rồi điền 4 ô — g
   - **Recall:** ≥ 60% trên Golden Set cấy lỗi.
   - **Evidence Gate Drops:** Bắt buộc > 0 nếu AI bịa ra span không tồn tại, đảm bảo không có span rác lọt qua UI.
 
-- **Golden set** (eval/golden_set.json): Đã hoàn thiện 10 case kịch bản lỗi (gắn nhãn tay exact_span, category) và 1 đoạn sạch 40 câu.
+- **Golden set** (eval/golden_set.json): **22 case** — 20 flawed case (gắn nhãn tay exact_span, category) + 2 scope-refusal case (lớp ③) + 1 đoạn sạch 40 câu. Đủ chuẩn rubric ≥20 case:
+  - **Độ khó:** 10 case thường · 8 case chỗ khó (≥2/lớp ①②③④) · 4 case hiếm.
+  - **Nguồn:** 10 case tự viết (C1-C10, đã eval — xem bảng dưới) · **10 case từ chatlog thật** (`data/vlearn-pack/chatlog/tutor_turns.csv`, C11-C20, trích dẫn ≤2 câu kèm `turn_id`, không commit data pack) · 2 case ③ tự thiết kế theo hành vi đã dựng ở §5-§6 (không phải case dạng span nên tách riêng `scope_refusal_cases`).
 
-- **Bảng kết quả chạy Eval tự động (Model: openai/gpt-4o-mini)**:
+- **Bảng kết quả chạy Eval tự động (Model: openai/gpt-4o-mini) — lượt 1, trên 10 case đầu (C1-C10)**:
 
 | ID | Loại lỗi | Kết quả | Ghi chú |
 |---|---|---|---|
@@ -188,10 +190,12 @@ TODO: mỗi người thử 1 sản phẩm gần giống rồi điền 4 ô — g
 | C9 | PRONUNCIATION | ✅ PASS | |
 | C10 | UNGROUNDED_CLAIM | ❌ FAIL | |
 
-**TỔNG KẾT:**
+**TỔNG KẾT (lượt 1, C1-C10):**
 - False Positive (Sạch): 0/40 câu
 - Recall (Lỗi): 6/10 (60%)
 - Evidence Gate Drops: 0 (Span trích xuất cực chuẩn nhờ System Prompt)
+
+TODO: chạy lại `eval/run_eval.py` (đã sửa để tự đếm số case, không còn hardcode 10) trên đủ 20 case C1-C20 — cần `OPENROUTER_API_KEY`, chưa có trong môi trường build này nên chưa tự chạy được. Quality bar ở trên tạm giữ số của lượt 1 (10 case), sẽ cập nhật recall/FP thật sau khi chạy đủ bộ.
 
 ## §8. Phân công & kế hoạch
 
