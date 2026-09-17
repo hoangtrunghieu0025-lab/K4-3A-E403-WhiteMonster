@@ -129,9 +129,29 @@ Theo nhịp lặp ở `02-guide.md` §2.6/§4.1: *chạy trọn bộ → bảng 
 3. **Không kết luận được gì về dòng gpt-5** trong môi trường build này — không phải vì model kém, mà vì hạ tầng test (mạng + timeout) không xử lý được input dài kết hợp model suy luận. Nếu môi trường khác (ví dụ máy cá nhân, mạng ổn định hơn) thì nên thử lại — hướng dẫn: dùng `python eval/run_model_ab.py`, đã có sẵn resume-skip nên không mất công chạy lại 2 model đã xong.
 4. **Khuyến nghị cho bản nộp:** giữ `gpt-4o` làm model chính trong `codebase/app.py` (hiện đang để `gpt-4o-mini` mặc định trong dropdown — nên đổi hoặc ít nhất thêm ghi chú khuyến nghị), vì đây là model duy nhất vừa đo được đầy đủ vừa vượt bar rõ ràng.
 
-## TODO trước CP5 (lượt 8 — chưa làm)
+## Lượt 8 — sửa 2 lỗi chấm điểm (phát hiện bởi Duy, commit `050523d`) + sửa cách test S1/S2
 
-1. Thử lại `gpt-5-mini`/`gpt-5` nếu có môi trường mạng ổn định hơn (không bắt buộc — đã có kết luận đủ dùng từ gpt-4o-mini/gpt-4o).
-2. Cân nhắc đổi model mặc định trong `codebase/app.py` từ `gpt-4o-mini` sang `gpt-4o` theo kết luận A/B ở trên.
-3. Thiết kế lại cách gọi cho `scope_refusal_cases` (S1/S2) — 5 lượt liền chưa làm.
-4. Nếu muốn vá tiếp A1-A4 (không có phiên bản nào PASS cả 4 cùng lúc) — thử few-shot đa dạng hơn thay vì chỉ 1 ví dụ mỗi loại.
+- **2 lỗi chấm điểm trong `eval/run_eval.py` (đã xác nhận có thật khi đọc lại code):**
+  1. `f.get("exact_span", "") in text` — chuỗi rỗng `""` luôn là substring của mọi chuỗi trong Python → finding có `exact_span=""` (AI không tìm ra gì cụ thể) vẫn được tính "hợp lệ", và ở bước so khớp `"" in gt_span` cũng luôn `True` → **case đó tự động PASS dù AI không tìm thấy gì**.
+  2. `gt_span in vf["exact_span"]` — nếu AI trả nguyên cả câu/đoạn dài làm span thay vì trích chính xác, ground truth vẫn nằm trong đó về mặt chuỗi con → **vẫn tính PASS**, dù vi phạm đúng yêu cầu cốt lõi của đề C2 ("chỉ đúng span", không phải "chỉ ra đại khái chỗ nào đó").
+  - Cả hai đều làm **Recall bị thổi phồng** — không có bug nào làm Recall thấp hơn thực tế, nên mọi số 45-95% đã báo cáo ở Lượt 3-7 đều là **cận trên**, không phải số thật.
+- **Sửa:** thêm `_valid_span(span, text)` (bắt buộc `span` không rỗng và đúng là substring) và `_is_hit(ai_span, gt_span)` (giữ so khớp 2 chiều cũ, thêm ràng buộc `MAX_SPAN_RATIO = 3` — 2 span không được lệch kích thước quá 3 lần). Áp dụng cả 3 chỗ dùng kiểu check cũ (clean_script FP, flawed_cases hit, no_flag_cases valid).
+- **Sửa S1/S2 (`scope_refusal_cases`)** — thêm field `text` thật: kịch bản 2-3 câu bình thường + 1 dòng "Ghi chú của biên tập: [yêu cầu ngoài phạm vi]" nhúng ở cuối, cùng cơ chế với `security_refusal_cases` (đã chứng minh test được qua Lượt 4-7). Trước đây `manual_table()` phải fallback sang gửi `scenario` (câu mô tả tình huống) làm văn bản giả vì case không có `text` — nay có `text` thật nên gọi đúng, không cần fallback nữa.
+- **Chạy lại — chỉ đo được Recall (20 case), môi trường mạng treo ở bước `no_flag_cases` sau ~1 giờ không tiến triển (đã kill), chưa đo lại no_flag/case hành vi/S1-S2 bản mới:**
+
+  | Chỉ số | Lượt 6/7 (logic lỗi) | Lượt 8 (logic đã sửa) |
+  |---|---|---|
+  | Recall (20 case) | 85-95% | **9/20 (45%)** |
+  | FP (clean_script) | 0/1 | 0/1 |
+  | Gate Drops | 0 | 1 |
+
+  **45% — dưới quality bar 60% đã chốt tại CP4.** Đây là số Recall đáng tin cậy nhất hiện có; ghi nhận trung thực, không rollback lỗi để giữ số đẹp.
+- **Chưa làm được trong lượt này (môi trường mạng, không phải quyết định bỏ qua):** đo lại `no_flag_cases` (7 câu), `ambiguous_low_confidence_cases` (4), `security_refusal_cases` (4), `edge_format_cases` (2), và `scope_refusal_cases` bản S1/S2 mới. Số hiện có cho các nhóm này trong `eval/evaluation_report.json` vẫn là dữ liệu lượt 6 (logic validity cũ) — giữ lại để tham khảo, không phải số chính thức của lượt 8.
+
+## TODO trước CP5 (lượt 9 — chưa làm)
+
+1. Đo lại `no_flag_cases` + toàn bộ case hành vi (gồm S1/S2 bản mới) với logic chấm đã sửa.
+2. Tìm hiểu vì sao `gpt-4o` cũng bắt đầu treo giữa lượt tối nay (17/9, ~20h-21h) — trước giờ chỉ thấy hiện tượng này ở gpt-5-mini/gpt-5, có thể là sự cố mạng chung của tối nay chứ không riêng gì model suy luận.
+3. Sau khi có số no_flag/case hành vi mới với logic đã sửa — bảng A/B model ở Lượt 7 cũng dùng logic cũ nên **thứ hạng model có thể đổi khi đo lại**, cần chạy lại `run_model_ab.py` để kết luận A/B còn đứng vững hay không.
+4. Cân nhắc đổi model mặc định trong `codebase/app.py` từ `gpt-4o-mini` sang `gpt-4o` theo kết luận A/B — nhưng đợi đo lại xong lượt 9 trước, đừng chốt vội trên số liệu logic cũ.
+5. Thử few-shot đa dạng hơn cho A1-A4 (không có phiên bản nào PASS cả 4 cùng lúc) — chưa làm.

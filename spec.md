@@ -347,6 +347,31 @@ Chi tiết đầy đủ (bảng số, log treo model, chẩn đoán) ở [`eval/
 
   **Kết luận:** `gpt-4o` là lựa chọn tốt nhất trong số model đo được ổn định — recall cao hơn hẳn `gpt-4o-mini` (50% → 95%) và luôn đạt quality bar, đáng đánh đổi chi phí API cao hơn cho một agent QA nội dung giáo dục nơi bỏ sót lỗi tốn kém hơn. Khuyến nghị đổi model mặc định trong `codebase/app.py` từ `gpt-4o-mini` sang `gpt-4o` (chưa làm — để lượt sau).
 
+### Lượt 8 — sửa 2 lỗi chấm điểm do Duy phát hiện (17/9 tối) — **toàn bộ số Recall từ lượt 3-7 ở trên đã bị thổi phồng**
+
+**Quan trọng — đọc trước khi trích số ở trên:** 2 lỗi trong `eval/run_eval.py` khiến mọi con số Recall báo cáo từ Lượt 3 đến Lượt 7 (45%→95%) **cao hơn thực tế**:
+1. `f.get("exact_span", "") in text` — chuỗi rỗng luôn là substring của mọi chuỗi trong Python, nên finding có `exact_span=""` vẫn được tính "hợp lệ" và tự động khớp bất kỳ ground truth nào → **PASS giả**.
+2. `gt_span in vf["exact_span"]` — nếu AI trả nguyên cả câu làm span (không trích chính xác), ground truth vẫn "nằm trong" chuỗi đó → **PASS dù AI không hề chỉ đúng chỗ**, ngược hẳn với yêu cầu cốt lõi "chỉ đúng span" của đề C2.
+
+**Đã sửa:** thêm `_valid_span()` (bắt buộc span không rỗng) và `_is_hit()` (thêm ratio guard — span AI và ground truth không được lệch kích thước quá 3 lần, chặn kiểu "trả nguyên cả câu").
+
+**Chạy lại — chỉ có số Recall mới, chưa kịp đo lại no_flag/case hành vi (môi trường mạng treo giữa chừng ở bước no_flag, đã kill sau ~1 giờ không tiến triển):**
+
+| Chỉ số | Lượt 6/7 (logic lỗi) | Lượt 8 (logic đã sửa) |
+|---|---|---|
+| False Positive (clean_script) | 0/1 | 0/1 (không đổi) |
+| **Recall (20 case)** | 85-95% | **9/20 (45%) — DƯỚI quality bar 60%** |
+| Evidence Gate Drops | 0 | 1 |
+
+**Đây là con số Recall chính thức, chính xác nhất tính đến thời điểm này — không đạt quality bar đã chốt tại CP4.** Ghi nhận trung thực theo đúng nguyên tắc của rubric ("kết quả thấp không ảnh hưởng — cần ghi nhận đầy đủ"). Không rollback lỗi để "giữ số đẹp".
+
+**Sửa S1/S2 cùng lượt này:** thêm field `text` thật (kịch bản có nhúng "Ghi chú của biên tập: [yêu cầu ngoài phạm vi]" ở cuối, giống cách SEC1/SEC4 đã làm) thay vì gửi câu mô tả tình huống (`scenario`) làm văn bản giả — trước đây bị gọi nhầm nên không test được đúng ý. Chưa đo lại S1/S2 bằng bản mới do cùng sự cố treo môi trường.
+
+**TODO lượt 9 (chưa làm):**
+- Đo lại `no_flag_cases` + toàn bộ case hành vi (bao gồm S1/S2 bản mới) với logic chấm đã sửa — số hiện tại của các nhóm này vẫn là dữ liệu cũ (logic validity cũ, ít tin cậy hơn).
+- Tìm nguyên nhân vì sao gpt-4o cũng bắt đầu treo giữa lượt tối nay (trước đó chỉ thấy ở gpt-5-mini/gpt-5) — có thể môi trường mạng chung, không riêng model suy luận.
+- Sau khi có số no_flag/case hành vi mới, cập nhật lại `eval/manual-grading-worksheet.md` và kết luận A/B model (bảng ở Lượt 7 dùng logic chấm cũ, nên thứ hạng model có thể đổi khi đo lại).
+
 ## §8. Phân công & kế hoạch
 
 - **Phân công có tên** (spec / evidence / prompt / code / demo):

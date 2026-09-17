@@ -86,7 +86,7 @@ Chi tiết kỹ thuật + chỗ neo từng nguyên tắc HAX: [`codebase/README.
 | Việc | Đề xuất người làm | Hạn |
 |---|---|---|
 | **Chốt model dùng khi demo.** Khối "Đã đo được gì" trên giao diện là số của `gpt-4o`. Demo bằng model khác thì phải chạy lại golden set và sửa khối đó | Hiếu + An | Trước CP5 |
-| **Sửa 2 lỗi chấm trong `run_eval.py`:** span rỗng `""` được tính PASS; span rộng cả câu cũng tính PASS → recall trong spec có thể cao hơn thực tế | An | Trước CP5 |
+| ~~Sửa 2 lỗi chấm trong `run_eval.py`~~ **Đã sửa (17/9 tối)** — `_valid_span()` + `_is_hit()` (ratio guard ≤3x). Recall đo lại: 45% (dưới bar 60%) — số cũ 85-95% ở spec §7 lượt 3-7 đã bị thổi phồng, xem `eval/test-log.md` Lượt 8. **Còn treo:** đo lại `no_flag_cases` + case hành vi + S1/S2 bản mới (môi trường mạng treo giữa chừng tối nay, chưa xong) | An | Trước CP5 |
 | **Nhánh `feat/cp3-ai-eval`** sửa trùng `eval/run_eval.py`, `eval/golden_set.json`, `spec.md`, `codebase/README.md` → **đừng merge thẳng**, so với `main` rồi gộp phần cần giữ | Tác giả nhánh | Trước khi merge |
 | **Nghe thử phần đọc tiếng Anh** trên app — nếu nghe tệ hơn cách đọc cũ thì báo Duy gỡ | Ai cũng được | Sớm |
 | **Chuẩn bị máy demo:** cài đủ, tải giọng Piper, điền `.env`, `test_server.py` in OK, soát thử 1 kịch bản | Người demo | Trước dry run CP5 |

@@ -19,8 +19,14 @@ URL = "https://api.openai.com/v1/chat/completions"
 
 if not API_KEY and os.environ.get("OPENROUTER_API_KEY"):
     API_KEY = os.environ["OPENROUTER_API_KEY"]
-    MODEL = "openai/gpt-4o-mini"
-    URL = "https://openrouter.ai/api/v1/chat/completions"
+    # OPENROUTER_API_KEY có thể chứa key OpenRouter thật (sk-or-...) hoặc — tình huống có thật
+    # trong .env của nhóm — một key OpenAI (sk-proj-...) bị điền nhầm tên biến. Phân biệt theo
+    # tiền tố (giống cách codebase/app.py đã làm) thay vì cứ thấy tên biến là route sang openrouter.ai.
+    if API_KEY.startswith("sk-or-"):
+        MODEL = "openai/gpt-4o-mini"
+        URL = "https://openrouter.ai/api/v1/chat/completions"
+    # else: giữ nguyên MODEL="gpt-4o" + URL=api.openai.com ở trên — key OpenAI không xác thực
+    # được với openrouter.ai (xem comment đầu file), route sai sẽ làm mọi lượt eval fail 401.
 # OpenCode Go (gói thuê bao, endpoint tương thích OpenAI) — cũng chưa đo trên golden set.
 if not API_KEY and os.environ.get("OPENCODE_API_KEY"):
     API_KEY = os.environ["OPENCODE_API_KEY"]
@@ -90,6 +96,26 @@ Format mỗi object:
 }
 """
 
+MAX_SPAN_RATIO = 3  # AI span không được lệch kích thước quá 3 lần so với ground truth —
+                     # chặn 2 lỗi chấm điểm Duy phát hiện 17/9: span rỗng và span "cả câu"
+                     # đều từng bị tính PASS oan (xem eval/test-log.md).
+
+def _valid_span(span, text):
+    """Span hợp lệ = không rỗng và đúng là substring nguyên văn của text.
+    Trước đây `"" in text` luôn True nên finding rỗng lọt qua Evidence Gate."""
+    return bool(span) and span in text
+
+def _is_hit(ai_span, gt_span):
+    """Khớp hai chiều (như cũ) NHƯNG chặn ăn gian bằng cách trả về span quá khổ
+    (vd nguyên cả câu) hoặc quá vụn — bắt buộc kích thước hai bên gần nhau."""
+    if not ai_span or not gt_span:
+        return False
+    overlap = gt_span in ai_span or ai_span in gt_span
+    if not overlap:
+        return False
+    ratio = max(len(ai_span), len(gt_span)) / min(len(ai_span), len(gt_span))
+    return ratio <= MAX_SPAN_RATIO
+
 def call_ai(text, model=None):
     model = model or MODEL
     headers = {
@@ -157,7 +183,7 @@ def run_eval(model=None, save_report=True, verbose=True, include_extra=True):
 
     # 1. Đo False Positive trên Clean Script
     clean_findings = _call(data["clean_script"])
-    valid_clean = [f for f in clean_findings if f.get("exact_span", "") in data["clean_script"]]
+    valid_clean = [f for f in clean_findings if _valid_span(f.get("exact_span", ""), data["clean_script"])]
     fp_count = len(valid_clean)
     if verbose:
         print(f"   -> Kết quả: Bắt sai {fp_count} lỗi. (Kỳ vọng: 0)")
@@ -180,7 +206,7 @@ def run_eval(model=None, save_report=True, verbose=True, include_extra=True):
 
         valid_findings = []
         for f in findings:
-            if f.get("exact_span", "") in text:
+            if _valid_span(f.get("exact_span", ""), text):
                 valid_findings.append(f)
             else:
                 gate_drops += 1
@@ -188,14 +214,9 @@ def run_eval(model=None, save_report=True, verbose=True, include_extra=True):
         hit = False
         ai_span = "-"
         for vf in valid_findings:
-            span = vf.get("exact_span", "").strip()
-            if not span:
-                continue
-            if span == text.strip():
-                continue
-            if gt_span in span or span in gt_span:
+            if _is_hit(vf.get("exact_span", ""), gt_span):
                 hit = True
-                ai_span = span
+                ai_span = vf.get("exact_span", "")
                 break
 
         status = "✅ PASS" if hit else "❌ FAIL"
@@ -223,7 +244,7 @@ def run_eval(model=None, save_report=True, verbose=True, include_extra=True):
                 no_flag_table += f"| {case['id']} | {case.get('source','-')} | 0 (input rỗng, bỏ qua gọi AI) | ✅ PASS |\n"
                 continue
             findings = _call(text)
-            valid = [f for f in findings if f.get("exact_span", "") in text]
+            valid = [f for f in findings if _valid_span(f.get("exact_span", ""), text)]
             no_flag_fp += len(valid)
             no_flag_table += f"| {case['id']} | {case.get('source','-')} | {len(valid)} | {'✅ PASS' if not valid else '❌ FAIL'} |\n"
 
