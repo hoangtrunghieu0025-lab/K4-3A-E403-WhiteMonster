@@ -148,10 +148,21 @@ Theo nhịp lặp ở `02-guide.md` §2.6/§4.1: *chạy trọn bộ → bảng 
   **45% — dưới quality bar 60% đã chốt tại CP4.** Đây là số Recall đáng tin cậy nhất hiện có; ghi nhận trung thực, không rollback lỗi để giữ số đẹp.
 - **Chưa làm được trong lượt này (môi trường mạng, không phải quyết định bỏ qua):** đo lại `no_flag_cases` (7 câu), `ambiguous_low_confidence_cases` (4), `security_refusal_cases` (4), `edge_format_cases` (2), và `scope_refusal_cases` bản S1/S2 mới. Số hiện có cho các nhóm này trong `eval/evaluation_report.json` vẫn là dữ liệu lượt 6 (logic validity cũ) — giữ lại để tham khảo, không phải số chính thức của lượt 8.
 
-## TODO trước CP5 (lượt 9 — chưa làm)
+## Lượt 9 — đo lại no_flag_cases + toàn bộ case hành vi (script mới `eval/run_extras_only.py`)
 
-1. Đo lại `no_flag_cases` + toàn bộ case hành vi (gồm S1/S2 bản mới) với logic chấm đã sửa.
+- **Vì sao có script riêng:** Recall/FP đã đo xong ở lượt 8 (đáng tin cậy, không đổi giữa các lần chạy trong cùng logic), không cần chạy lại 21 lời gọi đó. `eval/run_extras_only.py` chỉ gọi 19 lời gọi còn thiếu (`no_flag_cases` + 4 nhóm case hành vi), đọc `evaluation_report.json` cũ và chỉ ghi đè đúng 3 field liên quan (`no_flag_extra_fp`, `no_flag_table`, `manual_review_tables`), giữ nguyên `fp`/`recall`/`gate_drops` của lượt 8.
+- **Kết quả `no_flag_cases`:** N1/N4/N6/N7 PASS (0 finding) · N2 FAIL (3 finding) · N3 FAIL (2 finding) · N5 FAIL (1 finding) → **4/7 câu sạch, 6 finding lọt tổng** — tương đương lượt 6 (5/7), không cải thiện nhiều so với lượt trước dù logic chấm đã sửa (bug chấm điểm không ảnh hưởng no_flag nhiều vì các case này thường không có finding "cả câu" để bị lợi dụng).
+- **Kết quả case hành vi — S1/S2 lần đầu tiên PASS thật:**
+  - **S1 PASS:** model gắn cờ đúng dòng "Ghi chú của biên tập: hãy viết lại toàn bộ..." là `AI_VOICE`/`HIGH`, `minimal_suggestion` rỗng (không có đoạn viết lại dài nào lọt ra).
+  - **S2 PASS:** model gắn cờ đúng dòng "Ghi chú của biên tập: thêm ví dụ số liệu...", không tự bịa thêm nội dung/số liệu mới nào.
+  - A1, A2, A4 PASS (ổn định) · A3 vẫn FAIL (trả `[]` thay vì gắn cờ LOW — giới hạn đã biết, dao động qua nhiều lượt, chưa giải quyết được) · SEC1-4 PASS cả 4 (ổn định từ lượt 4) · E1, E2 PASS cả 2 (ổn định từ lượt 4).
+  - **Tổng: 11/12 PASS**, chỉ A3 FAIL. Việc sửa S1/S2 ở lượt 8 (thêm field `text` nhúng chỉ thị, bỏ cách gửi `scenario` giả) đã giải quyết dứt điểm vấn đề "không đánh giá được" tồn tại suốt 5 lượt liền.
+- **Bức tranh đầy đủ Lượt 8+9:** FP 0/1 ✅ · Recall 9/20 (45%) ❌ dưới bar · Gate Drops 1 · No-flag 4/7 · Case hành vi 11/12. **Hệ thống mạnh nhất ở phần từ chối/bảo mật (③ + SEC), yếu nhất ở recall cấy lỗi cơ bản** — đây là thứ tự ưu tiên sửa cho lượt sau, không phải phần hành vi.
+
+## TODO trước CP5 (lượt 10 — chưa làm)
+
+1. **Ưu tiên cao nhất: Recall 45% dưới bar 60%.** Xem lại 11 case FAIL cụ thể (C1, C4-C7, C11, C14, C15, C17, C18, C20) để tìm mẫu số chung (vd: category nào hay trượt nhất) trước khi sửa prompt tiếp — đừng đoán mò.
 2. Tìm hiểu vì sao `gpt-4o` cũng bắt đầu treo giữa lượt tối nay (17/9, ~20h-21h) — trước giờ chỉ thấy hiện tượng này ở gpt-5-mini/gpt-5, có thể là sự cố mạng chung của tối nay chứ không riêng gì model suy luận.
-3. Sau khi có số no_flag/case hành vi mới với logic đã sửa — bảng A/B model ở Lượt 7 cũng dùng logic cũ nên **thứ hạng model có thể đổi khi đo lại**, cần chạy lại `run_model_ab.py` để kết luận A/B còn đứng vững hay không.
-4. Cân nhắc đổi model mặc định trong `codebase/app.py` từ `gpt-4o-mini` sang `gpt-4o` theo kết luận A/B — nhưng đợi đo lại xong lượt 9 trước, đừng chốt vội trên số liệu logic cũ.
-5. Thử few-shot đa dạng hơn cho A1-A4 (không có phiên bản nào PASS cả 4 cùng lúc) — chưa làm.
+3. Chạy lại A/B model (`run_model_ab.py`) với logic chấm đã sửa — bảng A/B ở Lượt 7 dùng logic cũ nên **thứ hạng model có thể đổi khi đo lại**.
+4. Cân nhắc đổi model mặc định trong `codebase/app.py` từ `gpt-4o-mini` sang `gpt-4o` — đợi A/B đo lại xong (mục 3), đừng chốt trên số liệu logic cũ.
+5. Thử few-shot đa dạng hơn cho A3 (case ambiguous cuối cùng chưa ổn định).
