@@ -252,7 +252,7 @@ function renderFindings(){
                 ${f.sugg ? `<button class="ok" data-act="accept" data-id="${f.id}">Áp dụng</button>` : ""}
                 <button class="ghost" data-act="edit" data-id="${f.id}">Sửa tay</button>
                 <button class="ghost" data-act="reject" data-id="${f.id}">Bỏ qua</button>
-                <button class="ghost" onclick="event.stopPropagation(); speakText('${esc(f.span)}')">🔊 Nghe</button>
+                <button class="ghost" data-act="tts" data-id="${f.id}">🔊 Nghe</button>
               </div>`;
     return `<div class="${cls}" data-id="${f.id}">
       <div class="f-top">
@@ -277,6 +277,8 @@ function renderFindings(){
 
 function act(a, id){
   const f = FINDINGS.find(x => x.id === id);
+  if (!f) return;
+  if (a === "tts"){ speakText(f.span); return; }
   if (a === "accept"){ state[id] = { status:"accepted", applied:f.sugg }; }
   else if (a === "reject"){ state[id] = { status:"rejected" }; }
   else if (a === "undo"){ delete state[id]; }
@@ -439,7 +441,8 @@ KỊCH BẢN:
 ${textToAnalyze}`;
 
   try {
-    const resp = await fetch(\`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=\${key}\`, {
+    const url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + encodeURIComponent(key);
+    const resp = await fetch(url, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
@@ -449,25 +452,25 @@ ${textToAnalyze}`;
     });
 
     if (!resp.ok) {
-      throw new Error(\`API returned \${resp.status}\`);
+      throw new Error("API returned " + resp.status);
     }
 
     const data = await resp.json();
     const rawContent = data.candidates[0].content.parts[0].text;
-    const cleanJson = rawContent.replace(/^\\\`\\\`\\\`json\\s*/, "").replace(/\\s*\\\`\\\`\\\`$/, "");
+    const cleanJson = rawContent.replace(/^```json\s*/, "").replace(/\s*```$/, "");
     const aiFindings = JSON.parse(cleanJson);
 
     const elapsed = Math.round(performance.now() - startTime);
 
     if (sel === "custom") {
       SENTENCES.length = 0;
-      textToAnalyze.split(/\\n+/).filter(s => s.trim()).forEach(s => SENTENCES.push(s.trim()));
+      textToAnalyze.split(/\n+/).filter(s => s.trim()).forEach(s => SENTENCES.push(s.trim()));
     }
 
     FINDINGS.length = 0;
     aiFindings.forEach((f, idx) => {
       FINDINGS.push({
-        id: f.id || \`AI_\${idx+1}\`,
+        id: f.id || ("AI_" + (idx + 1)),
         s: typeof f.s === 'number' ? f.s : 0,
         span: f.span || "",
         cat: f.cat || "Lỗi kịch bản",
@@ -483,14 +486,14 @@ ${textToAnalyze}`;
     activeId = null;
     filter = "all";
 
-    $("#mode-badge").textContent = \`AI THẬT · Gemini 1.5 Flash (\${elapsed}ms)\`;
+    $("#mode-badge").textContent = "AI THẬT · Gemini 1.5 Flash (" + elapsed + "ms)";
     $("#mode-badge").style.background = "#ecfdf5";
     $("#mode-badge").style.color = "#047857";
     $("#mode-badge").style.borderColor = "#a7f3d0";
 
     closeAiModal();
     render();
-    alert(\`⚡ AI đã phân tích xong trong \${elapsed}ms! Tìm thấy \${FINDINGS.length} điểm lưu ý.\`);
+    alert("⚡ AI đã phân tích xong trong " + elapsed + "ms! Tìm thấy " + FINDINGS.length + " điểm lưu ý.");
   } catch (err) {
     alert("Lỗi khi gọi Gemini API: " + err.message);
   } finally {
