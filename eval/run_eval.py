@@ -188,9 +188,14 @@ def run_eval(model=None, save_report=True, verbose=True, include_extra=True):
         hit = False
         ai_span = "-"
         for vf in valid_findings:
-            if gt_span in vf["exact_span"] or vf["exact_span"] in gt_span:
+            span = vf.get("exact_span", "").strip()
+            if not span:
+                continue
+            if span == text.strip():
+                continue
+            if gt_span in span or span in gt_span:
                 hit = True
-                ai_span = vf["exact_span"]
+                ai_span = span
                 break
 
         status = "✅ PASS" if hit else "❌ FAIL"
