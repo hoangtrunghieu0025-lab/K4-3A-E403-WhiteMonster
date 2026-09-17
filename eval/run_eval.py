@@ -19,8 +19,14 @@ URL = "https://api.openai.com/v1/chat/completions"
 
 if not API_KEY and os.environ.get("OPENROUTER_API_KEY"):
     API_KEY = os.environ["OPENROUTER_API_KEY"]
-    MODEL = "openai/gpt-4o-mini"
-    URL = "https://openrouter.ai/api/v1/chat/completions"
+    # OPENROUTER_API_KEY có thể chứa key OpenRouter thật (sk-or-...) hoặc — tình huống có thật
+    # trong .env của nhóm — một key OpenAI (sk-proj-...) bị điền nhầm tên biến. Phân biệt theo
+    # tiền tố (giống cách codebase/app.py đã làm) thay vì cứ thấy tên biến là route sang openrouter.ai.
+    if API_KEY.startswith("sk-or-"):
+        MODEL = "openai/gpt-4o-mini"
+        URL = "https://openrouter.ai/api/v1/chat/completions"
+    # else: giữ nguyên MODEL="gpt-4o" + URL=api.openai.com ở trên — key OpenAI không xác thực
+    # được với openrouter.ai (xem comment đầu file), route sai sẽ làm mọi lượt eval fail 401.
 # OpenCode Go (gói thuê bao, endpoint tương thích OpenAI) — cũng chưa đo trên golden set.
 if not API_KEY and os.environ.get("OPENCODE_API_KEY"):
     API_KEY = os.environ["OPENCODE_API_KEY"]
