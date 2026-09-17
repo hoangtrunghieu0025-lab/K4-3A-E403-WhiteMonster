@@ -1,0 +1,36 @@
+{
+  "models": ["gpt-4o-mini", "gpt-4o", "gpt-5-mini", "gpt-5"],
+  "results": [
+    {
+      "model": "gpt-4o-mini",
+      "ok": true,
+      "fp": 0,
+      "recall": "10/20",
+      "recall_pct": 50,
+      "gate_drops": 1,
+      "no_flag_extra_fp": "0/0"
+    },
+    {
+      "model": "gpt-4o",
+      "ok": true,
+      "fp": 0,
+      "recall": "19/20",
+      "recall_pct": 95,
+      "gate_drops": 0,
+      "no_flag_extra_fp": "0/0"
+    },
+    {
+      "model": "gpt-5-mini",
+      "ok": false,
+      "status": "not_tested_environment_hang",
+      "note": "Treo 2/2 lần thử đúng ở bước FP-clean_script (~40 câu), >15 phút mỗi lần, không có lỗi/log. Test riêng bằng câu đơn xác nhận model tự nó phản hồi bình thường (33s). Xem eval/test-log.md Lượt 7."
+    },
+    {
+      "model": "gpt-5",
+      "ok": false,
+      "status": "not_tested_environment_hang",
+      "note": "Treo 1/1 lần thử, cùng triệu chứng và cùng vị trí với gpt-5-mini (33s cho câu đơn, treo trên input dài). Xem eval/test-log.md Lượt 7."
+    }
+  ],
+  "conclusion": "gpt-4o là lựa chọn tốt nhất trong số model đo được đầy đủ và ổn định (recall 95% ở lượt tốt nhất, luôn >= quality bar 60% qua các lượt). gpt-4o-mini không đạt bar 60% một cách ổn định (50%). gpt-5-mini/gpt-5 không kết luận được trong môi trường build này do giới hạn hạ tầng test (không phải giới hạn model) — xem eval/test-log.md để chạy lại nếu có môi trường mạng ổn định hơn."
+}

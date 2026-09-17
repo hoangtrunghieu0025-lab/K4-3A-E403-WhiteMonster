@@ -1,4 +1,5 @@
 import json
+import re
 import requests
 import time
 import os
@@ -54,6 +55,10 @@ Ví dụ 3 (confidence HIGH — đối chứng, rõ ràng là lỗi, không mơ 
 Input: "Mô hình ngôn ngữ lớn là một sự thay đổi cuộc chơi lớn vào cuối ngày."
 Finding đúng: {"exact_span": "sự thay đổi cuộc chơi lớn vào cuối ngày", "category": "TRANSLATIONESE", "severity": "HIGH", "issue_type": "CONTENT", "confidence": "HIGH", "reason": "Dịch cứng rõ ràng từ 'game changer at the end of the day', không có gì mơ hồ.", "minimal_suggestion": "bước ngoặt lớn"}
 
+Ví dụ 4 (KHÔNG gắn cờ gì cả — quan trọng: không phải lúc nào cũng phải trả về ít nhất 1 finding):
+Input: "Theo nghiên cứu về não bộ thì não bộ của chúng ta hay đi theo thói quen — cái này là trong cuốn sách kinh điển về tư duy hệ thống 1 với hệ thống 2, Thinking, Fast and Slow."
+Finding đúng: {"findings": []} — câu này DÀI và có cụm tiếng Anh, nhưng KHÔNG có lỗi thật: "theo nghiên cứu" không phải ungrounded claim vì tên sách được nêu ngay trong câu, và tên sách "Thinking, Fast and Slow" là trích dẫn chính xác chứ không phải translationese. Nhiều câu trong thực tế hoàn toàn sạch — đừng cố tìm ra một lỗi nào đó chỉ vì câu có vẻ phức tạp.
+
 Chỉ gắn cờ khi có bằng chứng chắc chắn theo các quy tắc trên. Return ONLY a JSON object với key 'findings' là mảng object.
 Format mỗi object:
 {
@@ -67,13 +72,14 @@ Format mỗi object:
 }
 """
 
-def call_ai(text):
+def call_ai(text, model=None):
+    model = model or MODEL
     headers = {
         "Authorization": f"Bearer {API_KEY}",
         "Content-Type": "application/json"
     }
     payload = {
-        "model": MODEL,
+        "model": model,
         "messages": [
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": text}
@@ -82,116 +88,149 @@ def call_ai(text):
     }
     if not API_KEY:
         raise RuntimeError("Thiếu OPENAI_API_KEY (hoặc OPENROUTER_API_KEY) trong .env")
-    resp = requests.post(URL, headers=headers, json=payload, timeout=45)
-    if resp.status_code != 200:
-        print(f"   !! Lỗi API {resp.status_code}: {resp.text[:300]}")
-        return []
-    result = json.loads(resp.json()['choices'][0]['message']['content'])
-    return result.get('findings', [])
 
-def run_eval():
+    # Tài khoản đang ở tier thấp (30000 TPM) nên rất dễ dính 429 khi chạy hết golden set.
+    # Ưu tiên đọc đúng thời gian chờ OpenAI đề nghị ("Please try again in Xs"), nếu không
+    # có thì backoff tăng dần, trần 65s (đủ cho 1 vòng TPM reset) thay vì đoán liều 3-15s.
+    # Cũng retry lỗi kết nối/DNS thoáng qua (mạng chập chờn) — không phải lỗi model.
+    max_retries = 8
+    for attempt in range(max_retries):
+        try:
+            resp = requests.post(URL, headers=headers, json=payload, timeout=60)
+        except requests.exceptions.RequestException as e:
+            if attempt < max_retries - 1:
+                wait = min(30, 3 * (attempt + 1))
+                print(f"   .. lỗi kết nối ({e.__class__.__name__}), chờ {wait}s rồi thử lại ({attempt+1}/{max_retries})", flush=True)
+                time.sleep(wait)
+                continue
+            raise
+        if resp.status_code == 200:
+            result = json.loads(resp.json()['choices'][0]['message']['content'])
+            return result.get('findings', [])
+        if resp.status_code == 429 and attempt < max_retries - 1:
+            m = re.search(r"try again in ([\d.]+)s", resp.text)
+            wait = min(65, float(m.group(1)) + 1) if m else min(65, 5 * (attempt + 1))
+            print(f"   .. 429 rate limit, chờ {wait:.1f}s rồi thử lại ({attempt+1}/{max_retries})", flush=True)
+            time.sleep(wait)
+            continue
+        raise RuntimeError(f"Lỗi API {resp.status_code}: {resp.text[:300]}")
+
+def run_eval(model=None, save_report=True, verbose=True, include_extra=True):
+    """Chạy golden set với 1 model. include_extra=False bỏ no_flag_cases + case hành vi
+    (19 lời gọi) — dùng cho A/B nhiều model để không cháy hết TPM chỉ vì so sánh recall/FP.
+    Trả về dict metrics + tables để run_model_ab.py gọi lặp lại mà không phải chép code."""
+    model = model or MODEL
+
+    def _call(text):
+        result = call_ai(text, model=model)
+        time.sleep(1)  # giãn nhịp gọi để đỡ dồn cụm vào cùng cửa sổ TPM
+        return result
+
     with open("eval/golden_set.json", "r", encoding="utf-8") as f:
         data = json.load(f)
-        
-    print(f"=== ĐÁNH GIÁ (MODEL: {MODEL}) ===\n")
-    
+
+    if verbose:
+        print(f"=== ĐÁNH GIÁ (MODEL: {model}) ===\n")
+        print("1. Kiểm tra False Positive (Tập kịch bản sạch 40 câu):")
+
     # 1. Đo False Positive trên Clean Script
-    print("1. Kiểm tra False Positive (Tập kịch bản sạch 40 câu):")
-    clean_findings = call_ai(data["clean_script"])
-    
-    # Evidence Gate cho tập sạch
+    clean_findings = _call(data["clean_script"])
     valid_clean = [f for f in clean_findings if f.get("exact_span", "") in data["clean_script"]]
     fp_count = len(valid_clean)
-    print(f"   -> Kết quả: Bắt sai {fp_count} lỗi. (Kỳ vọng: 0)")
-    
+    if verbose:
+        print(f"   -> Kết quả: Bắt sai {fp_count} lỗi. (Kỳ vọng: 0)")
+
     # 2. Đo Recall trên Flawed Cases
     total_cases = len(data["flawed_cases"])
-    print(f"\n2. Kiểm tra Recall (Tập cấy lỗi - {total_cases} cases):")
+    if verbose:
+        print(f"\n2. Kiểm tra Recall (Tập cấy lỗi - {total_cases} cases):")
     correct_hits = 0
     gate_drops = 0
-    
+
     markdown_table = "| ID | Câu test | Lỗi cần bắt (Ground Truth) | Loại lỗi | Kết quả AI | Trạng thái |\n"
     markdown_table += "|---|---|---|---|---|---|\n"
-    
+
     for case in data["flawed_cases"]:
         text = case["text"]
         gt_span = case["ground_truth_span"]
-        
-        findings = call_ai(text)
-        
-        # Evidence Gate
+
+        findings = _call(text)
+
         valid_findings = []
         for f in findings:
             if f.get("exact_span", "") in text:
                 valid_findings.append(f)
             else:
                 gate_drops += 1
-                
-        # Kiểm tra hit
+
         hit = False
         ai_span = "-"
         for vf in valid_findings:
-            # So sánh xem span AI tìm được có overlap với ground truth không
             if gt_span in vf["exact_span"] or vf["exact_span"] in gt_span:
                 hit = True
                 ai_span = vf["exact_span"]
                 break
-                
+
         status = "✅ PASS" if hit else "❌ FAIL"
         if hit: correct_hits += 1
-        
+
         markdown_table += f"| {case['id']} | {text} | `{gt_span}` | {case['category']} | `{ai_span}` | {status} |\n"
-        print(f"   - {case['id']}: {status}")
-        
+        if verbose:
+            print(f"   - {case['id']}: {status}")
+
     recall_pct = round(correct_hits / total_cases * 100) if total_cases else 0
-    print("\n=== TỔNG KẾT BÁO CÁO ===")
-    print(f"False Positive (Sạch): {fp_count}/1")
-    print(f"Recall (Lỗi): {correct_hits}/{total_cases} ({recall_pct}%)")
-    print(f"Evidence Gate Drops (Chặn ảo giác): {gate_drops}")
+    if verbose:
+        print("\n=== TỔNG KẾT BÁO CÁO ===")
+        print(f"False Positive (Sạch): {fp_count}/1")
+        print(f"Recall (Lỗi): {correct_hits}/{total_cases} ({recall_pct}%)")
+        print(f"Evidence Gate Drops (Chặn ảo giác): {gate_drops}")
 
-    # 3. No-flag cases bổ sung (lớp ④ mined + input rỗng) — kỳ vọng 0 finding hợp lệ mỗi case
-    no_flag_cases = data.get("no_flag_cases", [])
-    no_flag_table = "| ID | Nguồn | Finding hợp lệ | Trạng thái |\n|---|---|---|---|\n"
-    no_flag_fp = 0
-    for case in no_flag_cases:
-        text = case["text"]
-        if not text.strip():
-            no_flag_table += f"| {case['id']} | {case.get('source','-')} | 0 (input rỗng, bỏ qua gọi AI) | ✅ PASS |\n"
-            continue
-        findings = call_ai(text)
-        valid = [f for f in findings if f.get("exact_span", "") in text]
-        no_flag_fp += len(valid)
-        no_flag_table += f"| {case['id']} | {case.get('source','-')} | {len(valid)} | {'✅ PASS' if not valid else '❌ FAIL'} |\n"
-
-    # 4. Case hành vi (ambiguous / scope_refusal / security_refusal / edge) — chấm tay theo expected_behavior,
-    #    không so khớp span tự động vì đây là test hành vi (từ chối / confidence thấp), không phải test trích span.
-    def manual_table(cases, label, text_key="text", expect_key="expected_behavior"):
-        rows = f"### {label}\n\n| ID | Kỳ vọng | Output AI thô |\n|---|---|---|\n"
-        for case in cases:
-            text = case.get(text_key) or case.get("scenario", "")
-            expected = case.get(expect_key, "-")
+    no_flag_fp, no_flag_cases, no_flag_table, manual_tables = 0, [], "", ""
+    if include_extra:
+        # 3. No-flag cases bổ sung (lớp ④ mined + input rỗng) — kỳ vọng 0 finding hợp lệ mỗi case
+        no_flag_cases = data.get("no_flag_cases", [])
+        no_flag_table = "| ID | Nguồn | Finding hợp lệ | Trạng thái |\n|---|---|---|---|\n"
+        for case in no_flag_cases:
+            text = case["text"]
             if not text.strip():
-                raw = "(input rỗng, không gọi AI)"
-            else:
-                raw = json.dumps(call_ai(text), ensure_ascii=False)
-            rows += f"| {case['id']} | {expected} | `{raw}` |\n"
-        return rows
+                no_flag_table += f"| {case['id']} | {case.get('source','-')} | 0 (input rỗng, bỏ qua gọi AI) | ✅ PASS |\n"
+                continue
+            findings = _call(text)
+            valid = [f for f in findings if f.get("exact_span", "") in text]
+            no_flag_fp += len(valid)
+            no_flag_table += f"| {case['id']} | {case.get('source','-')} | {len(valid)} | {'✅ PASS' if not valid else '❌ FAIL'} |\n"
 
-    manual_tables = "\n\n".join([
-        manual_table(data.get("scope_refusal_cases", []), "scope_refusal_cases (lớp ③, đã có sẵn)"),
-        manual_table(data.get("ambiguous_low_confidence_cases", []), "ambiguous_low_confidence_cases (lớp ②)"),
-        manual_table(data.get("security_refusal_cases", []), "security_refusal_cases (lớp ③ + bảo mật)"),
-        manual_table(data.get("edge_format_cases", []), "edge_format_cases"),
-    ])
+        # 4. Case hành vi (ambiguous / scope_refusal / security_refusal / edge) — chấm tay theo expected_behavior,
+        #    không so khớp span tự động vì đây là test hành vi (từ chối / confidence thấp), không phải test trích span.
+        def manual_table(cases, label, text_key="text", expect_key="expected_behavior"):
+            rows = f"### {label}\n\n| ID | Kỳ vọng | Output AI thô |\n|---|---|---|\n"
+            for case in cases:
+                text = case.get(text_key) or case.get("scenario", "")
+                expected = case.get(expect_key, "-")
+                if not text.strip():
+                    raw = "(input rỗng, không gọi AI)"
+                else:
+                    raw = json.dumps(_call(text), ensure_ascii=False)
+                rows += f"| {case['id']} | {expected} | `{raw}` |\n"
+            return rows
 
-    print(f"\nNo-flag set bổ sung: {no_flag_fp} finding lọt trên {len(no_flag_cases)} case (kỳ vọng 0).")
-    print("Case hành vi (ambiguous/scope/security/edge): xem eval/evaluation_report.json, cần người chấm tay.")
+        manual_tables = "\n\n".join([
+            manual_table(data.get("scope_refusal_cases", []), "scope_refusal_cases (lớp ③, đã có sẵn)"),
+            manual_table(data.get("ambiguous_low_confidence_cases", []), "ambiguous_low_confidence_cases (lớp ②)"),
+            manual_table(data.get("security_refusal_cases", []), "security_refusal_cases (lớp ③ + bảo mật)"),
+            manual_table(data.get("edge_format_cases", []), "edge_format_cases"),
+        ])
 
-    # Lưu report
+        if verbose:
+            print(f"\nNo-flag set bổ sung: {no_flag_fp} finding lọt trên {len(no_flag_cases)} case (kỳ vọng 0).", flush=True)
+            print("Case hành vi (ambiguous/scope/security/edge): xem eval/evaluation_report.json, cần người chấm tay.", flush=True)
+
     report = {
+        "model": model,
         "metrics": {
             "fp": fp_count,
             "recall": f"{correct_hits}/{total_cases}",
+            "recall_pct": recall_pct,
             "gate_drops": gate_drops,
             "no_flag_extra_fp": f"{no_flag_fp}/{len(no_flag_cases)}"
         },
@@ -199,8 +238,12 @@ def run_eval():
         "no_flag_table": no_flag_table,
         "manual_review_tables": manual_tables
     }
-    with open("eval/evaluation_report.json", "w", encoding="utf-8") as f:
-        json.dump(report, f, ensure_ascii=False, indent=2)
+
+    if save_report:
+        with open("eval/evaluation_report.json", "w", encoding="utf-8") as f:
+            json.dump(report, f, ensure_ascii=False, indent=2)
+
+    return report
 
 if __name__ == "__main__":
     run_eval()

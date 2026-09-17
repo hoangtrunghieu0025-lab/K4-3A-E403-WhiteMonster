@@ -71,6 +71,10 @@ Ví dụ 3 (confidence HIGH — đối chứng, rõ ràng là lỗi, không mơ 
 Input: "Mô hình ngôn ngữ lớn là một sự thay đổi cuộc chơi lớn vào cuối ngày."
 Finding đúng: {"exact_span": "sự thay đổi cuộc chơi lớn vào cuối ngày", "category": "TRANSLATIONESE", "severity": "HIGH", "issue_type": "CONTENT", "confidence": "HIGH", "reason": "Dịch cứng rõ ràng từ 'game changer at the end of the day', không có gì mơ hồ.", "minimal_suggestion": "bước ngoặt lớn"}
 
+Ví dụ 4 (KHÔNG gắn cờ gì cả — không phải lúc nào cũng phải trả về ít nhất 1 finding):
+Input: "Theo nghiên cứu về não bộ thì não bộ của chúng ta hay đi theo thói quen — cái này là trong cuốn sách kinh điển về tư duy hệ thống 1 với hệ thống 2, Thinking, Fast and Slow."
+Finding đúng: {"findings": []} — câu dài và có cụm tiếng Anh nhưng KHÔNG có lỗi thật: tên sách được nêu ngay trong câu nên không phải ungrounded claim, và "Thinking, Fast and Slow" là trích dẫn chính xác chứ không phải translationese. Đừng cố tìm ra một lỗi nào đó chỉ vì câu có vẻ phức tạp.
+
 Chỉ gắn cờ khi có bằng chứng chắc chắn. Return ONLY a JSON object với key 'findings' là mảng object.
 Format mỗi object:
 {

@@ -311,6 +311,24 @@ TODO: mỗi người thử 1 sản phẩm gần giống rồi điền 4 ô — g
 - A/B đúng 10 case C1-C10 trên gpt-4o-mini vs gpt-4o (vẫn chưa làm, 3 lượt liền để lại).
 - Thiết kế lại cách gọi cho S1/S2 (vẫn chưa làm).
 
+### Lượt 6 — thêm few-shot #4 (vá A4/N1) — và Lượt 7 — A/B nhiều model
+
+Chi tiết đầy đủ (bảng số, log treo model, chẩn đoán) ở [`eval/test-log.md`](eval/test-log.md); tóm tắt:
+
+- **Lượt 6:** thêm ví dụ mẫu thứ 4 (`findings: []` khi câu sạch) vào `SYSTEM_PROMPT` → A4 PASS trở lại, no-flag set giảm từ 7/7 câu bị gắn cờ xuống còn 2/7 (N3, N4). Đổi lại: A3 chuyển sang một kiểu FAIL khác (im lặng thay vì gắn cờ LOW). **Không có phiên bản prompt nào (lượt 4/5/6) làm A1-A4 cùng PASS một lúc** — luôn đánh đổi giữa "gắn cờ thận trọng" và "im lặng đúng chỗ"; ghi nhận đây là giới hạn hiện tại của cách tiếp cận few-shot đơn giản.
+- **Lượt 7 — A/B model, từ rẻ đến đắt:**
+
+  | Model | Recall | FP (clean) | Gate Drops |
+  |---|---|---|---|
+  | `gpt-4o-mini` | 10/20 (50%) — dưới bar 60% | 0/1 | 1 |
+  | `gpt-4o` | **19/20 (95%)** | 0/1 | 0 |
+  | `gpt-5-mini` | không đo được — môi trường treo | — | — |
+  | `gpt-5` | không đo được — môi trường treo (cùng triệu chứng với gpt-5-mini) | — | — |
+
+  `gpt-5-mini`/`gpt-5` treo tái lập được 3/3 lần đúng ở bước input dài (không phải lỗi model — câu đơn vẫn phản hồi bình thường 15-33s); nghi do OpenAI gửi keep-alive trong lúc suy luận dài khiến timeout không kích hoạt. Đã dừng thử theo quyết định của đội trưởng, không cố sửa thêm.
+
+  **Kết luận:** `gpt-4o` là lựa chọn tốt nhất trong số model đo được ổn định — recall cao hơn hẳn `gpt-4o-mini` (50% → 95%) và luôn đạt quality bar, đáng đánh đổi chi phí API cao hơn cho một agent QA nội dung giáo dục nơi bỏ sót lỗi tốn kém hơn. Khuyến nghị đổi model mặc định trong `codebase/app.py` từ `gpt-4o-mini` sang `gpt-4o` (chưa làm — để lượt sau).
+
 ## §8. Phân công & kế hoạch
 
 - **Phân công có tên** (spec / evidence / prompt / code / demo):

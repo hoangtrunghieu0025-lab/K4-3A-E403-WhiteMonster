@@ -91,8 +91,47 @@ Theo nhịp lặp ở `02-guide.md` §2.6/§4.1: *chạy trọn bộ → bảng 
 - **Quyết định:** giữ bản lượt 5 vì net vẫn lợi hơn hại (case hành vi PASS 7→9, recall 80%→85%, đổi lấy 1 case A4 và 1 câu N1). Không rollback, nhưng ghi công khai đánh đổi này — không giấu phần hồi quy.
 - **Phiếu chấm tay cập nhật:** [`eval/manual-grading-worksheet.md`](eval/manual-grading-worksheet.md) — 9 PASS · 1 FAIL (A4) · 2 không đánh giá được (S1, S2).
 
-## TODO trước CP5 (lượt 6 — chưa làm)
+## Lượt 6 — thêm few-shot ví dụ 4 ("không gắn cờ gì cả"), vá A4/N1
 
-1. Thêm 1 ví dụ few-shot "không gắn cờ gì cả" (`findings: []`) để cân bằng lại xu hướng "luôn phải tìm ra lỗi" — có thể vá cả A4 lẫn no_flag N1-N6 cùng lúc mà không mất 3 case A1-A3 vừa sửa được.
-2. A/B đúng 10 case C1-C10 trên `gpt-4o-mini` (qua OpenRouter) và `gpt-4o` (qua OpenAI) để tách biến số model khỏi biến số golden set — 3 lượt liền chưa làm.
-3. Thiết kế lại cách gọi cho `scope_refusal_cases` (S1/S2) — 3 lượt liền chưa làm.
+- **Sửa:** thêm ví dụ mẫu thứ 4 vào `SYSTEM_PROMPT` (`eval/run_eval.py` + `codebase/app.py`, đồng bộ cả hai) — minh hoạ rõ `{"findings": []}` là output đúng trên một câu dài + có cụm tiếng Anh nhưng KHÔNG có lỗi thật, kèm giải thích vì sao (nguồn đã nêu trong câu, tên sách trích đúng). Mục tiêu: cân bằng lại xu hướng "luôn phải tìm ra ít nhất 1 lỗi" mà 3 ví dụ few-shot trước vô tình tạo ra.
+- **Cũng thêm trong lượt này (hạ tầng, không phải prompt):** retry cho lỗi kết nối mạng (không chỉ 429), `include_extra` param để A/B nhiều model không cần chạy no_flag/case hành vi mỗi lần, và tách `run_eval()`/`call_ai()` thành hàm dùng lại được cho script A/B (`eval/run_model_ab.py`, viết mới lượt này).
+- **Kết quả (gpt-4o, archive lượt 5 → `evaluation_report.lot5.json` trước khi ghi đè):**
+
+  | Chỉ số | Lượt 5 | Lượt 6 | Nhận định |
+  |---|---|---|---|
+  | Recall (C1-C20) | 17/20 (85%) | 17/20 (85%) | Cùng %, nhưng đổi case cụ thể (C1 PASS nay, C13/C19 FAIL nay) — một phần là nhiễu ngẫu nhiên của model (temperature > 0), không phải hoàn toàn do prompt |
+  | No-flag set (7 câu) | 7 finding / 7 câu FAIL | **4 finding / 2 câu FAIL** (N3, N4) | Cải thiện rõ — từ "gắn cờ mọi câu" xuống chỉ còn 2/7 câu |
+  | A4 (ambiguous) | FAIL (hồi quy ở lượt 5) | **PASS trở lại** (`[]`, đúng như mong đợi) | Vá đúng mục tiêu |
+  | A3 (ambiguous) | PASS (LOW confidence, đúng cụm) | **FAIL kiểu mới** — nay trả `[]`, không gắn cờ gì (thay vì gắn cờ LOW) | Đánh đổi mới: có vẻ ví dụ 4 kéo model về phía "im lặng" hơi quá tay cho đúng 1 case biên giới |
+
+- **Nhận định:** không có phiên bản SYSTEM_PROMPT nào (lượt 4/5/6) làm cả 4 case A1-A4 cùng PASS một lúc — luôn đánh đổi giữa "gắn cờ với confidence thấp" và "không gắn cờ gì". Đây có thể là giới hạn thật của việc dùng few-shot đơn giản để dạy một phân biệt tinh tế; cần few-shot đa dạng hơn (nhiều case biên giới khác nhau) hoặc chấp nhận đây là ranh giới đã biết, khai trong `spec.md` §8.
+- Không cập nhật lại phiếu chấm tay lần này (A1-A3-A4 dao động qua lại, ưu tiên dồn sức cho A/B model theo yêu cầu tiếp theo).
+
+## Lượt 7 — A/B nhiều model, từ rẻ đến đắt (gpt-4o-mini → gpt-4o → gpt-5-mini → gpt-5)
+
+- **Script mới:** `eval/run_model_ab.py` — chạy `run_eval()` (chỉ FP + Recall + Gate Drops, `include_extra=False` để giảm số lời gọi) lần lượt qua nhiều model, lưu tạm sau mỗi model để không mất kết quả nếu bị ngắt giữa chừng, tự bỏ qua model đã có kết quả "ok" khi chạy lại (đỡ tốn API call).
+- **Kết quả:**
+
+  | Model | Recall (20 case) | FP (clean, 40 câu) | Gate Drops | Ghi chú |
+  |---|---|---|---|---|
+  | `gpt-4o-mini` | 10/20 (50%) | 0/1 | 1 | Rẻ nhất, recall thấp nhất trong các model test được |
+  | `gpt-4o` | **19/20 (95%)** | 0/1 | 0 | Tốt nhất đo được — cao hơn hẳn cả 2 lượt chạy gpt-4o trước đó (80-85%), một phần do dao động ngẫu nhiên giữa các lượt (đã thấy nhiều lần trong log này) |
+  | `gpt-5-mini` | **không đo được** | **không đo được** | — | Treo 2/2 lần thử (>15 phút, không lỗi không log) đúng ở bước FP-40-câu; test riêng bằng script chẩn đoán xác nhận model tự nó phản hồi bình thường (33s) với câu đơn ngắn |
+  | `gpt-5` | **không đo được** | **không đo được** | — | Treo y hệt gpt-5-mini, cũng đúng ở bước FP-40-câu (lần thử duy nhất) |
+
+- **Phát hiện quan trọng — giới hạn môi trường, không phải giới hạn model:** cả 2 model dòng suy luận (gpt-5-mini, gpt-5) đều treo tái lập được (3/3 lần) đúng tại lời gọi có input dài (đoạn sạch ~40 câu), trong khi cùng 2 model đó trả lời bình thường trong 15-33s cho input ngắn (1 câu). Test chẩn đoán riêng (`eval/_diag_quick.py`, đã xoá sau khi dùng xong) xác nhận: gọi trực tiếp không qua `SYSTEM_PROMPT` nặng → phản hồi 2-3s; gọi với `SYSTEM_PROMPT` đầy đủ + 1 câu đơn → 15-33s (nhiều token suy luận ẩn, thấy rõ qua `completion_tokens` cao bất thường cho câu trả lời "ok" 2 ký tự); gọi với input dài 40 câu → treo, không timeout dù đã đặt `timeout=60` (nghi ngờ do OpenAI gửi keep-alive/heartbeat trong lúc suy luận dài, khiến timeout của `requests` không bao giờ kích hoạt vì nó tính theo khoảng cách giữa các gói tin chứ không phải tổng thời gian).
+- **Quyết định (theo yêu cầu):** dừng thử `gpt-5-mini`/`gpt-5` ở đây, không thử thêm. Kết luận A/B dựa trên 2 model đã đo được đầy đủ.
+
+### Kết luận A/B (những gì đo được được)
+
+1. **`gpt-4o` là lựa chọn tốt nhất trong số model đo được ổn định** — recall 95% ở lượt đo tốt nhất (dao động 80-95% qua các lượt, luôn ≥ bar 60%), FP 0/1, Gate Drops 0. Chi phí cao hơn `gpt-4o-mini` nhưng recall chênh lệch rất lớn (50% vs 80-95%) — đáng đánh đổi cho một agent QA nội dung giáo dục, nơi bỏ sót lỗi (recall thấp) tốn kém hơn chi phí API.
+2. **`gpt-4o-mini` không đạt quality bar một cách ổn định** — 50% recall dưới bar 60% đã chốt ở CP4. Không nên dùng làm model chính thức cho bản demo, dù rẻ.
+3. **Không kết luận được gì về dòng gpt-5** trong môi trường build này — không phải vì model kém, mà vì hạ tầng test (mạng + timeout) không xử lý được input dài kết hợp model suy luận. Nếu môi trường khác (ví dụ máy cá nhân, mạng ổn định hơn) thì nên thử lại — hướng dẫn: dùng `python eval/run_model_ab.py`, đã có sẵn resume-skip nên không mất công chạy lại 2 model đã xong.
+4. **Khuyến nghị cho bản nộp:** giữ `gpt-4o` làm model chính trong `codebase/app.py` (hiện đang để `gpt-4o-mini` mặc định trong dropdown — nên đổi hoặc ít nhất thêm ghi chú khuyến nghị), vì đây là model duy nhất vừa đo được đầy đủ vừa vượt bar rõ ràng.
+
+## TODO trước CP5 (lượt 8 — chưa làm)
+
+1. Thử lại `gpt-5-mini`/`gpt-5` nếu có môi trường mạng ổn định hơn (không bắt buộc — đã có kết luận đủ dùng từ gpt-4o-mini/gpt-4o).
+2. Cân nhắc đổi model mặc định trong `codebase/app.py` từ `gpt-4o-mini` sang `gpt-4o` theo kết luận A/B ở trên.
+3. Thiết kế lại cách gọi cho `scope_refusal_cases` (S1/S2) — 5 lượt liền chưa làm.
+4. Nếu muốn vá tiếp A1-A4 (không có phiên bản nào PASS cả 4 cùng lúc) — thử few-shot đa dạng hơn thay vì chỉ 1 ví dụ mỗi loại.
