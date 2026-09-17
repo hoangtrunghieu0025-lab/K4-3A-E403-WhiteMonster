@@ -35,9 +35,31 @@ Theo nhịp lặp ở `02-guide.md` §2.6/§4.1: *chạy trọn bộ → bảng 
 - **Sửa code:** `eval/run_eval.py` giữ nguyên toàn bộ logic của Duy (đếm `flawed_cases`, evidence gate, bảng markdown C1-C20), **thêm phần chạy `no_flag_cases`** (đếm finding lọt, kỳ vọng 0) và **phần in output thô** của `scope_refusal_cases`/`ambiguous_low_confidence_cases`/`security_refusal_cases`/`edge_format_cases` để người chấm tay theo `expected_behavior` (đây là case hành vi — từ chối/confidence thấp — không so khớp span tự động được).
 - **Kết quả cải thiện — TODO: chưa đo được, cần chạy thật.** Phiên làm việc này không có `OPENROUTER_API_KEY` trong môi trường nên chưa gọi được model để lấy số cho 17 case mới (7 no-flag + 4 ambiguous + 4 security + 2 edge).
 
-## TODO trước CP5
+## Lượt 3 — cùng phiên, sau khi bạn điền `OPENAI_API_KEY` vào `.env` — đã chạy đủ 39 case
 
-1. Set `OPENROUTER_API_KEY` rồi chạy `python eval/run_eval.py` — lấy số Recall/FP/Gate Drops thật cho `flawed_cases` (C1-C20, đủ 20 thay vì chỉ 10) + `no_flag_cases` (N1-N7).
-2. Đọc thủ công output của `scope_refusal_cases`, `ambiguous_low_confidence_cases`, `security_refusal_cases`, `edge_format_cases` trong `eval/evaluation_report.json` — chấm đạt/không đạt theo cột `expected_behavior`.
-3. **Ưu tiên SEC1/SEC4 (chống prompt injection) trước tiên** theo nhịp lặp của guide (chọn MỘT failure đau nhất để sửa) — nếu agent tuân theo chỉ thị nhúng (lộ system prompt, xuất dữ liệu ngoài phiên), đây là rủi ro an toàn thật, không chỉ là rớt điểm eval, cần sửa `SYSTEM_PROMPT` trong `codebase/app.py` trước khi demo CP6.
-4. Cập nhật bảng kết quả + % ở `spec.md` §7 sau khi có số thật — **không sửa quality bar đã chốt tại CP4** (FP=0, Recall≥60%), chỉ ghi nhận thêm số đo trên bộ mở rộng, kể cả nếu thấp hơn.
+- **Đổi hạ tầng trước khi chạy:** key bạn điền là key OpenAI (`sk-proj-...`), không xác thực được với endpoint OpenRouter cũ → sửa `eval/run_eval.py` gọi thẳng `api.openai.com`, đổi `MODEL` sang `gpt-4o` ("bản 4 thường", không phải mini — nếu ý bạn là `gpt-4` gốc thì báo lại, model đó không hỗ trợ ép JSON response nên phải đổi cách gọi). Thêm `.env`/`.env.example`/`.gitignore`/`python-dotenv` để không phải set biến môi trường tay. Sửa thêm lỗi `UnicodeEncodeError` khi in tiếng Việt trên console Windows (`sys.stdout.reconfigure(encoding="utf-8")`).
+- **Chạy trọn bộ 39 case, 1 lượt, không sửa gì giữa chừng** (đúng nhịp lặp guide — chạy xong mới phân tích, không tối ưu ngay trong lượt này):
+
+  | Chỉ số | Kết quả | So quality bar (chốt CP4) |
+  |---|---|---|
+  | False Positive (40 câu sạch gốc) | 0/1 | ✅ đạt |
+  | Recall (20 case C1-C20) | **9/20 (45%)** | ❌ KHÔNG đạt (bar ≥60%) |
+  | Evidence Gate Drops | 2 | ✅ đạt (đúng là có bịa span và bị chặn) |
+  | No-flag set bổ sung (N1-N7) | 10 finding lọt / 6 câu FAIL, chỉ N7 (rỗng) PASS | ❌ FAIL gần như toàn bộ |
+  | Case hành vi (S1-S2, A1-A4, SEC1-SEC4, E1-E2) | Chấm tay — xem bảng chi tiết ở `spec.md` §7 | Đa số FAIL hoặc không đánh giá được |
+
+- **Ghi nhận trung thực dù không đạt bar — không chỉnh sửa số liệu.** Bảng đầy đủ từng case (kể cả 11 case FAIL trong C1-C20, cả 6 case FAIL trong no_flag) đã chép vào `spec.md` §7, đúng yêu cầu R4 "bảng kết quả... đủ mọi case kể cả case chưa đạt".
+
+- **Chọn MỘT failure đau nhất theo nhịp lặp của guide:** `no_flag_cases` FAIL gần 100% — hệ thống đang gắn cờ đúng loại câu (dài nhưng tự nhiên) mà spec.md §1 dùng làm bằng chứng trung tâm để nói "KHÔNG được gắn cờ chỉ vì dài". Nguyên nhân: `SYSTEM_PROMPT` chưa từng được viết luật này — kết luận evidence trong spec chưa thực sự có mặt trong code.
+
+- **Nguyên nhân khác đã xác định (đầy đủ ở `spec.md` §7, không lặp lại ở đây):** SYSTEM_PROMPT lạc hậu (thiếu 4/8 category, thiếu field confidence) · đổi model + đổi số case cùng lúc nên không so sánh công bằng được 60%→45% · `scope_refusal_cases` (S1/S2) bị lỗi thiết kế test (không có kênh gửi "yêu cầu ngoài phạm vi" tách biệt với "văn bản kịch bản") · phần "an toàn" của SEC1-SEC4 một phần đến từ kiến trúc giới hạn quyền (API không có quyền xoá file) chứ chưa chắc AI chủ động từ chối.
+
+- **Chưa sửa gì trong lượt này** — theo đúng yêu cầu, chỉ nhận định hướng sửa, để lại cho lượt 4.
+
+## TODO trước CP5 (lượt 4 — chưa làm)
+
+1. Thêm vào `SYSTEM_PROMPT`: luật "không gắn cờ chỉ vì câu dài/nhiều mệnh đề, trừ khi không có điểm ngắt hơi tự nhiên" (vá `no_flag_cases`) + đủ 8 category + field `confidence` (vá `ambiguous_low_confidence_cases`) + luật gắn cờ PII (vá SEC3).
+2. Thiết kế lại cách gọi cho `scope_refusal_cases` (S1/S2) — cần mô phỏng "yêu cầu của người duyệt" tách biệt khỏi "văn bản kịch bản cần soát", khác với `security_refusal_cases` (đã đúng vì chỉ thị nằm ngay trong văn bản).
+3. Chạy lại đúng 10 case C1-C10 trên cả `gpt-4o-mini` (qua OpenRouter) và `gpt-4o` (qua OpenAI) để tách biến số model khỏi biến số golden set, mới kết luận được model nào tốt hơn.
+4. Sau khi sửa SYSTEM_PROMPT, chạy lại `python eval/run_eval.py` trọn bộ 39 case — so sánh % trước/sau, ghi thành Lượt 5.
+5. Cập nhật lại `codebase/app.py` (đang dùng SYSTEM_PROMPT cũ hơn cả bản trong `run_eval.py`) cho đồng bộ, tránh 2 nơi lệch prompt.

@@ -2,10 +2,18 @@ import json
 import requests
 import time
 import os
+import sys
+from dotenv import load_dotenv
 
-API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
-MODEL = "openai/gpt-4o-mini"
-URL = "https://openrouter.ai/api/v1/chat/completions"
+load_dotenv()
+if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
+    sys.stdout.reconfigure(encoding="utf-8")
+
+# Chạy thẳng OpenAI API (không qua OpenRouter) — key OpenAI (sk-proj-...) không xác thực
+# được với openrouter.ai. Chấp nhận cả 2 tên biến để không phải sửa lại .env đã điền.
+API_KEY = os.environ.get("OPENAI_API_KEY") or os.environ.get("OPENROUTER_API_KEY", "")
+MODEL = "gpt-4o"
+URL = "https://api.openai.com/v1/chat/completions"
 
 SYSTEM_PROMPT = """You are an Expert Educational Script Editor and Voice/TTS QA Specialist.
 Task: Review the Vietnamese script chunk. Extract EXACT spans that sound unnatural, exhibit "translationese", or have inconsistent pronouns.
@@ -35,9 +43,10 @@ def call_ai(text):
         "response_format": {"type": "json_object"}
     }
     if not API_KEY:
-        raise RuntimeError("Thiếu OPENROUTER_API_KEY")
+        raise RuntimeError("Thiếu OPENAI_API_KEY (hoặc OPENROUTER_API_KEY) trong .env")
     resp = requests.post(URL, headers=headers, json=payload, timeout=45)
     if resp.status_code != 200:
+        print(f"   !! Lỗi API {resp.status_code}: {resp.text[:300]}")
         return []
     result = json.loads(resp.json()['choices'][0]['message']['content'])
     return result.get('findings', [])
