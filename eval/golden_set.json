@@ -6,70 +6,230 @@
       "text": "Chào các bạn. Hôm nay chúng tôi sẽ nói về Prompt Engineering. Cá nhân tôi nghĩ các bạn sẽ thích nó.",
       "ground_truth_span": "chúng tôi",
       "category": "INCONSISTENT_REGISTER",
-      "note": "Xưng hô đang 'các bạn' - 'tôi' nhưng lại xen 'chúng tôi'."
+      "note": "Xưng hô đang 'các bạn' - 'tôi' nhưng lại xen 'chúng tôi'.",
+      "difficulty": "kho",
+      "class": "④",
+      "source": "tu_viet"
     },
     {
       "id": "C2",
       "text": "Mô hình ngôn ngữ lớn là một sự thay đổi cuộc chơi lớn vào cuối ngày đối với ngành công nghệ.",
       "ground_truth_span": "sự thay đổi cuộc chơi lớn vào cuối ngày",
       "category": "TRANSLATIONESE",
-      "note": "Dịch word-by-word từ 'game changer at the end of the day'."
+      "note": "Dịch word-by-word từ 'game changer at the end of the day'.",
+      "difficulty": "thuong",
+      "class": null,
+      "source": "tu_viet"
     },
     {
       "id": "C3",
       "text": "Để tối ưu mô hình, ta cần làm sạch dữ liệu. Dữ liệu sạch rất quan trọng. Nếu không làm sạch dữ liệu thì mô hình sẽ học sai.",
       "ground_truth_span": "Dữ liệu sạch rất quan trọng. Nếu không làm sạch dữ liệu thì mô hình sẽ học sai.",
       "category": "REPETITION",
-      "note": "Lặp ý, lê thê không cần thiết trong văn nói."
+      "note": "Lặp ý, lê thê không cần thiết trong văn nói.",
+      "difficulty": "thuong",
+      "class": null,
+      "source": "tu_viet"
     },
     {
       "id": "C4",
       "text": "Theo báo cáo mới nhất, AI đã giúp tăng doanh thu lên 45,7% ở các doanh nghiệp vừa và nhỏ tại Việt Nam trong năm 2024.",
       "ground_truth_span": "tăng doanh thu lên 45,7% ở các doanh nghiệp vừa và nhỏ",
       "category": "UNGROUNDED_CLAIM",
-      "note": "Chèn số liệu quá cụ thể không có nguồn (vi phạm rule kịch bản)."
+      "note": "Chèn số liệu quá cụ thể không có nguồn (vi phạm rule kịch bản).",
+      "difficulty": "kho",
+      "class": "①",
+      "source": "tu_viet"
     },
     {
       "id": "C5",
       "text": "Bước tiếp theo, bạn click vào nút Submit Form sau đó parse file JSON để extract data ra format chuẩn.",
       "ground_truth_span": "parse file JSON để extract data ra format chuẩn",
       "category": "TRANSLATIONESE",
-      "note": "Code-switch tiếng Anh dày đặc, khó đọc thành tiếng tự nhiên."
+      "note": "Code-switch tiếng Anh dày đặc, khó đọc thành tiếng tự nhiên.",
+      "difficulty": "kho",
+      "class": "②",
+      "source": "tu_viet"
     },
     {
       "id": "C6",
       "text": "Hôm qua mình vừa setup xong server. Bây giờ chúng ta hãy cùng nhau deploy con bot này lên mây nhé.",
       "ground_truth_span": "chúng ta",
       "category": "INCONSISTENT_REGISTER",
-      "note": "Chuyển từ 'mình' sang 'chúng ta' đột ngột."
+      "note": "Chuyển từ 'mình' sang 'chúng ta' đột ngột.",
+      "difficulty": "thuong",
+      "class": null,
+      "source": "tu_viet"
     },
     {
       "id": "C7",
       "text": "Nó thực sự không phải là khoa học tên lửa, bạn chỉ cần một chút nỗ lực là làm được.",
       "ground_truth_span": "khoa học tên lửa",
       "category": "TRANSLATIONESE",
-      "note": "Thành ngữ 'rocket science' dịch thô."
+      "note": "Thành ngữ 'rocket science' dịch thô.",
+      "difficulty": "thuong",
+      "class": null,
+      "source": "tu_viet"
     },
     {
       "id": "C8",
       "text": "Tóm lại, phần này rất dễ. Nên nhớ là phần này cực kỳ đơn giản để vượt qua.",
       "ground_truth_span": "Nên nhớ là phần này cực kỳ đơn giản để vượt qua.",
       "category": "REPETITION",
-      "note": "Conclusion residue, lặp ý chốt."
+      "note": "Conclusion residue, lặp ý chốt.",
+      "difficulty": "thuong",
+      "class": null,
+      "source": "tu_viet"
     },
     {
       "id": "C9",
       "text": "Bạn có thể dùng công cụ OpenAI GPT-4o-mini-2024-07-18 để xử lý nhanh đoạn text này.",
       "ground_truth_span": "GPT-4o-mini-2024-07-18",
       "category": "UNGROUNDED_CLAIM",
-      "note": "Tên model quá dài và có số/chữ xen kẽ cực kỳ khó đọc TTS."
+      "note": "Tên model quá dài và có số/chữ xen kẽ cực kỳ khó đọc TTS.",
+      "difficulty": "hiem",
+      "class": null,
+      "source": "tu_viet"
     },
     {
       "id": "C10",
       "text": "AI sẽ là chìa khóa mở ra cánh cửa thành công cho 10 triệu sinh viên trên toàn thế giới vào năm tới.",
       "ground_truth_span": "10 triệu sinh viên trên toàn thế giới vào năm tới",
       "category": "UNGROUNDED_CLAIM",
-      "note": "Bịa số liệu tương lai không nguồn."
+      "note": "Bịa số liệu tương lai không nguồn.",
+      "difficulty": "kho",
+      "class": "①",
+      "source": "tu_viet"
+    },
+    {
+      "id": "C11",
+      "text": "Vai trò của LLM: Được xác định là \"engine\" cốt lõi cho cả Generative AI và Agentic AI [trang 7].",
+      "ground_truth_span": "Được xác định là \"engine\" cốt lõi cho cả Generative AI và Agentic AI [trang 7]",
+      "category": "AI_VOICE",
+      "note": "Giọng liệt kê gạch đầu dòng + trích [trang N] — viết cho mắt đọc, đọc thành tiếng sẽ vấp ở phần trích trang.",
+      "difficulty": "thuong",
+      "class": null,
+      "source": "chatlog_that",
+      "source_id": "T00001"
+    },
+    {
+      "id": "C12",
+      "text": "Chào bạn! Tôi là trợ lý học tập cho bài học Ngày 2 về **Xác định bài toán kinh doanh cho AI** [trang 1].",
+      "ground_truth_span": "Tôi là trợ lý học tập cho bài học Ngày 2 về **Xác định bài toán kinh doanh cho AI** [trang 1]",
+      "category": "AI_VOICE",
+      "note": "Ký hiệu ** (in đậm markdown) và [trang N] chen giữa câu — không đọc được thành tiếng nguyên trạng.",
+      "difficulty": "thuong",
+      "class": null,
+      "source": "chatlog_that",
+      "source_id": "T00002"
+    },
+    {
+      "id": "C13",
+      "text": "VLearn: Đây là tên hệ thống quản lý học tập trực tuyến (Learning Management System - LMS) của VinUniversity.",
+      "ground_truth_span": "(Learning Management System - LMS)",
+      "category": "TRANSLATIONESE",
+      "note": "Chú giải tiếng Anh trong ngoặc ngay sau tên hệ thống — lặp một khái niệm hai lần, khó đọc liền mạch.",
+      "difficulty": "hiem",
+      "class": null,
+      "source": "chatlog_that",
+      "source_id": "T00022"
+    },
+    {
+      "id": "C14",
+      "text": "Hello! Welcome to Day 1: **LLM Foundation**. I'm here to help you explore the fundamental concepts of Large Language Models, from understanding how they process text through tokens [page 14].",
+      "ground_truth_span": "Hello! Welcome to Day 1: **LLM Foundation**. I'm here to help you explore the fundamental concepts of Large Language Models, from understanding how they process text through tokens [page 14].",
+      "category": "TRANSLATIONESE",
+      "note": "Cả câu trả lời bằng tiếng Anh nguyên khối trong công cụ tiếng Việt — ca hiếm nhưng có thật trong log.",
+      "difficulty": "hiem",
+      "class": null,
+      "source": "chatlog_that",
+      "source_id": "T00014"
+    },
+    {
+      "id": "C15",
+      "text": "Hello! I'm here to support you with today's lesson, **Day 1: LLM Foundation**. We will explore the basics of Large Language Models, including how they predict tokens [trang 15] and their role as the engine for Agentic AI [trang 7].",
+      "ground_truth_span": "Hello! I'm here to support you with today's lesson, **Day 1: LLM Foundation**.",
+      "category": "TRANSLATIONESE",
+      "note": "Ca hiếm thứ hai — trộn tiêu đề tiếng Anh và [trang N] tiếng Việt trong cùng một câu chào.",
+      "difficulty": "hiem",
+      "class": null,
+      "source": "chatlog_that",
+      "source_id": "T00015"
+    },
+    {
+      "id": "C16",
+      "text": "Có vẻ như bạn đang thắc mắc về nội dung chúng ta sẽ trao đổi? Bài học Ngày 2 này tập trung vào bước khởi đầu của mọi dự án AI: **Xác định bài toán kinh doanh** [trang 1].",
+      "ground_truth_span": "Bài học Ngày 2 này tập trung vào bước khởi đầu của mọi dự án AI: **Xác định bài toán kinh doanh** [trang 1]",
+      "category": "AI_VOICE",
+      "note": "Dấu hai chấm + in đậm + trích trang — cấu trúc văn bản, không phải cấu trúc câu nói.",
+      "difficulty": "thuong",
+      "class": null,
+      "source": "chatlog_that",
+      "source_id": "T00008"
+    },
+    {
+      "id": "C17",
+      "text": "Bạn đang gặp khó khăn với nội dung cụ thể nào, chẳng hạn như cách làm việc Agile cho AI [trang 6], phân biệt MVE/MVP/PoC [trang 12], hay cách xây dựng mô hình ROI [trang 21]?",
+      "ground_truth_span": "phân biệt MVE/MVP/PoC [trang 12]",
+      "category": "PRONUNCIATION",
+      "note": "Ba viết tắt liền nhau (MVE/MVP/PoC) không có nghĩa tiếng Việt ở lần nhắc đầu — vi phạm Luật 3 sổ luật Studio.",
+      "difficulty": "thuong",
+      "class": null,
+      "source": "chatlog_that",
+      "source_id": "T04197"
+    },
+    {
+      "id": "C18",
+      "text": "Trọng tâm của bài học là chuyển đổi một hệ thống RAG từ trạng thái demo (thường chỉ đạt độ chính xác khoảng 60%) lên mức production (đạt độ tin cậy trên 85%) bằng cách tập trung tối ưu hóa hai thành phần chính: ingestion và...",
+      "ground_truth_span": "chuyển đổi một hệ thống RAG từ trạng thái demo (thường chỉ đạt độ chính xác khoảng 60%) lên mức production (đạt độ tin cậy trên 85%)",
+      "category": "TRANSLATIONESE",
+      "note": "'ingestion' và 'RAG' có thể là thuật ngữ chuẩn khoá (đã dạy ở bài Production RAG) — agent không đủ căn cứ để tự quyết đổi sang tiếng Việt, cần người xác minh.",
+      "difficulty": "kho",
+      "class": "②",
+      "source": "chatlog_that",
+      "source_id": "T07108"
+    },
+    {
+      "id": "C19",
+      "text": "Việc format dữ liệu sang dạng JSON hoặc yêu cầu sử dụng API key là những kỹ năng lập trình chung, không nằm trong nội dung giảng dạy của ngày học day13-monitoring-logging-observability.",
+      "ground_truth_span": "day13-monitoring-logging-observability",
+      "category": "PRONUNCIATION",
+      "note": "Mã bài giảng dạng slug (gạch nối, chữ thường liền) — đọc thành tiếng khó, nhưng đây là placeholder kỹ thuật của hệ thống, không phải lỗi nội dung: cần gắn cờ tách biệt khỏi lỗi ngữ nghĩa, không được tự ý đổi tên bài.",
+      "difficulty": "kho",
+      "class": "④",
+      "source": "chatlog_that",
+      "source_id": "T05026"
+    },
+    {
+      "id": "C20",
+      "text": "Dưới đây là một câu hỏi để giúp bạn kiểm tra việc chuẩn bị cho bài Lab 01 dựa trên nội dung tại trang 8: Ngoài việc lấy API key của Gemini và OpenAI, đâu là hai bước quan trọng khác bạn cần thực hiện trên tài khoản GitHub và Email?",
+      "ground_truth_span": "dựa trên nội dung tại trang 8",
+      "category": "AI_VOICE",
+      "note": "Trích số trang giữa câu hỏi — quy ước tài liệu viết, không phải cách đặt câu hỏi khi nói.",
+      "difficulty": "thuong",
+      "class": null,
+      "source": "chatlog_that",
+      "source_id": "T04126"
+    }
+  ],
+  "scope_refusal_cases": [
+    {
+      "id": "S1",
+      "class": "③",
+      "difficulty": "kho",
+      "source": "tu_viet",
+      "scenario": "Người duyệt yêu cầu agent viết lại cả kịch bản cho mượt.",
+      "expected_behavior": "Từ chối viết lại toàn văn; giải thích phạm vi chỉ dừng ở từng finding (Accept/Sửa tay/Bỏ qua); đề nghị người duyệt xử lý từng chỗ hoặc tự viết lại rồi đưa lại để agent soát tiếp.",
+      "ref": "spec.md §5 case 8, dựng trong codebase/mockup.html (nút \"Yêu cầu viết lại cả bài\")"
+    },
+    {
+      "id": "S2",
+      "class": "③",
+      "difficulty": "kho",
+      "source": "tu_viet",
+      "scenario": "Người duyệt yêu cầu agent tự thêm một ví dụ minh hoạ mới cho sinh động.",
+      "expected_behavior": "Từ chối thêm nội dung mới; giải thích agent chỉ soát chứ không sáng tác thêm claim/ví dụ ngoài kịch bản gốc; đề nghị người duyệt tự viết rồi đưa lại.",
+      "ref": "spec.md §5 case 11, non-goal §4"
     }
   ]
 }
