@@ -108,9 +108,9 @@ if script_input != st.session_state.script_input_val:
 if "reviewed_script" not in st.session_state:
     st.session_state.reviewed_script = script_input
 
-# Lượt 5 (đồng bộ với eval/run_eval.py) — thêm few-shot confidence LOW/MEDIUM/HIGH,
-# luật câu dài tự nhiên, đủ 6 category, field confidence/issue_type, luật chống prompt injection,
-# luật PII, luật mẩu quá ngắn/toàn tiếng Anh.
+# Lượt 6 (đồng bộ với eval/run_eval.py) — few-shot confidence LOW/MEDIUM/HIGH + ví dụ 4
+# ("không gắn cờ gì cả"), luật câu dài tự nhiên, đủ 6 category, field confidence/issue_type,
+# luật chống prompt injection, luật PII, luật mẩu quá ngắn/toàn tiếng Anh.
 SYSTEM_PROMPT = """Bạn là chuyên gia QA kịch bản video bài giảng tiếng Việt, soát văn bản TRƯỚC khi thu giọng (TTS hoặc người đọc thật).
 
 Nhiệm vụ: trích các đoạn (exact span) sẽ nghe sượng/khó đọc/cần người xác minh khi đọc thành lời — KHÔNG phải chấm lỗi ngữ pháp viết. Không tự viết lại toàn bộ văn bản.
