@@ -1,0 +1,75 @@
+{
+  "clean_script": "Chào mừng các bạn đến với khóa học Trí tuệ Nhân tạo. Hôm nay, chúng ta sẽ cùng tìm hiểu về các mô hình ngôn ngữ lớn. Đây là nền tảng cho nhiều ứng dụng trong đời sống. Mọi người không cần lo lắng nếu chưa có nền tảng toán học chuyên sâu. Khóa học được thiết kế theo từng bước dễ theo dõi. Trước hết, chúng ta làm quen với khái niệm dữ liệu. Sau đó, chúng ta xem cách mô hình học từ những ví dụ đã có. Mỗi ví dụ đều có phần giải thích ngắn gọn. Các bạn có thể tạm dừng video để ghi chú. Nếu có thuật ngữ mới, hãy đọc lại phần chú thích. Bài học hôm nay tập trung vào cách đặt câu hỏi cho mô hình. Một câu hỏi rõ ràng thường tạo ra câu trả lời dễ dùng hơn. Tuy vậy, kết quả vẫn cần được con người kiểm tra. Chúng ta sẽ xem một ví dụ đơn giản trước. Tiếp theo, chúng ta so sánh hai cách viết câu hỏi. Cách thứ nhất nêu rõ mục tiêu cần đạt. Cách thứ hai đưa thêm bối cảnh cần thiết. Khi bối cảnh đủ rõ, mô hình ít phải đoán hơn. Đây là kỹ năng có thể luyện tập qua nhiều bài nhỏ. Các bạn không cần ghi nhớ mọi công thức ngay trong buổi đầu. Hãy chú ý đến cách suy nghĩ trước khi chú ý đến công cụ. Phần thực hành sẽ dùng một đoạn văn ngắn. Các bạn sẽ đọc yêu cầu và dự đoán kết quả. Sau đó, chúng ta đối chiếu dự đoán với câu trả lời của mô hình. Nếu có khác biệt, chúng ta tìm nguyên nhân cùng nhau. Một số câu trả lời có thể thiếu thông tin. Khi đó, chúng ta bổ sung dữ kiện thay vì đoán tiếp. Cách làm này giúp việc kiểm tra minh bạch hơn. Ở cuối bài, chúng ta tóm tắt ba điểm chính. Thứ nhất, cần nêu rõ mục tiêu. Thứ hai, cần cung cấp bối cảnh phù hợp. Thứ ba, cần kiểm tra kết quả trước khi sử dụng. Bây giờ, chúng ta chuyển sang phần thực hành. Hãy mở trang bài tập và làm câu đầu tiên. Nếu gặp khó khăn, các bạn có thể xem gợi ý. Chúng ta sẽ cùng chữa bài ở phần tiếp theo. Phần cuối giới thiệu cách tự đánh giá câu trả lời. Các bạn hãy ghi lại điều mình muốn thử ở bài sau. Hãy lưu lại ghi chú để xem lại khi cần. Cảm ơn các bạn đã theo dõi.",
+  "flawed_cases": [
+    {
+      "id": "C1",
+      "text": "Chào các bạn. Hôm nay chúng tôi sẽ nói về Prompt Engineering. Cá nhân tôi nghĩ các bạn sẽ thích nó.",
+      "ground_truth_span": "chúng tôi",
+      "category": "INCONSISTENT_REGISTER",
+      "note": "Xưng hô đang 'các bạn' - 'tôi' nhưng lại xen 'chúng tôi'."
+    },
+    {
+      "id": "C2",
+      "text": "Mô hình ngôn ngữ lớn là một sự thay đổi cuộc chơi lớn vào cuối ngày đối với ngành công nghệ.",
+      "ground_truth_span": "sự thay đổi cuộc chơi lớn vào cuối ngày",
+      "category": "TRANSLATIONESE",
+      "note": "Dịch word-by-word từ 'game changer at the end of the day'."
+    },
+    {
+      "id": "C3",
+      "text": "Để tối ưu mô hình, ta cần làm sạch dữ liệu. Dữ liệu sạch rất quan trọng. Nếu không làm sạch dữ liệu thì mô hình sẽ học sai.",
+      "ground_truth_span": "Dữ liệu sạch rất quan trọng. Nếu không làm sạch dữ liệu thì mô hình sẽ học sai.",
+      "category": "REPETITION",
+      "note": "Lặp ý, lê thê không cần thiết trong văn nói."
+    },
+    {
+      "id": "C4",
+      "text": "Theo báo cáo mới nhất, AI đã giúp tăng doanh thu lên 45,7% ở các doanh nghiệp vừa và nhỏ tại Việt Nam trong năm 2024.",
+      "ground_truth_span": "tăng doanh thu lên 45,7% ở các doanh nghiệp vừa và nhỏ",
+      "category": "UNGROUNDED_CLAIM",
+      "note": "Chèn số liệu quá cụ thể không có nguồn (vi phạm rule kịch bản)."
+    },
+    {
+      "id": "C5",
+      "text": "Bước tiếp theo, bạn click vào nút Submit Form sau đó parse file JSON để extract data ra format chuẩn.",
+      "ground_truth_span": "parse file JSON để extract data ra format chuẩn",
+      "category": "TRANSLATIONESE",
+      "note": "Code-switch tiếng Anh dày đặc, khó đọc thành tiếng tự nhiên."
+    },
+    {
+      "id": "C6",
+      "text": "Hôm qua mình vừa setup xong server. Bây giờ chúng ta hãy cùng nhau deploy con bot này lên mây nhé.",
+      "ground_truth_span": "chúng ta",
+      "category": "INCONSISTENT_REGISTER",
+      "note": "Chuyển từ 'mình' sang 'chúng ta' đột ngột."
+    },
+    {
+      "id": "C7",
+      "text": "Nó thực sự không phải là khoa học tên lửa, bạn chỉ cần một chút nỗ lực là làm được.",
+      "ground_truth_span": "khoa học tên lửa",
+      "category": "TRANSLATIONESE",
+      "note": "Thành ngữ 'rocket science' dịch thô."
+    },
+    {
+      "id": "C8",
+      "text": "Tóm lại, phần này rất dễ. Nên nhớ là phần này cực kỳ đơn giản để vượt qua.",
+      "ground_truth_span": "Nên nhớ là phần này cực kỳ đơn giản để vượt qua.",
+      "category": "REPETITION",
+      "note": "Conclusion residue, lặp ý chốt."
+    },
+    {
+      "id": "C9",
+      "text": "Bạn có thể dùng công cụ OpenAI GPT-4o-mini-2024-07-18 để xử lý nhanh đoạn text này.",
+      "ground_truth_span": "GPT-4o-mini-2024-07-18",
+      "category": "UNGROUNDED_CLAIM",
+      "note": "Tên model quá dài và có số/chữ xen kẽ cực kỳ khó đọc TTS."
+    },
+    {
+      "id": "C10",
+      "text": "AI sẽ là chìa khóa mở ra cánh cửa thành công cho 10 triệu sinh viên trên toàn thế giới vào năm tới.",
+      "ground_truth_span": "10 triệu sinh viên trên toàn thế giới vào năm tới",
+      "category": "UNGROUNDED_CLAIM",
+      "note": "Bịa số liệu tương lai không nguồn."
+    }
+  ]
+}

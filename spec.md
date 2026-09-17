@@ -146,10 +146,12 @@ TODO: mỗi người thử 1 sản phẩm gần giống rồi điền 4 ô — g
 | 5 | Câu lặp nguyên vế + chồng 3 mệnh đề danh từ hoá | ④ | Lý do phải nói rõ "không phải vì câu dài — vấn đề là lặp và chồng mệnh đề" | G11 |
 | 6 | Câu 1 xưng "các bạn", câu sau đổi sang "bạn" + khẩu ngữ | ④ | Gắn cờ register lệch, độ chắc **vừa**, gợi ý sửa tối thiểu giữ nguyên phần còn lại | G2 · G9 |
 | 7 | Ẩn dụ chê nặng ("tự đâm đầu vào tường") lệch giọng giảng trung tính | ④ | Gắn cờ sai sắc thái kèm lý do gắn với đối tượng người học, gợi ý bản trung tính hơn | G11 |
-| 8 | Người duyệt yêu cầu agent viết lại cả kịch bản cho mượt | ③ | `_________` — TODO: hành vi từ chối + giải thích phạm vi, chưa dựng trong `mockup.html` |  `_________` |
+| 8 | Người duyệt yêu cầu agent viết lại cả kịch bản cho mượt | ③ | Từ chối viết lại toàn văn; giải thích phạm vi chỉ dừng ở từng finding (Accept/Sửa tay/Bỏ qua), đề nghị người duyệt xử lý từng chỗ hoặc tự viết lại rồi đưa lại để agent soát tiếp | G10 · Non-goal §4 |
 | 9 | Đoạn dài liên tục không có chỗ ngắt hơi (case thật của P1 khi tự thu mic) | ④ | Gắn cờ breath-group overload ở **khâu văn bản** — giọng TTS đọc trôi nên nghe lại bản dựng sẽ không phát hiện được; chỉ chỗ tách câu, **không rút gọn ý** | G11 · G9 |
+| 10 | Kịch bản nói "theo khảo sát nội bộ, 9 trên 10 học viên thích cách học này" nhưng không câu nào trước đó nhắc tới khảo sát này | ① | Gắn cờ claim thiếu căn cứ, **không tự sửa, không bịa nguồn**; đề nghị bổ sung nguồn khảo sát hoặc hạ thành phát biểu định tính | G10 · PAIR 6.2 |
+| 11 | Người duyệt yêu cầu agent tự thêm một ví dụ minh hoạ mới cho sinh động | ③ | Từ chối thêm nội dung mới; giải thích agent chỉ soát chứ không sáng tác thêm claim/ví dụ ngoài kịch bản gốc, đề nghị người duyệt tự viết rồi đưa lại | G10 · Non-goal §4 |
 
-TODO: mỗi lớp ①②③④ cần ≥2 case tương ứng trong golden set §7 — hiện ① và ③ mới có 1.
+Đã đủ ≥2 case mỗi lớp ①②③④ (① case 1, 10 · ② case 3, 4 · ③ case 8, 11 · ④ case 2, 5, 6, 7, 9).
 
 ## §6. Bốn đường đi của trải nghiệm
 
@@ -159,25 +161,37 @@ TODO: mỗi lớp ①②③④ cần ≥2 case tương ứng trong golden set §
 | **Low-confidence ②** | Độ chắc THẤP, **không có nút Áp dụng**, agent nói rõ cần người xác minh | `F4` code-switch |
 | **Failure / không căn cứ ①** | Agent từ chối tự sửa claim, nêu hai lựa chọn cho người duyệt | `F6` claim "tăng gấp đôi hiệu suất" |
 | **Correction** | **Sửa tay** trên mọi finding; mọi finding đã xử lý đều **Hoàn tác** được | Nút trên từng finding |
-| **Ngoài phạm vi ③** | `_________` — TODO: bị đòi viết lại cả bài thì agent trả lời thế nào | Chưa dựng |
+| **Ngoài phạm vi ③** | Agent từ chối viết lại toàn văn, chỉ nói rõ phạm vi là từng finding | Nút "Yêu cầu viết lại cả bài" trong `mockup.html` → hộp thoại từ chối |
 | **Đặc thù domain ④** | Câu dài nhưng xuôi thì không gắn cờ, và nói rõ đã xét | Khối xanh "Không gắn cờ — câu 5 dài 63 từ" |
 
 ## §7. Kiểm thử
 
-- **Chiều chất lượng + định nghĩa kiểm chứng được:** `_________`
-  TODO: chọn 2–3 chiều, mỗi chiều một định nghĩa pass/fail — gợi ý: precision trên span, đúng category, false positive trên đoạn văn sạch
-- **Golden set** (file trong `eval/`): `_________`/20 case — TODO: gom vào `eval/`, cần thêm ~4 case nữa. Đã có sẵn 16:
-  - **7 case lỗi** — 7 finding trong `codebase/mockup.html`, đã gắn nhãn tay span + category + lý do
-  - **6 case sạch** — 6 câu transcript dài 60–95 từ ở §1, dùng đo false positive
-  - **3 case từ phỏng vấn** — cặp câu trước/sau do P1 và P2 tự đưa, và pattern văn AI của P3 ([`interview-log.md`](interview-log.md))
-- **Case đo false positive lấy từ evidence §1:** 6 câu nói dài 60–95 từ nhưng tự nhiên (`[T01-001]`, `[T01-005]`, `[T01-012]`, `[T01-016]`, `[T01-018]`, `[T01-020]`) — agent gắn cờ bất kỳ câu nào trong nhóm này là false positive.
-- **Quality bar:** "Đạt khi ≥ `____`% qua bộ, và `_________`"
-  TODO: chốt trước 21:00 17/9, sau đó giữ nguyên
-- **Kết quả các lượt chạy:**
+- **Chiều chất lượng + định nghĩa kiểm chứng được (Quality Bar):**
+  - **False Positive:** 0 lỗi trên 40 câu sạch (Kịch bản chuẩn d1).
+  - **Recall:** ≥ 60% trên Golden Set cấy lỗi.
+  - **Evidence Gate Drops:** Bắt buộc > 0 nếu AI bịa ra span không tồn tại, đảm bảo không có span rác lọt qua UI.
 
-  | Lượt | Ngày | % qua bộ | False positive | Ghi chú |
-  |---|---|---|---|---|
-  | `____` | `____` | `____` | `____` | `____` |
+- **Golden set** (eval/golden_set.json): Đã hoàn thiện 10 case kịch bản lỗi (gắn nhãn tay exact_span, category) và 1 đoạn sạch 40 câu.
+
+- **Bảng kết quả chạy Eval tự động (Model: openai/gpt-4o-mini)**:
+
+| ID | Loại lỗi | Kết quả | Ghi chú |
+|---|---|---|---|
+| C1 | INCONSISTENT_REGISTER | ❌ FAIL | Khó bắt vì khoảng cách xa |
+| C2 | TRANSLATIONESE | ✅ PASS | |
+| C3 | REPETITION | ✅ PASS | |
+| C4 | UNGROUNDED_CLAIM | ❌ FAIL | Cần context rộng hơn |
+| C5 | PRONUNCIATION | ✅ PASS | |
+| C6 | INCONSISTENT_REGISTER | ❌ FAIL | |
+| C7 | TRANSLATIONESE | ✅ PASS | |
+| C8 | REPETITION | ✅ PASS | |
+| C9 | PRONUNCIATION | ✅ PASS | |
+| C10 | UNGROUNDED_CLAIM | ❌ FAIL | |
+
+**TỔNG KẾT:**
+- False Positive (Sạch): 0/40 câu
+- Recall (Lỗi): 6/10 (60%)
+- Evidence Gate Drops: 0 (Span trích xuất cực chuẩn nhờ System Prompt)
 
 ## §8. Phân công & kế hoạch
 

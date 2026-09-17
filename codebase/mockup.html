@@ -81,6 +81,7 @@
   <span class="spacer"></span>
   <span class="progress">Đã xử lý <b id="done">0</b>/<b id="total">7</b> · còn <b id="left">7</b></span>
   <button class="ghost" id="btn-reset">Đặt lại</button>
+  <button class="ghost" id="btn-rewrite-all">Yêu cầu viết lại cả bài</button>
   <button class="primary" id="btn-export">Xuất kịch bản đã duyệt</button>
 </header>
 
@@ -310,6 +311,22 @@ $("#btn-export").addEventListener("click", () => {
   $("#dlg").showModal();
 });
 $("#dlg-close").addEventListener("click", () => $("#dlg").close());
+
+$("#btn-rewrite-all").addEventListener("click", () => {
+  $("#dlg-title").textContent = "Ngoài phạm vi — không viết lại cả bài";
+  $("#dlg-body").innerHTML = `
+    <div class="guard" style="margin:0">
+      <b>Agent không viết lại toàn bộ kịch bản.</b> Phạm vi công cụ chỉ dừng ở từng finding
+      (span cụ thể → lý do → gợi ý sửa tối thiểu), quyết định luôn thuộc về người duyệt qua
+      Áp dụng / Sửa tay / Bỏ qua.
+    </div>
+    <p style="margin-top:14px">Muốn kịch bản mượt hơn toàn bài, bạn có hai lựa chọn:</p>
+    <ul style="margin:10px 0 0 20px;line-height:1.7">
+      <li>Xử lý từng finding ở panel bên phải — 7 chỗ đã được chỉ rõ.</li>
+      <li>Tự viết lại thủ công, rồi đưa bản mới vào để agent soát lại từ đầu.</li>
+    </ul>`;
+  $("#dlg").showModal();
+});
 
 render();
 </script>
