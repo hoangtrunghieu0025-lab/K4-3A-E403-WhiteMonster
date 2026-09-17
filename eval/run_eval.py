@@ -102,14 +102,55 @@ def run_eval():
     print(f"Recall (Lỗi): {correct_hits}/{total_cases} ({recall_pct}%)")
     print(f"Evidence Gate Drops (Chặn ảo giác): {gate_drops}")
 
+    # 3. No-flag cases bổ sung (lớp ④ mined + input rỗng) — kỳ vọng 0 finding hợp lệ mỗi case
+    no_flag_cases = data.get("no_flag_cases", [])
+    no_flag_table = "| ID | Nguồn | Finding hợp lệ | Trạng thái |\n|---|---|---|---|\n"
+    no_flag_fp = 0
+    for case in no_flag_cases:
+        text = case["text"]
+        if not text.strip():
+            no_flag_table += f"| {case['id']} | {case.get('source','-')} | 0 (input rỗng, bỏ qua gọi AI) | ✅ PASS |\n"
+            continue
+        findings = call_ai(text)
+        valid = [f for f in findings if f.get("exact_span", "") in text]
+        no_flag_fp += len(valid)
+        no_flag_table += f"| {case['id']} | {case.get('source','-')} | {len(valid)} | {'✅ PASS' if not valid else '❌ FAIL'} |\n"
+
+    # 4. Case hành vi (ambiguous / scope_refusal / security_refusal / edge) — chấm tay theo expected_behavior,
+    #    không so khớp span tự động vì đây là test hành vi (từ chối / confidence thấp), không phải test trích span.
+    def manual_table(cases, label, text_key="text", expect_key="expected_behavior"):
+        rows = f"### {label}\n\n| ID | Kỳ vọng | Output AI thô |\n|---|---|---|\n"
+        for case in cases:
+            text = case.get(text_key) or case.get("scenario", "")
+            expected = case.get(expect_key, "-")
+            if not text.strip():
+                raw = "(input rỗng, không gọi AI)"
+            else:
+                raw = json.dumps(call_ai(text), ensure_ascii=False)
+            rows += f"| {case['id']} | {expected} | `{raw}` |\n"
+        return rows
+
+    manual_tables = "\n\n".join([
+        manual_table(data.get("scope_refusal_cases", []), "scope_refusal_cases (lớp ③, đã có sẵn)"),
+        manual_table(data.get("ambiguous_low_confidence_cases", []), "ambiguous_low_confidence_cases (lớp ②)"),
+        manual_table(data.get("security_refusal_cases", []), "security_refusal_cases (lớp ③ + bảo mật)"),
+        manual_table(data.get("edge_format_cases", []), "edge_format_cases"),
+    ])
+
+    print(f"\nNo-flag set bổ sung: {no_flag_fp} finding lọt trên {len(no_flag_cases)} case (kỳ vọng 0).")
+    print("Case hành vi (ambiguous/scope/security/edge): xem eval/evaluation_report.json, cần người chấm tay.")
+
     # Lưu report
     report = {
         "metrics": {
             "fp": fp_count,
             "recall": f"{correct_hits}/{total_cases}",
-            "gate_drops": gate_drops
+            "gate_drops": gate_drops,
+            "no_flag_extra_fp": f"{no_flag_fp}/{len(no_flag_cases)}"
         },
-        "markdown_table": markdown_table
+        "markdown_table": markdown_table,
+        "no_flag_table": no_flag_table,
+        "manual_review_tables": manual_tables
     }
     with open("eval/evaluation_report.json", "w", encoding="utf-8") as f:
         json.dump(report, f, ensure_ascii=False, indent=2)

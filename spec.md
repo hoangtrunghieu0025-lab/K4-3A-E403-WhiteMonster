@@ -171,9 +171,11 @@ TODO: mỗi người thử 1 sản phẩm gần giống rồi điền 4 ô — g
   - **Recall:** ≥ 60% trên Golden Set cấy lỗi.
   - **Evidence Gate Drops:** Bắt buộc > 0 nếu AI bịa ra span không tồn tại, đảm bảo không có span rác lọt qua UI.
 
-- **Golden set** (eval/golden_set.json): **22 case** — 20 flawed case (gắn nhãn tay exact_span, category) + 2 scope-refusal case (lớp ③) + 1 đoạn sạch 40 câu. Đủ chuẩn rubric ≥20 case:
-  - **Độ khó:** 10 case thường · 8 case chỗ khó (≥2/lớp ①②③④) · 4 case hiếm.
-  - **Nguồn:** 10 case tự viết (C1-C10, đã eval — xem bảng dưới) · **10 case từ chatlog thật** (`data/vlearn-pack/chatlog/tutor_turns.csv`, C11-C20, trích dẫn ≤2 câu kèm `turn_id`, không commit data pack) · 2 case ③ tự thiết kế theo hành vi đã dựng ở §5-§6 (không phải case dạng span nên tách riêng `scope_refusal_cases`).
+- **Golden set** (eval/golden_set.json): **39 case**, gộp 2 đợt mở rộng sau CP3:
+  - **Đợt 1 (Đạt/Duy):** 20 flawed case (exact_span/category) + 2 scope-refusal case (lớp ③) + 1 đoạn sạch 40 câu. Độ khó: 10 thường · 8 chỗ khó (≥2/lớp ①②③④) · 4 hiếm. Nguồn: 10 case tự viết (C1-C10, đã eval — xem bảng dưới) · **10 case từ chatlog thật** (`data/vlearn-pack/chatlog/tutor_turns.csv`, C11-C20, trích ≤2 câu kèm `turn_id`, không commit data pack).
+  - **Đợt 2:** +4 `ambiguous_low_confidence_cases` (lớp ②, kỳ vọng confidence thấp/không tự Áp dụng) · +7 `no_flag_cases` (lớp ④ — 6 câu dài **thật** trích transcript giảng viên T01-001/005/012/016/018/020, đã dùng ở §1, phải KHÔNG bị gắn cờ + 1 case input rỗng) · +4 `security_refusal_cases` (lớp ③ + **bảo mật**: 2 case chống prompt injection nhúng trong kịch bản đòi lộ system prompt/xoá audit trail, 1 case rò rỉ số điện thoại thật, 1 case injection nguỵ trang bằng code-fence) · +2 `edge_format_cases` (mẩu quá ngắn, câu toàn tiếng Anh).
+  - Đã sửa nhãn category sai lệch giữa `golden_set.json` và bảng kết quả bên dưới: C5, C9 trước ghi TRANSLATIONESE/UNGROUNDED_CLAIM, nay chuẩn hoá về PRONUNCIATION cho khớp bảng đã chạy.
+  - Lịch sử thiết kế + lý do từng nhóm case: [`eval/test-log.md`](eval/test-log.md).
 
 - **Bảng kết quả chạy Eval tự động (Model: openai/gpt-4o-mini) — lượt 1, trên 10 case đầu (C1-C10)**:
 
@@ -195,7 +197,7 @@ TODO: mỗi người thử 1 sản phẩm gần giống rồi điền 4 ô — g
 - Recall (Lỗi): 6/10 (60%)
 - Evidence Gate Drops: 0 (Span trích xuất cực chuẩn nhờ System Prompt)
 
-TODO: chạy lại `eval/run_eval.py` (đã sửa để tự đếm số case, không còn hardcode 10) trên đủ 20 case C1-C20 — cần `OPENROUTER_API_KEY`, chưa có trong môi trường build này nên chưa tự chạy được. Quality bar ở trên tạm giữ số của lượt 1 (10 case), sẽ cập nhật recall/FP thật sau khi chạy đủ bộ.
+TODO: chạy lại `eval/run_eval.py` (đã sửa để chạy hết `flawed_cases` C1-C20 tự động đếm số, cộng thêm `no_flag_cases`, và in output thô của `scope_refusal_cases`/`ambiguous_low_confidence_cases`/`security_refusal_cases`/`edge_format_cases` để chấm tay) — cần `OPENROUTER_API_KEY`, chưa có trong môi trường build này nên chưa tự chạy được lượt đủ 39 case. Quality bar ở trên tạm giữ số của lượt 1 (10 case), sẽ cập nhật recall/FP thật sau khi chạy đủ bộ. Ưu tiên chấm tay `security_refusal_cases` trước — nếu SEC1/SEC4 (chống prompt injection) FAIL thì đây là rủi ro an toàn, không chỉ là rớt điểm eval.
 
 ## §8. Phân công & kế hoạch
 
