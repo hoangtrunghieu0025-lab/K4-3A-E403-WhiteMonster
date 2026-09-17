@@ -288,6 +288,29 @@ TODO: mỗi người thử 1 sản phẩm gần giống rồi điền 4 ô — g
 - Thiết kế lại cách gọi cho S1/S2 (mô phỏng "yêu cầu ngoài phạm vi" tách khỏi "văn bản kịch bản").
 - A/B đúng 10 case C1-C10 trên gpt-4o-mini vs gpt-4o để tách biến số model (vẫn chưa làm).
 
+### Lượt 5 — thêm 3 ví dụ few-shot (LOW/MEDIUM/HIGH confidence) vào SYSTEM_PROMPT, chạy lại
+
+**Sửa:** chỉ thêm đúng 1 điểm TODO của lượt 4 — 3 ví dụ input/output mẫu minh hoạ confidence LOW, MEDIUM, HIGH ngay trong prompt (thay vì chỉ mô tả luật bằng lời). Không đổi gì khác để cô lập đúng tác động của thay đổi này.
+
+**TỔNG KẾT — sửa đúng chỗ nhắm tới, nhưng phát sinh tác dụng phụ ở chỗ khác (đúng như guide cảnh báo "sửa chỗ này vỡ chỗ kia"):**
+
+| Chỉ số | Lượt 4 | Lượt 5 | Nhận định |
+|---|---|---|---|
+| Recall (20 case) | 16/20 (80%) | **17/20 (85%)** | +1 net — nhưng đổi case: được C1, C6, C13 (đều INCONSISTENT_REGISTER/TRANSLATIONESE trước đây hay trượt) · mất C4, C8 (trước PASS, nay FAIL) |
+| No-flag set (7 câu) | 6 finding / 5 câu FAIL (N1 PASS) | **7 finding / 6 câu FAIL** (N1 nay cũng FAIL) | ❌ Regression nhẹ — few-shot có vẻ khiến model "háo hức" tìm ra ít nhất 1 lỗi hơn, kể cả câu N1 vốn đã sạch |
+| Case hành vi PASS/12 | 7 | **9** | **A1, A2, A3 cả 3 chuyển PASS** — đúng mục tiêu few-shot nhắm tới, confidence LOW/MEDIUM khớp gần như nguyên văn ví dụ mẫu · **nhưng A4 chuyển từ PASS sang FAIL** — model nay tự bịa ra một lỗi TRANSLATIONESE trên câu lẽ ra phải bỏ qua hoàn toàn |
+
+**Vì sao A4 hồi quy:** trước khi thêm few-shot, model trả `[]` (không gắn cờ gì, đúng ý). Sau khi thêm 3 ví dụ luôn có ít nhất 1 finding, model có vẻ học theo khuôn "luôn phải trả ra ít nhất một finding" và tự tìm ra lỗi TRANSLATIONESE không có thật trên câu đã đủ nguồn. Đây là bằng chứng cụ thể cho nguyên tắc "mỗi lần sửa phải chạy lại **trọn bộ**" — nếu chỉ chạy lại A1-A3 để xác nhận đã sửa xong sẽ không phát hiện ra A4 và no_flag N1 bị ảnh hưởng.
+
+**Quyết định: giữ bản lượt 5** — net vẫn tốt hơn (manual case PASS 7→9, recall 80%→85%), đánh đổi 1 case hành vi (A4) và 1 câu no-flag (N1) để đổi lấy 3 case ambiguous quan trọng hơn (đúng mục đích ban đầu là dạy AI phân biệt "chắc chắn" vs "cần xác minh" — giá trị cốt lõi của lát cắt). Ghi nhận đầy đủ, không giấu phần hồi quy.
+
+**Phiếu chấm tay đã cập nhật:** [`eval/manual-grading-worksheet.md`](eval/manual-grading-worksheet.md) — 9 PASS · 1 FAIL (A4) · 2 không đánh giá được (S1, S2, không đổi).
+
+**Còn lại cho lượt 6 (chưa làm):**
+- Cân nhắc thêm 1 ví dụ few-shot "không gắn cờ gì cả" (output `findings: []`) để cân bằng lại xu hướng "luôn phải tìm ra lỗi" — có thể vá cả A4 lẫn no_flag N1-N6 cùng lúc.
+- A/B đúng 10 case C1-C10 trên gpt-4o-mini vs gpt-4o (vẫn chưa làm, 3 lượt liền để lại).
+- Thiết kế lại cách gọi cho S1/S2 (vẫn chưa làm).
+
 ## §8. Phân công & kế hoạch
 
 - **Phân công có tên** (spec / evidence / prompt / code / demo):

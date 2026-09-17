@@ -76,9 +76,23 @@ Theo nhịp lặp ở `02-guide.md` §2.6/§4.1: *chạy trọn bộ → bảng 
   - S1/S2 (scope_refusal) vẫn không đánh giá được — lỗi thiết kế test, không phải lỗi prompt, chưa động vào.
 - **Phiếu chấm tay đầy đủ 12 case (điền theo yêu cầu, người chấm: Hoàng Trung Hiếu):** [`eval/manual-grading-worksheet.md`](eval/manual-grading-worksheet.md) — 7 PASS · 3 FAIL (A1-A3, cùng nguyên nhân confidence) · 2 không đánh giá được (S1, S2).
 
-## TODO trước CP5 (lượt 5 — chưa làm)
+## Lượt 5 — cùng phiên, thử few-shot ví dụ confidence LOW (chỉ sửa đúng điểm 3 của TODO lượt 4)
 
-1. A/B đúng 10 case C1-C10 trên `gpt-4o-mini` (qua OpenRouter) và `gpt-4o` (qua OpenAI) để tách biến số model khỏi biến số golden set.
-2. Đọc chi tiết finding trên N2-N6 (`no_flag_cases`) để tìm nguyên nhân cụ thể trước khi sửa tiếp, hoặc khai thẳng đây là giới hạn đã biết trong spec.md §8 (ranh giới hệ thống).
-3. Thử few-shot ví dụ "confidence LOW" trong prompt để vá A1-A3.
-4. Thiết kế lại cách gọi cho `scope_refusal_cases` (S1/S2).
+- **Sửa:** thêm đúng 1 thứ — 3 ví dụ input/output mẫu (confidence LOW/MEDIUM/HIGH) vào cuối `SYSTEM_PROMPT`, đồng bộ `eval/run_eval.py` và `codebase/app.py`. Không đổi luật nào khác, để cô lập tác động của riêng thay đổi này (đúng nguyên tắc chỉ đổi 1 biến/lượt).
+- **Archive lượt 4 vào `eval/evaluation_report.lot4.json` trước khi ghi đè, chạy lại trọn bộ 39 case:**
+
+  | Chỉ số | Lượt 4 | Lượt 5 | Nhận định |
+  |---|---|---|---|
+  | Recall (C1-C20) | 16/20 (80%) | **17/20 (85%)** | +1 net, nhưng đổi case: được C1/C6/C13, mất C4/C8 |
+  | No-flag set (7 câu) | 6 finding / 5 câu FAIL | 7 finding / **6 câu FAIL** | ❌ Hồi quy nhẹ — N1 (trước sạch) nay cũng bị gắn cờ |
+  | Case hành vi PASS/12 | 7 | **9** | A1, A2, A3 cả 3 chuyển PASS (đúng mục tiêu) — nhưng **A4 hồi quy PASS→FAIL** |
+
+- **Phát hiện quan trọng — few-shot có tác dụng phụ:** trước khi thêm ví dụ, model biết trả `[]` khi không có gì đáng gắn cờ (A4 lượt 4 đúng vậy). Sau khi thêm 3 ví dụ *luôn có ít nhất 1 finding*, model có xu hướng "phải tìm ra cái gì đó" — bịa lỗi TRANSLATIONESE trên câu A4 vốn phải bỏ qua hoàn toàn, và N1 (một trong 6 câu dài thật) cũng bắt đầu bị gắn cờ trở lại. Đây là minh chứng cụ thể cho lời guide dặn: *"sửa xong phải chạy lại **trọn bộ**, sửa chỗ này vỡ chỗ kia là chuyện thường của prompt"* — nếu chỉ test lại A1-A3 sẽ tưởng đã sửa xong hoàn toàn, không phát hiện ra A4/N1 bị ảnh hưởng.
+- **Quyết định:** giữ bản lượt 5 vì net vẫn lợi hơn hại (case hành vi PASS 7→9, recall 80%→85%, đổi lấy 1 case A4 và 1 câu N1). Không rollback, nhưng ghi công khai đánh đổi này — không giấu phần hồi quy.
+- **Phiếu chấm tay cập nhật:** [`eval/manual-grading-worksheet.md`](eval/manual-grading-worksheet.md) — 9 PASS · 1 FAIL (A4) · 2 không đánh giá được (S1, S2).
+
+## TODO trước CP5 (lượt 6 — chưa làm)
+
+1. Thêm 1 ví dụ few-shot "không gắn cờ gì cả" (`findings: []`) để cân bằng lại xu hướng "luôn phải tìm ra lỗi" — có thể vá cả A4 lẫn no_flag N1-N6 cùng lúc mà không mất 3 case A1-A3 vừa sửa được.
+2. A/B đúng 10 case C1-C10 trên `gpt-4o-mini` (qua OpenRouter) và `gpt-4o` (qua OpenAI) để tách biến số model khỏi biến số golden set — 3 lượt liền chưa làm.
+3. Thiết kế lại cách gọi cho `scope_refusal_cases` (S1/S2) — 3 lượt liền chưa làm.
