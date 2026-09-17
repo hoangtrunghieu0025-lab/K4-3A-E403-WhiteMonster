@@ -1,14 +1,15 @@
 import json
 import requests
 import time
+import os
 
-API_KEY = "NHAP_KEY_OPENROUTER_VAO_DAY"
+API_KEY = os.environ.get("OPENROUTER_API_KEY", "")
 MODEL = "openai/gpt-4o-mini"
 URL = "https://openrouter.ai/api/v1/chat/completions"
 
 SYSTEM_PROMPT = """You are an Expert Educational Script Editor and Voice/TTS QA Specialist.
 Task: Review the Vietnamese script chunk. Extract EXACT spans that sound unnatural, exhibit "translationese", or have inconsistent pronouns.
-Categories: TRANSLATIONESE, REPETITION, INCONSISTENT_REGISTER, UNGROUNDED_CLAIM, PRONUNCIATION.
+Categories: TRANSLATIONESE, REPETITION, INCONSISTENT_REGISTER, UNGROUNDED_CLAIM.
 Constraint: Only flag errors with undeniable evidence. Return ONLY a JSON object with a single key 'findings' containing an array of error objects.
 Format of array objects:
 {
@@ -33,7 +34,9 @@ def call_ai(text):
         ],
         "response_format": {"type": "json_object"}
     }
-    resp = requests.post(URL, headers=headers, json=payload)
+    if not API_KEY:
+        raise RuntimeError("Thiếu OPENROUTER_API_KEY")
+    resp = requests.post(URL, headers=headers, json=payload, timeout=45)
     if resp.status_code != 200:
         return []
     result = json.loads(resp.json()['choices'][0]['message']['content'])

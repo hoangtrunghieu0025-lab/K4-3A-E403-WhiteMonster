@@ -187,7 +187,7 @@ TODO: mỗi lớp ①②③④ cần ≥2 case tương ứng trong golden set §
 | C10 | UNGROUNDED_CLAIM | ❌ FAIL | |
 
 **TỔNG KẾT:**
-- False Positive (Sạch): 0/1
+- False Positive (Sạch): 0/40 câu
 - Recall (Lỗi): 6/10 (60%)
 - Evidence Gate Drops: 0 (Span trích xuất cực chuẩn nhờ System Prompt)
 

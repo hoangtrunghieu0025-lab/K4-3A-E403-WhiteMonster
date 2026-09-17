@@ -21,7 +21,7 @@ with st.sidebar:
     st.markdown("""
     **Nhớ chèn text này vào video:**
     - FP sạch: 0/40 câu
-    - Recall: 8/10 span
+    - Recall baseline: 6/10 span
     - Evidence Gate drops: _(Xem cảnh báo màu vàng khi chạy)_
     """)
 
@@ -31,6 +31,8 @@ Các mô hình ngôn ngữ lớn là một sự đột phá rất lớn trong ng
 Chúng tôi tin rằng công nghệ này sẽ thay đổi mọi thứ."""
 
 script_input = st.text_area("Nhập kịch bản (15-20 câu):", value=default_script, height=200)
+if "reviewed_script" not in st.session_state:
+    st.session_state.reviewed_script = script_input
 
 SYSTEM_PROMPT = """You are an Expert Educational Script Editor and Voice/TTS QA Specialist.
 Task: Review the Vietnamese script chunk. Extract EXACT spans that sound unnatural, exhibit "translationese", or have inconsistent pronouns.
@@ -99,6 +101,9 @@ if st.button("🚀 Rà soát kịch bản", type="primary"):
                         
                         col1, col2 = st.columns(2)
                         if col1.button("✅ Accept (Áp dụng)", key=f"acc_{i}"):
+                            st.session_state.reviewed_script = st.session_state.reviewed_script.replace(
+                                finding['exact_span'], finding['minimal_suggestion'], 1
+                            )
                             # Đảm bảo thư mục eval tồn tại
                             os.makedirs("eval", exist_ok=True)
                             log_entry = f"[{datetime.datetime.now()}] ACCEPTED: {finding['exact_span']} -> {finding['minimal_suggestion']}\n"
@@ -112,6 +117,9 @@ if st.button("🚀 Rà soát kịch bản", type="primary"):
                             with open("eval/audit_trail.log", "a", encoding="utf-8") as f:
                                 f.write(log_entry)
                             st.info("Đã bỏ qua. (Lưu vào eval/audit_trail.log)")
+
+                st.subheader("Kịch bản sau duyệt")
+                st.text_area("Bản xuất", st.session_state.reviewed_script, height=180, key="reviewed_output")
                             
             except Exception as e:
                 st.error(f"Có lỗi xảy ra khi gọi API OpenRouter: {e}")
