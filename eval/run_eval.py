@@ -4,6 +4,7 @@ import requests
 import time
 import os
 import sys
+import uuid
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -15,6 +16,18 @@ if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
 API_KEY = os.environ.get("OPENAI_API_KEY") or os.environ.get("OPENROUTER_API_KEY", "")
 MODEL = "gpt-4o"
 URL = "https://api.openai.com/v1/chat/completions"
+# OpenCode Go (gói thuê bao, endpoint tương thích OpenAI) — cũng chưa đo trên golden set.
+if not API_KEY and os.environ.get("OPENCODE_API_KEY"):
+    API_KEY = os.environ["OPENCODE_API_KEY"]
+    MODEL = os.environ.get("OPENCODE_MODEL", "deepseek-v4-flash")
+    URL = "https://opencode.ai/zen/go/v1/chat/completions"
+OPENCODE_SESSION = str(uuid.uuid4())  # một phiên cho mỗi lần chạy server/eval
+# Không có key OpenAI mà có GEMINI_API_KEY: gọi endpoint tương thích OpenAI của Gemini — cùng payload,
+# cùng SYSTEM_PROMPT. Số đo §7 là của gpt-4o; Gemini phải chạy lại golden set mới có số riêng.
+if not API_KEY and os.environ.get("GEMINI_API_KEY"):
+    API_KEY = os.environ["GEMINI_API_KEY"]
+    MODEL = os.environ.get("GEMINI_MODEL", "gemini-3.6-flash")
+    URL = "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
 
 # Lượt 4 — vá theo phân tích ở eval/test-log.md (lượt 3): thêm luật câu dài tự nhiên,
 # đủ 6 category thật đang dùng trong golden_set.json, field confidence/issue_type,
@@ -78,6 +91,8 @@ def call_ai(text, model=None):
         "Authorization": f"Bearer {API_KEY}",
         "Content-Type": "application/json"
     }
+    if "opencode.ai" in URL:  # Go bắt buộc mã phiên cố định, không có thì trả 400 MissingSessionID
+        headers.update({"x-opencode-session": OPENCODE_SESSION, "User-Agent": "spoken-script-qa/0.1"})
     payload = {
         "model": model,
         "messages": [
@@ -87,7 +102,7 @@ def call_ai(text, model=None):
         "response_format": {"type": "json_object"}
     }
     if not API_KEY:
-        raise RuntimeError("Thiếu OPENAI_API_KEY (hoặc OPENROUTER_API_KEY) trong .env")
+        raise RuntimeError("Thiếu OPENAI_API_KEY, OPENCODE_API_KEY hoặc GEMINI_API_KEY trong .env")
 
     # Tài khoản đang ở tier thấp (30000 TPM) nên rất dễ dính 429 khi chạy hết golden set.
     # Ưu tiên đọc đúng thời gian chờ OpenAI đề nghị ("Please try again in Xs"), nếu không
@@ -105,12 +120,14 @@ def call_ai(text, model=None):
                 continue
             raise
         if resp.status_code == 200:
-            result = json.loads(resp.json()['choices'][0]['message']['content'])
+            content = resp.json()['choices'][0]['message']['content'].strip()
+            # một số model qua gateway bọc JSON trong ```json … ``` dù đã ép response_format
+            result = json.loads(re.sub(r"^```(?:json)?\s*|\s*```$", "", content))
             return result.get('findings', [])
-        if resp.status_code == 429 and attempt < max_retries - 1:
+        if resp.status_code in (429, 503) and attempt < max_retries - 1:  # 503: Gemini báo quá tải tạm thời
             m = re.search(r"try again in ([\d.]+)s", resp.text)
             wait = min(65, float(m.group(1)) + 1) if m else min(65, 5 * (attempt + 1))
-            print(f"   .. 429 rate limit, chờ {wait:.1f}s rồi thử lại ({attempt+1}/{max_retries})", flush=True)
+            print(f"   .. {resp.status_code} rate limit/quá tải, chờ {wait:.1f}s rồi thử lại ({attempt+1}/{max_retries})", flush=True)
             time.sleep(wait)
             continue
         raise RuntimeError(f"Lỗi API {resp.status_code}: {resp.text[:300]}")

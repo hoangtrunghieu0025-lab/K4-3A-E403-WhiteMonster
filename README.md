@@ -14,6 +14,8 @@
 | Phan Đức Duy | 2A202602397 | Prototype · demo | Dựng prototype trong `codebase/` (flow duyệt kịch bản, accept/reject từng finding); nối lời gọi AI thật + lưu log/trace; quay video thao tác CP3 và video demo dự phòng CP5 |
 
 > **CP1 (Canvas):** [`canvas.md`](canvas.md) · [`canvas.png`](canvas.png) — đã nộp. Nội dung cũng nằm trong `spec.md` (đầu file + §1–§2, §4).
+>
+> **Cập nhật prototype 17/9 — cách chạy và việc cần làm:** [`TONG-KET-17-9.md`](TONG-KET-17-9.md)
 
 - Thời lượng: **47,5 giờ** từ phát đề đến thuyết trình (ca 3A) — LAB 5 (phát đề + build) · LEC 6 (tiếp tục build theo ca) · LAB 6 (vòng thi)
 - Nhóm: **3-4 người** · thi theo phòng (E403 / E402), chia cụm rồi chung kết phòng — xem *Thể thức thi*

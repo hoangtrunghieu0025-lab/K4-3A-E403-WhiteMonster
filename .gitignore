@@ -11,3 +11,9 @@ venv/
 
 # streamlit
 .streamlit/
+
+# prototype: quyết định duyệt chứa span kịch bản thật của người thử
+codebase/logs/audit.jsonl
+
+# giọng Piper tải về (63 MB), không commit
+codebase/models/

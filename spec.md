@@ -24,7 +24,7 @@ Loại: [ ] Tối ưu tính năng có sẵn  [x] Tính năng mới
   |---|---|---|
   | Tự đọc thành tiếng / đọc dò tay | Phải đọc hết mới biết; vẫn lọt (3/3 từng lọt); không lưu vết vì sao bỏ qua một câu | *"tiếng Việt lắt léo, đọc không có ngữ điệu là không biết câu đó sượng"* (P2) |
   | Word check chính tả | Chỉ bắt lỗi chính tả, không bắt câu đúng ngữ pháp mà đọc lên vẫn sượng | *"quen đọc bằng mắt rồi"* — miễn phí, có sẵn (P1) |
-  | Grammarly | Dùng được cho tiếng Anh, tiếng Việt thì "chịu" | Vẫn giữ cho phần tiếng Anh (P2) |
+  | Grammarly | P2: tiếng Việt thì "chịu". Thử lại 17/9: bản hiện tại có tiếng Việt nhưng chỉ bắt chính tả/dấu câu, không bắt câu dịch cứng hay lệch xưng hô (§3) | Vẫn giữ cho phần tiếng Anh (P2) |
   | Cho AI soát | P3 đã dùng — nhưng soát **logic và nguồn**, không soát độ trôi khi đọc | Giải được phần factuality, không giải phần đọc (P3) |
   | Nhờ AI viết lại cả bài | Mất giọng tác giả | *"sợ dùng máy móc nó sửa mất cái 'chất' giọng của mình"* — P1 **không dùng** vì lý do này |
 - **Problem statement (không chữ AI):** Người làm video bài giảng — đang đọc dò từng kịch bản để bắt câu "sượng" (dịch cứng, sai sắc thái, quá dài để đọc một hơi, số/viết tắt chưa chuẩn hoá), mất **45 phút đến 1 tiếng mỗi bài, 2–10 lần mỗi tuần** — không có công cụ nào chỉ đúng câu và nói nó sai loại gì, phải đọc hết cả bài mới phát hiện, nên vẫn lọt: 3/3 người được hỏi đều từng để sót. **Nghe lại bản đã dựng cũng không cứu được** — giọng máy đọc trơn tru cả câu sượng, không hụt hơi, không líu lưỡi, nên lỗi chỉ lộ ra khi người xem thấy bài giảng nghe như máy đọc.
@@ -93,18 +93,20 @@ Loại: [ ] Tối ưu tính năng có sẵn  [x] Tính năng mới
 | D. FeedbackRadar — gom góp ý người học thành kế hoạch sửa video (C5) | Đội sản xuất + giảng viên, gián tiếp là người học | Sau mỗi đợt học có video mới | Đọc tay từng góp ý rồi tự quyết định sửa gì, hay làm lại gần cả video dù chỉ vài câu có vấn đề | Trung bình — cần tự thu thập ~100 góp ý thật (khảo sát bạn cùng lớp) để làm golden set |
 
 - **Ứng viên ĐÃ LOẠI + vì sao:** B/C1 (phạm vi quá rộng — xây graph tri thức từ đầu không vừa 3 buổi) · C/C3 (rủi ro kỹ thuật cao hơn — agent tự tìm nguồn web, phạm vi an toàn phức tạp hơn) · D/C5 (cần tự thu thập ~100 góp ý thật mới đủ golden set, khối lượng evidence lớn hơn C2) — cả ba giữ lại nếu nhóm đổi hướng sau phỏng vấn Studio team.
-- **Ứng viên CHỌN + vì sao (bằng số):** C2 — **3/3 người được hỏi đang làm việc này 2–10 lần/tuần, mất 45'–1 tiếng mỗi lần, và 3/3 từng để lọt câu sượng xuống khâu sau** (P1 mất thêm ~1 tiếng thu lại, P2 để MC vấp trên sân khấu). **0/3 có công cụ soát được** — Word chỉ bắt chính tả, Grammarly không dùng được cho tiếng Việt, AI thì soát logic chứ không soát độ trôi. Ba ứng viên còn lại không có con số nào tương đương vì nhóm chưa phỏng vấn người dùng của chúng. C2 cũng là đề hẹp nhất Track C và có sẵn transcript bản sạch làm chuẩn "nghe được".
+- **Ứng viên CHỌN + vì sao (bằng số):** C2 — **3/3 người được hỏi đang làm việc này 2–10 lần/tuần, mất 45'–1 tiếng mỗi lần, và 3/3 từng để lọt câu sượng xuống khâu sau** (P1 mất thêm ~1 tiếng thu lại, P2 để MC vấp trên sân khấu). **0/3 có công cụ soát được** — Word chỉ bắt chính tả, Grammarly (nay có tiếng Việt) cũng chỉ bắt chính tả/dấu câu — 2 gạch chân, không trúng lỗi nào của C2/C4/C6/C7 khi thử (§3), AI thì soát logic chứ không soát độ trôi. Ba ứng viên còn lại không có con số nào tương đương vì nhóm chưa phỏng vấn người dùng của chúng. C2 cũng là đề hẹp nhất Track C và có sẵn transcript bản sạch làm chuẩn "nghe được".
 
 ## §3. Giải pháp tương tự đã nghiên cứu
 
-TODO: mỗi người thử 1 sản phẩm gần giống rồi điền 4 ô — gợi ý LanguageTool · Grammarly · TTS preview của CapCut/Canva · editor gợi ý văn phong
+Thử 17/9 bằng chính các câu **tự viết** trong golden set (C1–C10, không gửi dữ liệu data pack ra ngoài). Ba dòng đầu là thử tay; dòng TTS là tra tài liệu, chưa thử tay.
 
 | Sản phẩm | Người thử | Flow của họ | Đáng học | Đáng né | Mình khác gì ở lát cắt này |
 |---|---|---|---|---|---|
-| `_________` | `_________` | `_________` | `_________` | `_________` | `_________` |
-| `_________` | `_________` | `_________` | `_________` | `_________` | `_________` |
-| `_________` | `_________` | `_________` | `_________` | `_________` | `_________` |
-| `_________` | `_________` | `_________` | `_________` | `_________` | `_________` |
+| **LanguageTool** (API công khai `api.languagetool.org/v2/check`) | Duy — gọi API, 10 case C1–C10 | Dán văn bản → tự nhận ngôn ngữ → gạch chân từng lỗi kèm `rule.id` + `issueType` + danh sách thay thế | Mỗi lỗi có **mã luật + loại lỗi** tách riêng — cùng ý với `category` + `issue_type` của mình | **Không có tiếng Việt** (`language=vi` bị từ chối). Để `auto` thì nhận nhầm thành Ý/Anh/Breton (độ tin 0,99), gạch 55–95% số chữ là lỗi chính tả; 3/10 case bị từ chối hẳn vì ">60% từ có lỗi". **Bắt đúng 0/10** | Soát tiếng Việt, và soát **độ trôi khi đọc thành lời** chứ không soát chính tả |
+| **Hemingway Editor** (web, bản free) | Duy — dán 4 câu: 1 câu dài 61 từ có ngắt phẩy + C2, C7 dịch cứng + 1 câu ngắn sạch | Dán văn bản → tô màu câu "khó đọc" theo độ dài/độ phức tạp → cột bên phải đếm số câu mỗi loại | Tô màu **ngay trên văn bản** + đếm tổng ở cạnh — người duyệt thấy toàn cảnh trong 1 giây | Tô **đỏ "very hard to read"** câu dài nhưng xuôi, trong khi **bỏ qua cả 2 câu dịch cứng**; đếm 179 từ cho 109 từ thật (tách chữ theo dấu). Đúng cái bẫy mining §1 đã chỉ ra: ngưỡng độ dài gắn cờ oan 19,1% lời giảng thật | Không gắn cờ chỉ vì dài (luật riêng trong prompt, đo bằng `no_flag_cases` §7); gắn cờ theo **loại lỗi** kèm lý do |
+| **Grammarly** (trang grammar-check, không đăng nhập) | Duy — dán 6 câu: C2, C4, C6 (2 câu), C7 + câu dài 61 từ | Gõ/dán → gạch chân → rê chuột xem gợi ý → bấm để nhận | Theo [trang hỗ trợ](https://support.grammarly.com/hc/en-us/articles/39345737251469-Introducing-Multilingual-Suggestions), **nay đã có tiếng Việt** (chính tả, dấu câu, ngữ pháp; clarity/fluency cho câu hoàn chỉnh). Nhận gợi ý bằng **1 cú bấm** ngay tại chỗ | Chỉ gạch **2 chỗ**: dấu phẩy sau "tên lửa" và chữ "setup". Không bắt "thay đổi cuộc chơi lớn vào cuối ngày", "khoa học tên lửa", đổi "mình"→"chúng ta", hay số 45,7% không nguồn. Xem chi tiết gợi ý phải đăng ký | Bắt lỗi **nghe sượng** (dịch cứng, lệch xưng hô, claim thiếu căn cứ) — thứ chính tả đúng mà đọc lên vẫn sai; không bắt tài khoản |
+| **Google Cloud Text-to-Speech — SSML** ([tài liệu](https://docs.cloud.google.com/text-to-speech/docs/ssml)) | Tra tài liệu, chưa thử tay | Người dùng tự đánh dấu văn bản trước khi đọc: `<say-as>` (đọc số/ngày/đánh vần), `<sub alias>` (thay cách đọc), `<break>` (chèn chỗ ngắt), `<phoneme>` | Vấn đề phát âm (số, viết tắt, tên model) giải được bằng **đánh dấu cách đọc**, không cần viết lại câu — cùng tinh thần "sửa tối thiểu" của mình | Người viết phải **tự biết** chỗ nào cần đánh dấu; engine đọc đúng thứ được đưa, không báo câu nào sượng | Mình **chỉ ra** chỗ cần sửa (category `PRONUNCIATION`, `issue_type: PRONUNCIATION_ONLY`); gợi ý sửa có thể viết theo kiểu `<sub>` — tách lỗi đọc khỏi lỗi nội dung |
+
+**Rút ra:** 3 công cụ thử tay đều bắt **chính tả/dấu câu** hoặc **độ dài**; không cái nào bắt được lỗi dịch cứng, lệch xưng hô hay claim không nguồn trên cùng bộ câu mà agent của nhóm đạt 95% recall (gpt-4o, §7 lượt 7). Hemingway xác nhận bằng hành vi thật đúng rủi ro mining §1 đã đo: luật độ dài gắn cờ oan câu xuôi mà bỏ lọt câu sai.
 
 ## §4. Thiết kế
 
@@ -114,9 +116,20 @@ TODO: mỗi người thử 1 sản phẩm gần giống rồi điền 4 ô — g
   2. Không dùng nhãn "AI-generated" để kết luận về tác giả (chỉ chỉ ra câu khó đọc, không phán đoán ai viết).
   3. Không lưu trữ hay dùng kịch bản ngoài phạm vi buổi duyệt hiện tại.
   4. Không tự thêm claim/số liệu mới không có trong kịch bản gốc.
-- **Mức prototype nhắm tới:** [ ] Sketch [x] Mock [ ] Working — **thật:** luồng duyệt end-to-end trong `codebase/mockup.html` (hiển thị span, Accept / Sửa tay / Bỏ qua, hoàn tác, lọc theo nhóm lỗi, audit trail) · **mock:** 7 finding là dữ liệu tĩnh, chưa gọi AI. TODO: đổi sang Working nếu CP3 nối được lời gọi AI thật.
+- **Mức prototype nhắm tới:** [ ] Sketch [ ] Mock [x] Working — **thật:** `codebase/server.py` (FastAPI) + `codebase/web/index.html`: dán cả kịch bản → gọi LLM thật ở quyết định trung tâm → bôi màu từng chỗ + checklist Áp dụng / Sửa tay / Bỏ qua / Hoàn tác → xuất kịch bản đã duyệt + audit report; trace mỗi lượt ở `codebase/logs/trace.jsonl` · **mock:** `codebase/mockup.html` (bản nộp CP2, findings tĩnh) · `codebase/app.py` (Streamlit CP3) giữ làm dự phòng. Chi tiết: [`codebase/README.md`](codebase/README.md)
+- **Kiến trúc AI — workflow cố định, không phải agent tự chạy:** ① **[Luật]** tách câu, gom khối ≤40 câu theo đoạn → ② **[LLM]** mỗi khối 1 lời gọi `gpt-4o`, song song → ③ **[Luật]** Evidence Gate loại span không khớp nguyên văn → ④ **[Người]** quyết từng chỗ, ghi audit.
+  - **Không ReAct/tool-calling:** chỉ có 1 quyết định AI, các bước cố định; mọi số đo §7 là của 1 lời gọi; không có tool nên lệnh nhúng trong kịch bản không làm được gì (§7 SEC2).
+  - **Không thuần luật:** luật độ dài gắn cờ oan 19,1% câu thật (§1); LanguageTool bắt 0/10, Hemingway bỏ qua câu dịch cứng (§3).
+  - **Khối ≤40 câu** vì đó là cỡ đã đo; cắt theo đoạn để câu có nguồn ở câu bên cạnh không bị gắn cờ oan.
+  - **Server import thẳng `call_ai` + `SYSTEM_PROMPT` + `MODEL` từ `eval/run_eval.py`** — bản demo chạy đúng thứ đã đo.
+  - **Nghe thử (TTS) nằm ở bước ④, không phải bước phát hiện:** mỗi finding có "Nghe câu gốc" / "Nghe bản sửa" (cả câu chứa finding). Giọng đọc duy nhất là **Piper `vi_VN-vais1000-medium`** chạy trên máy, không key — đo trên M1: 0,1–0,35 giây cho 3–8 giây audio; đã thử và bỏ `gemini-3.1-flash-tts-preview` (~8 giây, lỗi 503 thường xuyên). Lỗi thì tự đọc bằng giọng tiếng Việt của trình duyệt. Vì giọng máy đọc trơn câu dịch cứng (kiểm ở trên), nghe chỉ dùng để so hai bản và bắt lỗi cách đọc số/viết tắt — giao diện ghi rõ điều này ngay dưới nút nghe. Đây cũng là phần "read-aloud cho một câu sượng" đề C2 yêu cầu.
+  - **"Xem chữ máy đọc":** chép lại chính audio vừa nghe (`gemini-3.6-flash`), so từng từ với chữ viết (`difflib`) và tô chỗ khác nhau. Thử 17/9 trên case tự viết C9/C4: `GPT-4o-mini-2024-07-18` → *"giê pi ti bốn ô mi ni hai không hai tư không bảy mười tám"*, `text` → *"tếch"*, `45,7%` → *"bốn mươi lăm phẩy bảy phần trăm"*. Với giọng Piper, tiếng Anh lộ rõ hơn: `cost-of-error` → *"cát xê"*, `McKinsey` → *"Mắc Kin Xi"*, `OpenAI GPT` → *"o n i đê đê"*. Không dùng `gemini-3.5-transcribe` vì nó tự đổi chữ đọc về lại số. Bản chép cũng là AI nên có thể nghe nhầm, giao diện ghi rõ. Cần `GEMINI_API_KEY`; thiếu key thì nút hiện sẵn "cần key Gemini" thay vì bấm mới báo lỗi.
+  - **"So cách đọc":** đo audio bản gốc và bản sửa (không gọi LLM) — vẽ âm lượng, chỗ ngắt hơi, đường lên xuống giọng trên cùng trục thời gian + bảng số. Đo 17/9 với Piper (đã tắt nhiễu, chèn 0,3 s lặng sau mỗi câu), cùng một ý: viết liền không dấu → 0 chỗ ngắt, đoạn liền 7,75 s · thêm dấu phẩy → 4 chỗ ngắt, đoạn dài nhất 2,35 s · tách câu → 3 chỗ ngắt, 2,33 s; đo lặp cho kết quả y hệt. Đây là bằng chứng đo được cho lỗi breath-group overload (§5 case 9). Giới hạn: tiếng Việt có thanh điệu nên đường cao độ chủ yếu là thanh của từng tiếng, không đo được "nhấn nhá" theo nghĩa ngữ điệu câu.
+  - **Từ tiếng Anh đọc theo phiên âm Anh:** giọng Piper tiếng Việt đọc `cost-of-error` → "cát xê", `McKinsey` → "Mắc Kin Xi" (chép lại audio 17/9), làm nghe thử báo sai gần như mọi thuật ngữ tiếng Anh. Server nhận ra từ tiếng Anh và đưa phiên âm `en-us` của espeak cho chính giọng Việt đọc. Chưa xác nhận bằng chép lại vì key Gemini đã thu hồi — cần người nghe so file trước/sau.
+  - **Tốc độ đọc Nhanh / Vừa / Chậm** (mặc định Vừa): đo 17/9, giọng gốc Piper ~5 tiếng/giây là quá nhanh cho lời giảng; Vừa ~4, Chậm ~3,5. Mỗi lần nghe hiện tốc độ đo thật trên audio, không ghi hệ số giả vì `length_scale` của model không tỉ lệ thuận.
+  - **Lưu gì:** kịch bản chỉ nằm trong `sessionStorage` của tab (đóng tab là hết, non-goal #3); server ghi `trace.jsonl` (chỉ số đếm) và `audit.jsonl` (span + quyết định, không commit).
 - **Automation:** [x] augment [ ] conditional [ ] automate — **lý do theo cost-of-error:**
-  - **Lỗi không lộ ra ở khâu nghe, nên phải bắt ở khâu văn bản.** Giọng TTS đọc trơn tru cả câu sượng — không hụt hơi, không líu lưỡi, không vấp. Người làm video nghe lại bản đã dựng vẫn thấy "ổn", lỗi chỉ lộ khi người học xem và thấy bài giảng nghe như máy đọc. Đây là lý do khâu duyệt văn bản là chỗ duy nhất chặn được, và cũng là ranh giới đề C2 yêu cầu: tách lỗi nội dung khỏi lỗi chỉ liên quan cách đọc.
+  - **Lỗi không lộ ra ở khâu nghe, nên phải bắt ở khâu văn bản.** Giọng TTS đọc trơn tru cả câu sượng — không hụt hơi, không líu lưỡi, không vấp. Người làm video nghe lại bản đã dựng vẫn thấy "ổn", lỗi chỉ lộ khi người học xem và thấy bài giảng nghe như máy đọc. Đây là lý do khâu duyệt văn bản là chỗ duy nhất chặn được, và cũng là ranh giới đề C2 yêu cầu: tách lỗi nội dung khỏi lỗi chỉ liên quan cách đọc. **Đã kiểm 17/9:** cho `gemini-3.1-flash-tts-preview` đọc câu dịch cứng *"Theo một nghiên cứu được thực hiện bởi McKinsey vào năm 2024, có tới 70%…"* rồi cho model chép lại audio — giọng máy đọc trôi cả cụm bị động dịch cứng, và đọc đúng *"hai nghìn hai mươi tư"*, *"bảy mươi phần trăm"*.
   - **Bỏ sót thì mất chất lượng bài giảng, không chỉ mất thời gian.** Render lại video rẻ, nhưng không ai render lại thứ mình tưởng là đúng. Cái đắt là bài đã đăng cho cả khoá xem.
   - **AI tự sửa thì user không dùng.** P1: *"sợ dùng máy móc nó sửa mất cái 'chất' giọng của mình"* — đó là lý do P1 chưa đụng tool AI nào. Agent tự viết lại sẽ phá đúng thứ người dùng sợ mất, và họ bỏ công cụ.
   - **Gợi ý sai thì rẻ** — bấm Bỏ qua là xong, highlight biến mất, hoàn tác được.
@@ -126,11 +139,11 @@ TODO: mỗi người thử 1 sản phẩm gần giống rồi điền 4 ô — g
 
   | Nguyên tắc | Áp cụ thể vào đâu trong prototype |
   |---|---|
-  | **G1** — làm rõ hệ thống làm được gì | Banner đầu trang `mockup.html`: "MOCK · findings là dữ liệu tĩnh, chưa gọi AI thật" + dòng "AI đề xuất — bạn quyết từng chỗ" |
-  | **G2** — làm rõ nó làm tốt đến đâu | Mỗi finding có dòng **Độ chắc** (cao / vừa / thấp); `F2` tách riêng "lỗi phát âm, không phải lỗi nội dung" |
-  | **G8** — gạt bỏ dễ dàng | Nút **Bỏ qua** trên mọi finding; bỏ qua rồi thì highlight biến khỏi kịch bản |
-  | **G9** — sửa dễ dàng | Nút **Sửa tay** (sửa ngay trên gợi ý) và **Hoàn tác** trên mọi finding đã xử lý |
-  | **G10** — thu hẹp phạm vi khi nghi ngờ | `F4`, `F6`: không đề xuất sửa, hiện khối "Không đủ căn cứ để tự sửa" thay vì đoán |
+  | **G1** — làm rõ hệ thống làm được gì | Màn nhập: khối "Cách hệ thống làm việc" (4 bước gắn nhãn LUẬT / LLM / NGƯỜI) + khối "Không làm" · Màn duyệt: thanh 4 bước kèm số thật của lượt soát (số câu, số lời gọi, giữ/loại) |
+  | **G2** — làm rõ nó làm tốt đến đâu | Khối "Đã đo được gì": 80–95% recall · 0/40 câu sạch bị gắn cờ oan · **2/7 câu dài thật vẫn bị gắn cờ oan** · mỗi finding có **Độ chắc** 3 vạch · nhãn "Chỉ ảnh hưởng cách đọc, không phải lỗi nội dung" |
+  | **G8** — gạt bỏ dễ dàng | Nút **Bỏ qua** trên mọi finding; bỏ qua rồi thì chỗ tô màu biến khỏi kịch bản |
+  | **G9** — sửa dễ dàng | Nút **Sửa tay** trên mọi finding và **Hoàn tác** trên mọi chỗ đã quyết (tab "Đã quyết") |
+  | **G10** — thu hẹp phạm vi khi nghi ngờ | Độ chắc thấp: **không có nút Áp dụng**, khối vàng "Chưa đủ căn cứ để tự sửa" · finding không có gợi ý: "Không có gợi ý tự sửa" · nút "Viết lại cả bài" → hộp thoại từ chối |
   | **G11** — giải thích vì sao | Mỗi finding có lý do gắn với ngữ cảnh câu đó, không phải nhãn lỗi chung chung |
 
 ## §5. Kiểu lỗi — 4 lớp chỗ khó + kịch bản (≥8)
@@ -155,14 +168,14 @@ TODO: mỗi người thử 1 sản phẩm gần giống rồi điền 4 ô — g
 
 ## §6. Bốn đường đi của trải nghiệm
 
-| Đường đi | Hành vi | Xem ở đâu trong `mockup.html` |
+| Đường đi | Hành vi | Xem ở đâu trong `codebase/web/index.html` |
 |---|---|---|
-| **Happy path** | Chỉ đúng span, lý do rõ, gợi ý sửa tối thiểu — bấm Áp dụng là xong | `F1` cú pháp dịch |
-| **Low-confidence ②** | Độ chắc THẤP, **không có nút Áp dụng**, agent nói rõ cần người xác minh | `F4` code-switch |
-| **Failure / không căn cứ ①** | Agent từ chối tự sửa claim, nêu hai lựa chọn cho người duyệt | `F6` claim "tăng gấp đôi hiệu suất" |
-| **Correction** | **Sửa tay** trên mọi finding; mọi finding đã xử lý đều **Hoàn tác** được | Nút trên từng finding |
-| **Ngoài phạm vi ③** | Agent từ chối viết lại toàn văn, chỉ nói rõ phạm vi là từng finding | Nút "Yêu cầu viết lại cả bài" trong `mockup.html` → hộp thoại từ chối |
-| **Đặc thù domain ④** | Câu dài nhưng xuôi thì không gắn cờ, và nói rõ đã xét | Khối xanh "Không gắn cờ — câu 5 dài 63 từ" |
+| **Happy path** | Chỉ đúng span, lý do rõ, gợi ý sửa tối thiểu — bấm Áp dụng là xong | Finding có gợi ý → **Áp dụng**: đoạn thay hiện màu xanh, tự chuyển sang chỗ kế tiếp |
+| **Low-confidence ②** | Độ chắc THẤP, **không có nút Áp dụng**, agent nói rõ cần người xác minh | Gạch chân nét đứt trong kịch bản + khối vàng "Chưa đủ căn cứ để tự sửa" |
+| **Failure / không căn cứ ①** | Agent không tự sửa claim; span AI bịa không đến tay người duyệt | Claim không nguồn → "Không có gợi ý tự sửa" · thanh bước ③ Evidence Gate báo "loại N" |
+| **Correction** | **Sửa tay** trên mọi finding; mọi chỗ đã quyết đều **Hoàn tác** được | Nút trên từng finding · tab "Đã quyết" |
+| **Ngoài phạm vi ③** | Agent từ chối viết lại toàn văn, chỉ nói rõ phạm vi là từng finding | Nút "Viết lại cả bài" trên header → hộp thoại từ chối |
+| **Đặc thù domain ④** | Câu dài nhưng xuôi thì không gắn cờ, và nói rõ đã xét | Khối "Đã xét, không gắn cờ: câu N (x từ)" dưới kịch bản |
 
 ## §7. Kiểm thử
 
@@ -368,3 +381,14 @@ Chi tiết đầy đủ (bảng số, log treo model, chẩn đoán) ở [`eval/
 | 17/9 (sau) | **Đổi job executor: không phải "biên tập viên Studio team" mà là lab coach của khoá** — học viên khoá trước làm video bằng AI, giọng TTS. Bỏ luôn vai "giảng viên duyệt kịch bản" | Hỏi lại về quy trình thật của khoá: không có Studio team, mentor là chuyên gia đi làm nên không tham gia khâu video |
 | 17/9 (sau) | **Đổi trục cost-of-error §4**: bỏ "sửa muộn thì đắt", thay bằng "giọng TTS đọc trơn cả câu sượng nên lỗi chỉ bắt được ở khâu văn bản" | Giọng là AI nên render lại gần như miễn phí — chi phí thu lại của P1 không áp dụng cho người dùng thật. P3 trả lời "5 phút là xong" hoá ra không phải ngoại lệ mà là đúng quy trình |
 | 17/9 (sau) | Đồng bộ `canvas.md` / `canvas.html` / `canvas.png` theo bản đã sửa, giữ ghi chú bản CP1 gốc ghi gì | Canvas là bản nộp CP1 nhưng để lệch với spec thì người chấm đối chiếu sẽ thấy mâu thuẫn |
+| 17/9 (CP4) | Điền §3: thử tay LanguageTool, Hemingway, Grammarly trên case C1–C10 + tra tài liệu SSML | Template còn trống; kết quả: không công cụ nào bắt được dịch cứng/lệch xưng hô/claim không nguồn, Hemingway gắn cờ oan câu dài xuôi |
+| 17/9 (CP4) | Sửa "Grammarly không dùng được cho tiếng Việt" ở §1/§2 | Thử lại thì Grammarly nay có tiếng Việt, nhưng chỉ bắt chính tả/dấu câu — kết luận "0/3 có công cụ soát được câu sượng" vẫn đứng |
+| 17/9 (CP4) | Mức prototype §4: Mock → Working | `codebase/app.py` đã gọi AI thật + Accept/Bỏ qua + audit log; khai lệch sẽ mất điểm R5 "mức khai báo khớp thực tế" |
+| 17/9 (CP4) | Làm lại giao diện prototype: FastAPI + HTML thuần thay Streamlit; dán cả kịch bản → bôi màu + checklist; thêm mục "Kiến trúc AI" §4; neo §4b/§6 sang giao diện mới | Nhóm thấy giao diện Streamlit khó dùng, phải nhập từng đoạn. Chọn workflow cố định thay vì ReAct để giữ nguyên giá trị các số đo §7 và phạm vi an toàn SEC1–SEC4 |
+| 17/9 (CP4) | Thêm nghe thử câu gốc / bản sửa bằng Gemini TTS trên từng finding, dự phòng giọng trình duyệt | Đề C2 yêu cầu read-aloud cho câu sượng. Đặt ở bước người quyết, không làm bộ phát hiện: thử thật cho thấy giọng TTS đọc trơn câu dịch cứng, đúng lập luận §1 |
+| 17/9 (CP4) | Thêm "Xem chữ máy đọc": chép lại audio TTS, tô chỗ máy đọc khác chữ viết | Nghe thôi thì người duyệt phải tự đoán máy đọc gì; chép lại cho thấy tận mắt (C9: tên model bị đọc thành chuỗi âm vô nghĩa) — bằng chứng cho category PRONUNCIATION |
+| 17/9 (CP4) | Giọng nghe thử mặc định đổi từ Gemini TTS sang Piper chạy trên máy; bước chép lại vẫn dùng Gemini | Không cần key, không phụ thuộc mạng lúc demo live; nhanh hơn ~25 lần; Gemini TTS trả 503 nhiều lần khi thử |
+| 17/9 (CP4) | Thêm "So cách đọc" (chỗ ngắt, đoạn dài nhất không ngắt, tốc độ, cao độ); Piper tắt nhiễu + chèn lặng sau câu | Người dùng cần thấy khác biệt cách đọc giữa bản gốc và bản sửa, không chỉ nghe; tắt nhiễu vì để ngẫu nhiên thì cùng câu đo ra 0 hoặc 2 chỗ ngắt tuỳ lần |
+| 17/9 (CP4) | Thêm chọn tốc độ đọc Nhanh / Vừa / Chậm, mặc định Vừa, hiện tốc độ đo thật mỗi lần nghe | Người dùng thấy giọng quá nhanh; đo được giọng gốc Piper ~5 tiếng/giây |
+| 17/9 (CP4) | Bỏ tuỳ chọn giọng Gemini (`TTS_ENGINE`), chỉ còn Piper | Một giọng cho mọi máy, không phải cấu hình; Gemini TTS chậm và hay 503, lại không chỉnh được tốc độ |
+| 17/9 (CP4) | Từ tiếng Anh trong kịch bản đọc theo phiên âm tiếng Anh (espeak `en-us`) thay vì luật tiếng Việt | Người dùng nghe thấy tiếng Anh bị đọc sai; nghe thử phải gần cách công cụ dựng video đọc, nếu không sẽ báo lỗi đọc giả |

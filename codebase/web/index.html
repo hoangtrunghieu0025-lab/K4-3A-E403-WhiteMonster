@@ -1,0 +1,876 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Soát kịch bản · Spoken-Script QA</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='8' fill='%231b1a17'/><path d='M9 13v6M13 9v14M17 12v8M21 10v12M25 14v4' stroke='white' stroke-width='2.4' stroke-linecap='round'/></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=Noto+Serif:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f4ef; --surface:#fff; --sunken:#faf9f6;
+  --ink:#1b1a17; --ink-2:#55524a; --ink-3:#8b877c; --line:#e5e2d9; --line-2:#d3cfc3;
+  --ok:#0f7a55; --ok-t:#e2f3ea; --warn-t:#fcf1dc; --warn-ink:#6b3d05; --err:#b42318; --llm:#2946a8;
+  --r:12px; --shadow:0 1px 2px rgba(27,26,23,.05),0 6px 20px rgba(27,26,23,.05);
+  --sans:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --serif:"Noto Serif",Georgia,"Times New Roman",serif;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:14px/1.55 var(--sans);-webkit-font-smoothing:antialiased}
+button{font:inherit;cursor:pointer;color:inherit}
+:focus-visible{outline:2px solid #3b6fe0;outline-offset:2px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.sp{flex:1}
+.muted{color:var(--ink-2)}
+.fine{font-size:12px;color:var(--ink-3);margin:14px 0 0}
+
+/* header */
+.top{position:sticky;top:0;z-index:10;display:flex;align-items:center;gap:12px;padding:0 24px;min-height:60px;background:rgba(245,244,239,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;font-weight:600;font-size:15px;letter-spacing:-.01em;white-space:nowrap}
+.brand small{font-weight:400;color:var(--ink-3);font-size:13px}
+.top-actions{display:flex;align-items:center;gap:6px}
+.progress{display:flex;align-items:center;gap:10px;color:var(--ink-2);font-size:13px;margin-right:8px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.bar{width:110px;height:6px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ok);transition:width .25s}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;height:34px;padding:0 14px;border-radius:8px;border:1px solid var(--line-2);background:var(--surface);font-weight:500;font-size:13px;white-space:nowrap}
+.btn:hover{border-color:var(--ink-3)}
+.btn.primary{background:var(--ink);border-color:var(--ink);color:#fff}
+.btn.primary:hover{background:#34322c}
+.btn.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.btn.ok:hover{background:#0b6546}
+.btn.ghost{border-color:transparent;background:transparent;color:var(--ink-2)}
+.btn.ghost:hover{background:rgba(27,26,23,.05);color:var(--ink)}
+.btn.lg{height:42px;padding:0 22px;font-size:14px}
+.btn:disabled{opacity:.55;cursor:progress}
+
+.wrap{max-width:1320px;margin:0 auto;padding:24px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow)}
+h1{font-size:22px;letter-spacing:-.02em;margin:0 0 6px;font-weight:600}
+h2{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--ink-3);margin:0 0 14px;font-weight:600}
+
+/* input view */
+.input-grid{display:grid;grid-template-columns:minmax(0,1fr) 360px;gap:24px;align-items:start}
+.editor-head{padding:24px 28px 4px}
+.editor-head p{margin:0;max-width:62ch}
+#script{display:block;width:100%;min-height:54vh;resize:vertical;border:0;padding:16px 28px 24px;font:17px/1.8 var(--serif);color:var(--ink);background:transparent}
+#script:focus{outline:none}
+#script::placeholder{color:var(--ink-3)}
+#script[readonly]{color:var(--ink-3)}
+.editor-foot{display:flex;align-items:center;gap:8px;padding:12px 16px 12px 28px;border-top:1px solid var(--line);background:var(--sunken);border-radius:0 0 var(--r) var(--r)}
+.aside .card{padding:20px 22px}
+.aside .card+.card{margin-top:16px}
+
+.steps{list-style:none;margin:0;padding:0}
+.step{display:grid;grid-template-columns:28px 1fr;gap:12px;padding-bottom:18px;position:relative}
+.step:last-child{padding-bottom:0}
+.step:not(:last-child)::before{content:"";position:absolute;left:13px;top:30px;bottom:4px;width:2px;background:var(--line)}
+.num{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:600;background:var(--sunken);border:1px solid var(--line-2);color:var(--ink-2)}
+.step p{margin:3px 0 0;color:var(--ink-2);font-size:13px}
+.step.done .num{background:var(--ink);border-color:var(--ink);color:#fff}
+.step.run .num{border-color:var(--llm);color:var(--llm);animation:pulse 1.2s ease-in-out infinite}
+.step .live{color:var(--llm);font-weight:500}
+@keyframes pulse{50%{box-shadow:0 0 0 6px rgba(41,70,168,.14)}}
+@media (prefers-reduced-motion:reduce){.step.run .num{animation:none}}
+.kind{display:inline-block;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;border-radius:4px;margin-left:6px;vertical-align:1px;line-height:1.3}
+.k-rule{background:#ebe9e2;color:#55524a}
+.k-llm{background:#e6ebfb;color:var(--llm)}
+.k-human{background:var(--ok-t);color:var(--ok)}
+
+.facts{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.facts li{display:grid;grid-template-columns:78px 1fr;gap:10px;align-items:baseline;font-size:13px;color:var(--ink-2)}
+.facts strong{font-size:17px;color:var(--ink);font-variant-numeric:tabular-nums;letter-spacing:-.01em;white-space:nowrap}
+.nongoals{margin:0;padding-left:18px;color:var(--ink-2);font-size:13px;display:grid;gap:4px}
+
+/* review view: pipeline strip */
+.strip{display:grid;grid-template-columns:repeat(4,1fr);margin-bottom:16px}
+.strip .s{padding:12px 18px;border-right:1px solid var(--line)}
+.strip .s:nth-child(4){border-right:0}
+.strip .t{font-size:12px;color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.strip .v{font-size:14px;font-weight:500;margin-top:3px;font-variant-numeric:tabular-nums}
+.strip-note{grid-column:1/-1;font-size:12px;color:var(--ink-2);padding:9px 18px;border-top:1px solid var(--line);background:var(--sunken);border-radius:0 0 var(--r) var(--r)}
+
+.review-grid{display:grid;grid-template-columns:minmax(0,1fr) 430px;gap:20px;align-items:start}
+.doc-head{display:flex;align-items:baseline;gap:12px;padding:16px 32px;border-bottom:1px solid var(--line)}
+.doc-head h1{font-size:16px;margin:0}
+.doc{padding:26px 32px 30px;font:17px/1.95 var(--serif);white-space:pre-wrap;overflow-wrap:anywhere}
+.sn{font:600 10px/1 var(--sans);color:var(--ink-3);vertical-align:super;margin-right:3px;user-select:none}
+mark{background:var(--t);color:inherit;border-bottom:2px solid var(--c);border-radius:3px 3px 0 0;padding:1px 0;cursor:pointer;-webkit-box-decoration-break:clone;box-decoration-break:clone;transition:box-shadow .15s}
+mark.low{border-bottom-style:dashed}
+mark:hover{box-shadow:inset 0 -1.2em 0 rgba(27,26,23,.04)}
+mark.active{box-shadow:0 0 0 2px var(--c)}
+.considered{margin:0 32px 28px;padding:12px 14px;border-radius:8px;background:var(--sunken);border:1px dashed var(--line-2);font-size:13px;color:var(--ink-2)}
+
+/* category colors: --c line, --t tint */
+.c-tr{--c:#b45309;--t:#fcefd9}
+.c-re{--c:#7c3aed;--t:#efe8fd}
+.c-rg{--c:#1d4ed8;--t:#e6edfd}
+.c-cl{--c:#c81e1e;--t:#fde8e8}
+.c-av{--c:#0f766e;--t:#dff3f0}
+.c-pr{--c:#0369a1;--t:#e1f0f9}
+.c-ot{--c:#6b675d;--t:#eeece6}
+mark.done{--c:var(--ok);--t:var(--ok-t)}
+
+/* findings panel */
+.panel{position:sticky;top:76px;max-height:calc(100vh - 92px);display:flex;flex-direction:column}
+.panel-head{padding:14px 14px 12px;border-bottom:1px solid var(--line)}
+.seg{display:flex;background:var(--sunken);border:1px solid var(--line);border-radius:9px;padding:3px;gap:2px}
+.seg button{flex:1;border:0;background:transparent;border-radius:6px;padding:6px 8px;font-size:13px;color:var(--ink-2);font-weight:500}
+.seg button[aria-pressed=true]{background:var(--surface);color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.seg .n{font-variant-numeric:tabular-nums;color:var(--ink-3);margin-left:2px}
+.speed{display:flex;align-items:center;flex-wrap:wrap;gap:4px;margin-top:10px;font-size:12px}
+.speed-label{color:var(--ink-3);margin-right:4px}
+.speed button{height:26px;padding:0 10px;border-radius:99px;border:1px solid var(--line);background:var(--surface);font-size:12px;color:var(--ink-2)}
+.speed button[aria-pressed=true]{border-color:var(--ink);color:var(--ink);font-weight:500}
+.speed-rate{margin-left:auto;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.chip{display:inline-flex;align-items:center;gap:6px;height:27px;padding:0 10px;border-radius:99px;border:1px solid var(--line);background:var(--surface);font-size:12px;color:var(--ink-2)}
+.chip:hover{border-color:var(--line-2)}
+.chip[aria-pressed=true]{border-color:var(--ink);color:var(--ink);font-weight:500}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--c);flex:none}
+.list{overflow:auto;padding:12px;display:grid;gap:10px;align-content:start}
+.f{border:1px solid var(--line);border-radius:10px;padding:14px;background:var(--surface);transition:border-color .15s,box-shadow .15s}
+.f.active{border-color:var(--c);box-shadow:0 0 0 3px var(--t)}
+.f-top{display:flex;align-items:center;gap:8px;font-size:12px}
+.f-cat{font-weight:600}
+.f-sev{color:var(--ink-3)}
+.f-sev::before{content:"·";margin-right:8px}
+.f-loc{margin-left:auto;color:var(--ink-3);font-variant-numeric:tabular-nums}
+.quote{display:block;width:100%;text-align:left;margin:10px 0;padding:8px 12px;border:0;border-left:3px solid var(--c);background:var(--sunken);border-radius:0 6px 6px 0;font:15px/1.6 var(--serif)}
+.quote:hover{background:var(--t)}
+.meta{display:flex;flex-wrap:wrap;gap:6px 12px;align-items:center;font-size:12px;color:var(--ink-2)}
+.conf{display:inline-flex;align-items:center;gap:6px}
+.conf i{display:inline-flex;gap:2px}
+.conf i b{width:4px;height:11px;border-radius:1px;background:var(--line-2)}
+.conf i b.on{background:var(--ink-2)}
+.tag{font-size:11px;padding:1px 8px;border-radius:99px;background:#e1f0f9;color:#0369a1;font-weight:500}
+.reason{margin:8px 0 0;font-size:13.5px}
+.sugg{margin-top:10px;padding:10px 12px;border-radius:8px;background:var(--ok-t);font-size:13.5px}
+.lbl{display:block;font-size:11px;font-weight:600;color:var(--ok);text-transform:uppercase;letter-spacing:.05em;margin-bottom:3px}
+.sugg del{color:var(--ink-3)}
+.sugg ins{text-decoration:none;font-weight:500}
+.caution{margin-top:10px;padding:10px 12px;border-radius:8px;background:var(--warn-t);color:var(--warn-ink);font-size:13px}
+.acts{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.listen{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
+.btn.sm{height:28px;padding:0 10px;font-size:12px}
+.btn.on{border-color:var(--llm);color:var(--llm)}
+.listen-hint{flex-basis:100%;margin:2px 0 0;font-size:12px;color:var(--ink-3)}
+.rb-list{flex-basis:100%;display:grid;gap:8px}
+.rb-list:empty{display:none}
+.rb{padding:10px 12px;border-radius:8px;background:var(--sunken);border:1px solid var(--line)}
+.rb .lbl{color:var(--ink-2)}
+.rb-text{margin:0;font:15px/1.7 var(--serif)}
+mark.rb-mark{background:#fff1bf;border-bottom:2px solid #c99a06;cursor:auto;box-shadow:none}
+.rb-pairs{margin:8px 0 0;padding-left:18px;font-size:13px}
+.rb-pairs code{font:12px/1.4 ui-monospace,SFMono-Regular,Menlo,monospace;background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:0 4px}
+.rb-miss{margin:6px 0 0;font-size:13px;color:var(--err)}
+.pr{padding:10px 12px;border-radius:8px;background:var(--sunken);border:1px solid var(--line)}
+.pr-row{display:grid;grid-template-columns:60px minmax(0,1fr);gap:8px;align-items:center;margin-top:6px}
+.pr-label{font-size:12px;color:var(--ink-2);font-weight:500}
+.pr-svg{display:block;width:100%;height:64px;background:var(--surface);border:1px solid var(--line);border-radius:6px}
+.pr-env{fill:#dcd8cd}
+.pr-pitch{fill:none;stroke:var(--llm);stroke-width:1.6;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.pr-pause{fill:rgba(15,122,85,.14)}
+.pr-table{width:100%;border-collapse:collapse;margin-top:10px;font-size:12.5px;font-variant-numeric:tabular-nums}
+.pr-table th,.pr-table td{padding:4px 6px;border-bottom:1px solid var(--line);text-align:right;font-weight:500}
+.pr-table th:first-child,.pr-table td:first-child{text-align:left;color:var(--ink-2);font-weight:400}
+.pr-table td.diff{color:var(--ink);font-weight:700}
+.pr-table td+td{white-space:nowrap}
+.pr-sum{margin:8px 0 0;font-size:13px;font-weight:500}
+.edit textarea{display:block;width:100%;min-height:76px;margin-top:10px;padding:8px 10px;border:1px solid var(--line-2);border-radius:8px;font:15px/1.55 var(--serif);resize:vertical;color:var(--ink)}
+.status{display:flex;align-items:center;gap:8px;font-size:12.5px;flex-wrap:wrap}
+.s-ok{color:var(--ok);font-weight:600}
+.s-no{color:var(--ink-3);font-weight:600}
+.f.decided .quote{margin:8px 0}
+.empty{text-align:center;padding:36px 20px;color:var(--ink-2)}
+.empty b{display:block;color:var(--ink);font-size:15px;margin-bottom:4px}
+.empty p{margin:0 0 14px}
+
+/* dialogs & toast */
+dialog{border:0;border-radius:14px;padding:0;max-width:480px;width:calc(100% - 32px);box-shadow:0 24px 64px rgba(0,0,0,.22);color:var(--ink)}
+dialog::backdrop{background:rgba(27,26,23,.38)}
+.dlg{padding:22px 24px 18px}
+.dlg h3{margin:0 0 10px;font-size:17px;letter-spacing:-.01em}
+.dlg p{margin:0 0 10px}
+.dlg-foot{display:flex;justify-content:flex-end;align-items:center;gap:8px;padding:14px 24px;border-top:1px solid var(--line);background:var(--sunken);flex-wrap:wrap}
+.dlg-foot form{margin:0;margin-right:auto}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:50;background:var(--ink);color:#fff;padding:10px 16px;border-radius:9px;font-size:13px;box-shadow:var(--shadow);max-width:calc(100% - 32px)}
+.toast.err{background:var(--err)}
+
+@media (max-width:1040px){
+  .top{flex-wrap:wrap;padding-block:8px}
+  .top-actions{width:100%}
+  .input-grid,.review-grid{grid-template-columns:minmax(0,1fr)}
+  .panel{position:static;max-height:none}
+  .strip{grid-template-columns:repeat(2,1fr)}
+  .strip .s:nth-child(2){border-right:0}
+  .strip .s:nth-child(-n+2){border-bottom:1px solid var(--line)}
+}
+@media (max-width:640px){
+  .wrap{padding:16px}
+  .top{padding:8px 16px}
+  .brand small,.top-note{display:none}
+  .top-actions{flex-wrap:wrap}
+  .top-actions>.sp{display:none}
+  .progress{width:100%;margin:0 0 2px}
+  .progress .bar{flex:1}
+  .top-actions .btn{padding:0 10px}
+  .top-actions .btn.primary{margin-left:auto}
+  .doc-head h1{white-space:nowrap}
+  .editor-head{padding:18px 16px 0}
+  #script{padding:12px 16px 20px;font-size:16px;min-height:46vh}
+  .editor-foot{padding:10px 12px;flex-wrap:wrap}
+  .doc{padding:18px 16px;font-size:16px}
+  .doc-head{padding:12px 16px}
+  .considered{margin:0 16px 18px}
+  .strip{grid-template-columns:1fr}
+  .strip .s{border-right:0;border-bottom:1px solid var(--line)}
+}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <svg width="26" height="26" viewBox="0 0 32 32" aria-hidden="true"><rect width="32" height="32" rx="8" fill="#1b1a17"/><path d="M9 13v6M13 9v14M17 12v8M21 10v12M25 14v4" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg>
+    Soát kịch bản <small>Spoken-Script QA</small>
+  </div>
+  <div class="sp"></div>
+  <span id="top-input" class="muted top-note" style="font-size:13px">Kịch bản không được lưu lại sau buổi duyệt</span>
+  <div id="top-review" class="top-actions" hidden>
+    <div class="progress" aria-live="polite"><span id="prog-text"></span><span class="bar"><i id="prog-bar"></i></span></div>
+    <span class="sp"></span>
+    <button class="btn ghost" data-act="new">Bài mới</button>
+    <button class="btn ghost" data-act="rewrite">Viết lại cả bài</button>
+    <button class="btn primary" data-act="export">Xuất bản đã duyệt</button>
+  </div>
+</header>
+
+<main class="wrap">
+  <section id="v-input" class="input-grid">
+    <div class="card">
+      <div class="editor-head">
+        <h1>Dán toàn bộ kịch bản</h1>
+        <p class="muted">Hệ thống tự tách câu và chỉ ra những chỗ sẽ nghe sượng khi đọc thành lời. Bạn quyết từng chỗ, không có gì bị sửa tự động.</p>
+      </div>
+      <label class="sr-only" for="script">Kịch bản</label>
+      <textarea id="script" maxlength="60000" spellcheck="false" placeholder="Xin chào các bạn, hôm nay chúng ta sẽ cùng tìm hiểu…"></textarea>
+      <div class="editor-foot">
+        <span id="count" class="muted" style="font-size:13px">0 từ</span>
+        <button class="btn ghost" data-act="sample">Dùng kịch bản mẫu</button>
+        <span class="sp"></span>
+        <button id="run" class="btn primary lg" data-act="run">Soát kịch bản</button>
+      </div>
+    </div>
+
+    <aside class="aside">
+      <div class="card">
+        <h2>Cách hệ thống làm việc</h2>
+        <ol class="steps" id="steps"></ol>
+        <p class="fine">Workflow cố định: không có agent tự chạy nhiều bước, không có công cụ. LLM chỉ trả về danh sách finding dạng JSON; mọi thay đổi trên kịch bản đều do bạn bấm.</p>
+      </div>
+      <div class="card">
+        <h2>Đã đo được gì</h2>
+        <ul class="facts">
+          <li><strong>80–95%</strong>lỗi cấy sẵn được chỉ đúng chỗ (16–19/20 case qua các lượt đo, gpt-4o)</li>
+          <li><strong>0/40</strong>câu trong đoạn văn sạch bị gắn cờ oan</li>
+          <li><strong>2/7</strong>câu dài thật của giảng viên vẫn bị gắn cờ oan, nên đọc kỹ lý do trước khi áp dụng</li>
+        </ul>
+        <p class="fine">Golden set 39 case của nhóm · chi tiết ở spec.md §7</p>
+      </div>
+      <div class="card">
+        <h2>Không làm</h2>
+        <ul class="nongoals">
+          <li>Không viết lại cả bài hay tự xuất bản</li>
+          <li>Không thêm số liệu, ví dụ ngoài kịch bản gốc</li>
+          <li>Không kết luận văn bản do ai hay do AI viết</li>
+        </ul>
+      </div>
+    </aside>
+  </section>
+
+  <section id="v-review" hidden>
+    <div class="card strip" id="strip"></div>
+    <div class="review-grid">
+      <article class="card">
+        <div class="doc-head"><h1>Kịch bản</h1><span class="muted" id="doc-meta" style="font-size:13px"></span></div>
+        <div class="doc" id="doc"></div>
+        <div id="considered"></div>
+      </article>
+      <aside class="card panel" aria-label="Các chỗ cần duyệt">
+        <div class="panel-head">
+          <div class="seg" role="group" aria-label="Trạng thái">
+            <button data-act="tab" data-v="pending" aria-pressed="true">Chờ duyệt <span class="n" id="n-pending"></span></button>
+            <button data-act="tab" data-v="done" aria-pressed="false">Đã quyết <span class="n" id="n-done"></span></button>
+          </div>
+          <div class="chips" id="chips"></div>
+          <div class="speed" role="group" aria-label="Tốc độ đọc khi nghe thử">
+            <span class="speed-label">Tốc độ đọc</span>
+            <button data-act="speed" data-v="nhanh" aria-pressed="false">Nhanh</button>
+            <button data-act="speed" data-v="vua" aria-pressed="false">Vừa</button>
+            <button data-act="speed" data-v="cham" aria-pressed="false">Chậm</button>
+            <span class="speed-rate" id="speed-rate" aria-live="polite"></span>
+          </div>
+        </div>
+        <div class="list" id="list"></div>
+      </aside>
+    </div>
+  </section>
+</main>
+
+<dialog id="dlg-rewrite" aria-labelledby="rw-title">
+  <div class="dlg">
+    <h3 id="rw-title">Công cụ không viết lại cả bài</h3>
+    <p>Viết lại toàn văn sẽ thay giọng của bạn bằng giọng máy, đúng điều người làm bài giảng lo nhất. Hệ thống chỉ chỉ ra từng chỗ sượng và gợi ý sửa tối thiểu; bạn quyết từng chỗ.</p>
+    <p class="muted">Muốn viết lại? Hãy tự viết bản mới rồi dán vào để soát lại.</p>
+  </div>
+  <form method="dialog" class="dlg-foot" style="justify-content:flex-end"><button class="btn primary">Đã hiểu</button></form>
+</dialog>
+
+<dialog id="dlg-export" aria-labelledby="ex-title">
+  <div class="dlg">
+    <h3 id="ex-title">Xuất bản đã duyệt</h3>
+    <div id="export-body"></div>
+  </div>
+  <div class="dlg-foot">
+    <form method="dialog"><button class="btn ghost">Đóng</button></form>
+    <button class="btn" data-act="dl-audit">Audit report (.json)</button>
+    <button class="btn primary" data-act="dl-text">Kịch bản (.txt)</button>
+  </div>
+</dialog>
+
+<div id="toast" class="toast" role="status" aria-live="polite" hidden></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+
+const CAT = {
+  TRANSLATIONESE: ['Dịch cứng', 'c-tr'],
+  REPETITION: ['Lặp ý', 'c-re'],
+  INCONSISTENT_REGISTER: ['Xưng hô lệch', 'c-rg'],
+  UNGROUNDED_CLAIM: ['Claim thiếu nguồn', 'c-cl'],
+  AI_VOICE: ['Văn viết lẫn vào lời nói', 'c-av'],
+  PRONUNCIATION: ['Khó đọc thành lời', 'c-pr'],
+};
+const cat = c => CAT[c] || [String(c).replaceAll('_', ' ').toLowerCase(), 'c-ot'];
+const SEV = {HIGH: 'Nặng', MEDIUM: 'Vừa', LOW: 'Nhẹ'};
+const CONF = {HIGH: ['cao', 3], MEDIUM: ['vừa', 2], LOW: ['thấp', 1]};
+const DONE = {accepted: 'Đã áp dụng', edited: 'Đã sửa tay', rejected: 'Đã bỏ qua'};
+const ACTION = {accepted: 'accept', edited: 'edit', rejected: 'reject', pending: 'undo'};
+const STEPS = [
+  ['Tách câu', 'rule', 'Luật', 'Chia theo dấu câu và xuống dòng, gom thành khối tối đa 40 câu, không cắt ngang đoạn.'],
+  ['Phát hiện chỗ sượng', 'llm', 'LLM', 'Mô hình ngôn ngữ đọc từng khối, trả về đoạn trích nguyên văn, loại lỗi, lý do, độ chắc và gợi ý sửa tối thiểu.'],
+  ['Evidence Gate', 'rule', 'Luật', 'Đoạn trích không khớp nguyên văn kịch bản bị loại trước khi đến tay bạn.'],
+  ['Bạn quyết', 'human', 'Người', 'Nghe thử câu gốc và bản sửa bằng giọng AI, rồi áp dụng, sửa tay hoặc bỏ qua từng chỗ. Mỗi quyết định được ghi vào audit trail.'],
+];
+const SAMPLE = `Xin chào các bạn, hôm nay chúng ta sẽ cùng tìm hiểu cách chọn mức tự động hoá phù hợp cho một sản phẩm AI. Trước khi đi vào chi tiết, mình muốn nói rõ một điều. Theo một nghiên cứu được thực hiện bởi McKinsey vào năm 2024, có tới 70% các dự án AI thất bại vì con người và vận hành. Điều đó có nghĩa là công nghệ không phải yếu tố quyết định duy nhất.
+
+Khi mình đi nói chuyện với các đội sản phẩm, mình để ý một điều khá thú vị là gần như đội nào cũng bắt đầu bằng câu hỏi nên dùng mô hình nào, trong khi câu hỏi đáng hỏi trước tiên lại là nếu hệ thống này trả lời sai một lần thì ai sẽ là người chịu hậu quả, và sửa cái sai đó tốn bao nhiêu. Chúng ta có ba mức tự động hoá: augment, conditional và automate. Mức augment là khi mà AI sẽ đưa ra gợi ý và con người sẽ là người đưa ra quyết định cuối cùng về việc có chấp nhận gợi ý đó hay là không chấp nhận gợi ý đó. Ví dụ, hệ thống sinh quiz đề xuất mười câu hỏi, giảng viên duyệt từng câu.
+
+Việc chọn mức nào phụ thuộc vào cost-of-error, tức là chi phí của việc sai. Nếu sai mà đắt thì bạn nên chọn augment cho chắc. Còn nếu sai mà rẻ, người dùng tự thấy và tự sửa được, thì automate là hợp lý. Áp dụng đúng nguyên tắc này chắc chắn sẽ giúp đội của bạn tăng gấp đôi hiệu suất trong vòng một quý. Những đội không chịu nghĩ về chuyện này thì đúng là tự đâm đầu vào tường. Ở phần tiếp theo, chúng ta sẽ xem ba ví dụ thật từ các sản phẩm đang chạy.`;
+
+// Phiên duyệt chỉ sống trong tab này (sessionStorage): tải lại trang không mất, đóng tab là hết.
+let S = null;  // {script, r: kết quả /api/review, st: {id: {s, text}}, audit: []}
+const ui = {tab: 'pending', cat: 'all', active: null, editing: null};
+try { S = JSON.parse(sessionStorage.getItem('ssqa')); } catch {}
+if (!S?.r?.findings) S = null;
+const save = () => { try { S ? sessionStorage.setItem('ssqa', JSON.stringify(S)) : sessionStorage.removeItem('ssqa'); } catch {} };
+
+const find = id => S.r.findings.find(f => f.id === id);
+const span = f => S.script.slice(f.start, f.end);
+const isDone = f => S.st[f.id].s !== 'pending';
+
+let toastTimer;
+function toast(msg, err) {
+  const t = $('#toast');
+  t.textContent = msg; t.className = 'toast' + (err ? ' err' : ''); t.hidden = false;
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.hidden = true, 4500);
+}
+
+function count() {
+  const w = $('#script').value.trim().split(/\s+/).filter(Boolean).length;
+  $('#count').textContent = `${w.toLocaleString('vi-VN')} từ`;
+}
+
+function renderSteps(state = []) {
+  $('#steps').innerHTML = STEPS.map(([name, k, label, desc], i) => `
+    <li class="step ${state[i] || ''}"><span class="num">${i + 1}</span><div>
+      <b>${name}</b><span class="kind k-${k}">${label}</span><p>${desc}</p>
+      ${state[i] === 'run' ? '<p class="live" id="elapsed">Đang chạy…</p>' : ''}
+    </div></li>`).join('');
+}
+
+function show(view) {
+  const review = view === 'review', busy = view === 'loading';
+  $('#v-input').hidden = review; $('#v-review').hidden = !review;
+  $('#top-review').hidden = !review; $('#top-input').hidden = review;
+  $('#script').readOnly = busy; $('#run').disabled = busy;
+  $('#run').textContent = busy ? 'Đang soát…' : 'Soát kịch bản';
+  review ? renderReview() : renderSteps(busy ? ['done', 'run'] : []);
+}
+
+async function run() {
+  const script = $('#script').value;
+  if (!script.trim()) return toast('Chưa có kịch bản để soát', true);
+  show('loading');
+  const t0 = Date.now();
+  const timer = setInterval(() => {
+    const el = $('#elapsed');
+    if (el) el.textContent = `Đang chạy · ${Math.round((Date.now() - t0) / 1000)} giây`;
+  }, 500);
+  try {
+    const res = await fetch('/api/review', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({script})});
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(typeof data.detail === 'string' ? data.detail : `Máy chủ trả lỗi ${res.status}`);
+    S = {script, r: data, st: Object.fromEntries(data.findings.map(f => [f.id, {s: 'pending', text: ''}])), audit: []};
+    Object.assign(ui, {tab: 'pending', cat: 'all', active: null, editing: null});
+    save(); show('review'); window.scrollTo(0, 0);
+  } catch (e) {
+    show('input');
+    toast(e instanceof TypeError ? 'Không kết nối được máy chủ' : e.message, true);
+  } finally {
+    clearInterval(timer);
+  }
+}
+
+function renderReview() { renderTop(); renderStrip(); renderDoc(); renderPanel(); }
+
+function renderTop() {
+  const n = S.r.findings.length, d = S.r.findings.filter(isDone).length;
+  $('#prog-text').textContent = n ? `Đã quyết ${d}/${n}` : 'Không có chỗ cần sửa';
+  $('#prog-bar').style.width = n ? `${d / n * 100}%` : '100%';
+}
+
+function renderStrip() {
+  const t = S.r.trace, n = S.r.findings.length, d = S.r.findings.filter(isDone).length;
+  const secs = (t.ms_total / 1000).toLocaleString('vi-VN', {maximumFractionDigits: 1});
+  const values = [
+    `${t.sentences} câu → ${t.llm_calls} khối`,
+    `${t.model} · ${t.llm_calls} lời gọi · ${secs} giây`,
+    `giữ ${t.kept} · loại ${t.dropped}`,
+    `${d}/${n} đã quyết`,
+  ];
+  $('#strip').innerHTML = STEPS.map(([name, k, label], i) => `
+    <div class="s"><div class="t">${i + 1} · ${name}<span class="kind k-${k}">${label}</span></div><div class="v">${esc(values[i])}</div></div>`).join('')
+    + `<div class="strip-note">Workflow cố định: luật → LLM (một bước, không công cụ) → luật → bạn. ${t.dropped
+      ? `Evidence Gate đã chặn <b>${t.dropped}</b> đoạn AI trích không có trong kịch bản.`
+      : 'Mọi đoạn AI trích đều khớp nguyên văn kịch bản.'}</div>`;
+}
+
+function renderDoc() {
+  const src = S.script, starts = S.r.sentences.map(s => s[0]);
+  let html = '', pos = 0, si = 0;
+  const text = (a, b) => {  // văn bản [a, b) kèm số câu ở đầu mỗi câu
+    let out = '';
+    for (; si < starts.length && starts[si] <= b; si++) {
+      out += esc(src.slice(a, starts[si])) + `<sup class="sn">${si + 1}</sup>`;
+      a = starts[si];
+    }
+    return out + esc(src.slice(a, b));
+  };
+  let lastEnd = -1;
+  for (const f of S.r.findings) {
+    const st = S.st[f.id];
+    if (st.s === 'rejected' || f.start < lastEnd) continue;  // chồng lấn: chỉ tô chỗ đầu, vẫn có trong danh sách
+    html += text(pos, f.start);
+    let inner;
+    if (isDone(f)) {
+      while (si < starts.length && starts[si] < f.end) si++;
+      inner = esc(st.text) || '∅';
+    } else inner = text(f.start, f.end);
+    const cls = [cat(f.category)[1], isDone(f) && 'done', f.confidence === 'LOW' && 'low', ui.active === f.id && 'active'].filter(Boolean).join(' ');
+    html += `<mark class="${cls}" data-id="${f.id}" tabindex="0" role="button" aria-label="${esc(cat(f.category)[0])}, câu ${f.sentence}">${inner}</mark>`;
+    pos = lastEnd = f.end;
+  }
+  $('#doc').innerHTML = html + text(pos, src.length);
+  $('#doc-meta').textContent = `${S.r.sentences.length} câu · bấm vào chỗ tô màu để xem lý do`;
+  const lu = S.r.long_unflagged;
+  $('#considered').innerHTML = lu.length ? `<div class="considered"><b>Đã xét, không gắn cờ:</b> ${lu.map(x => `câu ${x.sentence} (${x.words} từ)`).join(', ')}.
+    Câu dài không bị coi là lỗi nếu vẫn có chỗ ngắt hơi. 19,1% câu nói thật của giảng viên dài hơn 40 từ mà vẫn nghe xuôi.</div>` : '';
+}
+
+function renderPanel() {
+  const all = S.r.findings, pend = all.filter(f => !isDone(f)), done = all.filter(isDone);
+  $('#n-pending').textContent = pend.length; $('#n-done').textContent = done.length;
+  document.querySelectorAll('[data-act=tab]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === ui.tab));
+  const inTab = ui.tab === 'pending' ? pend : done;
+  const cats = [...new Set(all.map(f => f.category))];
+  $('#chips').innerHTML = `<button class="chip" data-act="cat" data-v="all" aria-pressed="${ui.cat === 'all'}">Tất cả · ${inTab.length}</button>`
+    + cats.map(c => {
+      const [label, cls] = cat(c);
+      return `<button class="chip ${cls}" data-act="cat" data-v="${esc(c)}" aria-pressed="${ui.cat === c}"><span class="dot"></span>${esc(label)} · ${inTab.filter(f => f.category === c).length}</button>`;
+    }).join('');
+  const shown = inTab.filter(f => ui.cat === 'all' || f.category === ui.cat);
+  $('#list').innerHTML = shown.length ? shown.map(card).join('') : emptyState(all, pend);
+  paintListen();
+}
+
+function emptyState(all, pend) {
+  if (!all.length) return `<div class="empty"><b>Không có chỗ nào cần sửa</b><p>Không tìm thấy câu nào sẽ nghe sượng khi đọc thành lời.</p><button class="btn primary" data-act="export">Xuất bản đã duyệt</button></div>`;
+  if (ui.tab === 'pending' && !pend.length) return `<div class="empty"><b>Đã quyết hết ${all.length} chỗ</b><p>Xuất kịch bản kèm audit report để lưu vết quyết định.</p><button class="btn primary" data-act="export">Xuất bản đã duyệt</button></div>`;
+  return `<div class="empty">Không có mục nào trong bộ lọc này.</div>`;
+}
+
+function card(f) {
+  const [label, cls] = cat(f.category), st = S.st[f.id], active = ui.active === f.id ? ' active' : '';
+  const head = `<div class="f-top"><span class="dot"></span><span class="f-cat">${esc(label)}</span><span class="f-sev">${SEV[f.severity] || esc(f.severity)}</span><span class="f-loc">Câu ${f.sentence}</span></div>`;
+  const quote = `<button class="quote" data-act="focus" data-id="${f.id}" title="Xem trong kịch bản">${esc(span(f))}</button>`;
+
+  if (st.s !== 'pending') {
+    const result = st.s === 'rejected' ? '' : `<span class="muted">→ ${esc(st.text) || '(xoá đoạn này)'}</span>`;
+    return `<div class="f decided ${cls}${active}" id="card-${f.id}">${head}${quote}
+      <div class="status"><span class="${st.s === 'rejected' ? 's-no' : 's-ok'}">${DONE[st.s]}</span>${result}<span class="sp"></span>
+      <button class="btn ghost" data-act="undo" data-id="${f.id}">Hoàn tác</button></div></div>`;
+  }
+
+  const [cw, cn] = CONF[f.confidence] || [f.confidence, 2];
+  const meta = `<div class="meta"><span class="conf">Độ chắc ${esc(cw)}<i aria-hidden="true">${[1, 2, 3].map(k => `<b class="${k <= cn ? 'on' : ''}"></b>`).join('')}</i></span>
+    ${f.issue_type === 'PRONUNCIATION_ONLY' ? '<span class="tag">Chỉ ảnh hưởng cách đọc, không phải lỗi nội dung</span>' : ''}</div>`;
+  const reason = f.reason ? `<p class="reason">${esc(f.reason)}</p>` : '';
+
+  let fix;
+  if (ui.editing === f.id) {
+    fix = `<div class="edit"><label class="sr-only" for="ed-${f.id}">Bản sửa của bạn</label>
+      <textarea id="ed-${f.id}">${esc(f.suggestion || span(f))}</textarea>${listenRow(f)}
+      <div class="acts"><button class="btn ok" data-act="save" data-id="${f.id}">Lưu bản sửa</button><button class="btn ghost" data-act="cancel">Huỷ</button></div></div>`;
+  } else {
+    fix = (f.suggestion
+      ? `<div class="sugg"><span class="lbl">Gợi ý sửa tối thiểu</span><del>${esc(span(f))}</del> → <ins>${esc(f.suggestion)}</ins></div>`
+      : `<div class="caution">${f.confidence === 'LOW'
+        ? '<b>Chưa đủ căn cứ để tự sửa.</b> AI không chắc đây là lỗi, bạn xác minh rồi quyết.'
+        : '<b>Không có gợi ý tự sửa.</b> Chỗ này cần bạn quyết nội dung, ví dụ bổ sung nguồn hoặc diễn đạt lại.'}</div>`)
+      + listenRow(f) + `<div class="acts">${f.suggestion ? `<button class="btn ok" data-act="accept" data-id="${f.id}">Áp dụng</button>` : ''}
+        <button class="btn" data-act="edit" data-id="${f.id}">Sửa tay</button>
+        <button class="btn ghost" data-act="reject" data-id="${f.id}">Bỏ qua</button></div>`;
+  }
+  return `<div class="f ${cls}${active}" id="card-${f.id}">${head}${quote}${meta}${reason}${fix}</div>`;
+}
+
+function listenRow(f) {
+  const editing = ui.editing === f.id;
+  const btn = (act, which, label, title = '', off = false) => `<button class="btn sm" data-act="${act}" data-id="${f.id}" data-which="${which}" data-key="${f.id}:${which}" data-label="${label}" title="${title}"${off ? ' disabled' : ''}>${label}</button>`;
+  const hasFix = editing || f.suggestion;
+  const hint = f.category === 'PRONUNCIATION' || f.issue_type === 'PRONUNCIATION_ONLY'
+    ? 'Nghe để kiểm giọng máy đọc số, viết tắt, tên riêng có đúng không.'
+    : 'Giọng máy thường đọc trơn cả câu sượng: nghe để so hai bản, đừng dựa vào tai để kết luận câu gốc ổn.';
+  return `<div class="listen">${btn('listen', 'orig', '▶ Nghe câu gốc')}${hasFix ? btn('listen', 'fix', editing ? '▶ Nghe bản sửa của bạn' : '▶ Nghe bản sửa') : ''}
+    ${hasFix ? btn('compare', 'pr', 'So cách đọc', 'Đo nhịp đọc của bản gốc và bản sửa trên cùng trục thời gian') : ''}
+    ${features.readback
+      ? btn('readback', 'rb', 'Xem chữ máy đọc', 'Chép lại audio của bản bạn nghe gần nhất (chưa nghe thì lấy câu gốc)')
+      : btn('readback', 'rb', 'Xem chữ máy đọc · cần key Gemini', 'Server chưa có GEMINI_API_KEY trong .env', true)}
+    <p class="listen-hint">${hint}</p><div class="rb-list" id="pr-${f.id}">${prosodyHtml(f)}</div><div class="rb-list" id="rb-${f.id}">${readbackHtml(f)}</div></div>`;
+}
+
+function readbackHtml(f) {
+  return ['orig', 'fix'].map(which => {
+    const r = tts.readback.get(`${f.id}:${which}`);
+    if (!r) return '';
+    let text = '', pos = 0;
+    for (const c of r.changes) if (c.start !== null) {
+      text += esc(r.transcript.slice(pos, c.start)) + `<mark class="rb-mark">${esc(r.transcript.slice(c.start, c.end))}</mark>`;
+      pos = c.end;
+    }
+    text += esc(r.transcript.slice(pos));
+    const pairs = r.changes.filter(c => c.written && c.spoken).map(c => `<li><code>${esc(c.written)}</code> → ${esc(c.spoken)}</li>`).join('');
+    const missing = r.changes.filter(c => c.start === null).map(c => esc(c.written));
+    const verdict = r.changes.length
+      ? 'Tô màu là chỗ máy đọc khác chữ viết, kiểm xem cách đọc đó có đúng ý bạn không.'
+      : 'Máy đọc đúng từng chữ. Đọc trơn không có nghĩa câu ổn: lỗi dịch cứng vẫn phải đọc bằng mắt.';
+    return `<div class="rb"><span class="lbl">Máy đọc ${which === 'orig' ? 'câu gốc' : 'bản sửa'} thành</span>
+      <p class="rb-text">${text}</p>${pairs ? `<ul class="rb-pairs">${pairs}</ul>` : ''}
+      ${missing.length ? `<p class="rb-miss">Máy bỏ qua, không đọc: ${missing.join(', ')}</p>` : ''}
+      <p class="listen-hint">${verdict} Giọng ${esc(r.voice)}, chép lại bằng ${esc(r.model)} (cũng có thể nghe nhầm) · ${(r.ms / 1000).toLocaleString('vi-VN', {maximumFractionDigits: 1})} giây</p></div>`;
+  }).join('');
+}
+
+// Nghe thử: /api/tts (Piper chạy trên máy); lỗi thì đọc bằng giọng tiếng Việt của trình duyệt.
+// Audio giữ trong tab theo nguyên văn câu, để nghe lại hoặc chép lại không phải tạo giọng lần nữa.
+const tts = {playing: null, loading: null, reading: null, last: {}, cache: new Map(), readback: new Map(), prosody: new Map(), audio: new Audio()};
+let features = {readback: true, voice: ''};  // server báo lại ngay khi tải trang (/api/features)
+tts.audio.onended = () => { tts.playing = null; paintListen(); };
+
+function sentenceRange(f) {  // nghe cả câu chứa finding, không chỉ mỗi cụm bị gắn cờ
+  const ss = S.r.sentences;
+  return [(ss.filter(s => s[0] <= f.start).at(-1) || [f.start])[0], (ss.find(s => s[1] >= f.end) || [0, f.end])[1]];
+}
+
+function listenText(f, which) {  // bản sửa lấy chữ đang gõ nếu đang sửa tay
+  const [a, b] = sentenceRange(f), ed = $(`#ed-${f.id}`);
+  const text = which === 'orig' ? S.script.slice(a, b) : S.script.slice(a, f.start) + (ed ? ed.value : f.suggestion) + S.script.slice(f.end, b);
+  return text.trim().slice(0, 2000);
+}
+
+function paintListen() {  // chỉ đổi nhãn nút, không render lại thẻ để khỏi mất chữ đang sửa tay
+  document.querySelectorAll('[data-act=listen], [data-act=readback], [data-act=compare]').forEach(b => {
+    const k = b.dataset.key, busy = k === tts.loading || k === tts.reading;
+    b.textContent = busy ? ({readback: 'Đang chép lại…', compare: 'Đang đo cách đọc…'}[b.dataset.act] || 'Đang tạo giọng…') : k === tts.playing ? '■ Dừng' : b.dataset.label;
+    b.classList.toggle('on', busy || k === tts.playing);
+  });
+}
+
+function stopAudio() {
+  tts.audio.pause();
+  if ('speechSynthesis' in window) speechSynthesis.cancel();
+  tts.playing = tts.loading = null;
+}
+
+// Tốc độ đọc: nhớ theo trình duyệt. Server đổi thành length_scale của Piper và trả lại tốc độ đo thật.
+const SPEED = {nhanh: 'Nhanh', vua: 'Vừa', cham: 'Chậm'}, BROWSER_RATE = {nhanh: 1, vua: 0.85, cham: 0.7};
+let speed = 'vua';
+try { speed = localStorage.getItem('ssqa-speed') || 'vua'; } catch {}
+if (!SPEED[speed]) speed = 'vua';
+
+function paintSpeed(note) {
+  document.querySelectorAll('[data-act=speed]').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === speed));
+  if (note !== undefined) $('#speed-rate').textContent = note;
+}
+
+async function ttsAudio(text) {
+  const key = `${speed}|${text}`;
+  if (!tts.cache.has(key)) {
+    const res = await fetch('/api/tts', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({text, speed})});
+    if (!res.ok) throw new Error((await res.json().catch(() => ({}))).detail || `Lỗi ${res.status}`);
+    const blob = await res.blob();
+    tts.cache.set(key, {blob, url: URL.createObjectURL(blob), rate: parseFloat(res.headers.get('X-Speech-Rate')) || null});
+  }
+  return tts.cache.get(key);
+}
+
+async function speak(key, text) {
+  const same = key === tts.playing || key === tts.loading;
+  stopAudio();
+  if (same) return paintListen();
+  tts.loading = key; paintListen();
+  let clip, err;
+  try { clip = await ttsAudio(text); } catch (e) { err = e; }
+  if (tts.loading !== key) return;  // trong lúc chờ, người dùng đã bấm dừng hoặc nghe câu khác
+  tts.loading = null; tts.playing = key;
+  if (clip) {
+    tts.audio.src = clip.url;
+    tts.audio.play().catch(() => { tts.playing = null; paintListen(); });
+    paintSpeed(clip.rate ? `Vừa nghe: ${clip.rate.toLocaleString('vi-VN')} tiếng/giây` : '');
+  } else browserSpeak(key, text, err);
+  paintListen();
+}
+
+function blobBase64(blob) {
+  return new Promise((ok, fail) => {
+    const r = new FileReader();
+    r.onload = () => ok(r.result.split(',')[1]); r.onerror = fail;
+    r.readAsDataURL(blob);
+  });
+}
+
+// So cách đọc: đo audio của bản gốc và bản sửa (cùng giọng) rồi vẽ trên cùng một trục thời gian.
+async function compareReading(f) {
+  if (tts.reading) return;
+  tts.reading = `${f.id}:pr`; paintListen();
+  try {
+    const versions = await Promise.all(['orig', 'fix'].map(async which => {
+      const text = listenText(f, which), audio = await blobBase64((await ttsAudio(text)).blob);
+      const res = await fetch('/api/prosody', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({text, audio})});
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(typeof data.detail === 'string' ? data.detail : `Lỗi ${res.status}`);
+      return data;
+    }));
+    versions.speed = speed;
+    tts.prosody.set(f.id, versions);
+  } catch (e) {
+    toast(`Chưa so được cách đọc: ${e.message}`, true);
+  } finally {
+    tts.reading = null;
+    const box = $(`#pr-${f.id}`);
+    if (box) box.innerHTML = prosodyHtml(f);
+    paintListen();
+  }
+}
+
+function prosodyHtml(f) {
+  const v = tts.prosody.get(f.id);
+  if (!v) return '';
+  const [o, x] = v, maxDur = Math.max(o.duration, x.duration), W = 600, H = 64;
+  const num = (n, d = 1) => n == null ? '—' : n.toLocaleString('vi-VN', {maximumFractionDigits: d});
+  const f0 = v.flatMap(p => p.pitch.filter(Boolean)), lo = Math.min(...f0), hi = Math.max(...f0);
+  const tx = t => (t / maxDur * W).toFixed(1);
+  const track = (p, label) => {
+    let env = `M0 ${H}`;
+    p.envelope.forEach((e, i) => { env += ` L${tx(i * 0.01)} ${(H - e * (H - 6)).toFixed(1)}`; });
+    env += ` L${tx((p.envelope.length - 1) * 0.01)} ${H} Z`;
+    let pitch = '', pen = false;
+    if (hi > lo) p.pitch.forEach((hz, i) => {  // trục cao độ dùng chung cho hai bản, thang log
+      if (!hz) { pen = false; return; }
+      pitch += `${pen ? 'L' : 'M'}${tx(i * 0.01)} ${(4 + (1 - Math.log(hz / lo) / Math.log(hi / lo)) * H * 0.55).toFixed(1)} `;
+      pen = true;
+    });
+    const pauses = p.pauses.map(([a, b]) => `<rect class="pr-pause" x="${tx(a)}" y="0" width="${tx(b - a)}" height="${H}"><title>Ngắt ${num(b - a, 2)} giây</title></rect>`).join('');
+    return `<div class="pr-row"><span class="pr-label">${label}</span>
+      <svg class="pr-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="${label}: ${num(p.duration)} giây, ${p.pauses.length} chỗ ngắt">${pauses}<path class="pr-env" d="${env}"/><path class="pr-pitch" d="${pitch}"/></svg></div>`;
+  };
+  const rows = [
+    ['Thời lượng', p => p.duration, 'giây'],
+    ['Chỗ ngắt hơi', p => p.pauses.length, ''],
+    ['Đoạn dài nhất không ngắt', p => p.longest_run_s, 'giây'],
+    ['Tốc độ', p => p.rate, 'tiếng/giây'],
+    ['Độ lên xuống giọng', p => p.pitch_range_st, 'nửa cung'],
+  ].map(([name, get, unit]) => `<tr><td>${name}</td><td>${num(get(o))} ${unit}</td><td class="${num(get(o)) !== num(get(x)) ? 'diff' : ''}">${num(get(x))} ${unit}</td></tr>`).join('');
+  const notes = [];
+  const dd = x.duration - o.duration, dp = x.pauses.length - o.pauses.length, dl = x.longest_run_s - o.longest_run_s;
+  if (Math.abs(dd) >= 0.3) notes.push(`bản sửa ${dd < 0 ? 'ngắn' : 'dài'} hơn ${num(Math.abs(dd))} giây`);
+  if (dp) notes.push(`${dp > 0 ? 'thêm' : 'bớt'} ${Math.abs(dp)} chỗ ngắt hơi`);
+  if (Math.abs(dl) >= 0.5) notes.push(`đoạn dài nhất không ngắt ${num(o.longest_run_s)} → ${num(x.longest_run_s)} giây`);
+  return `<div class="pr"><span class="lbl">So cách đọc</span>
+    ${track(o, 'Gốc')}${track(x, 'Bản sửa')}
+    <p class="pr-sum">${notes.length ? notes.join(' · ') : 'Nhịp đọc hai bản gần như giống nhau, khác biệt nằm ở chữ chứ không ở cách đọc.'}</p>
+    <table class="pr-table"><thead><tr><th></th><th>Gốc</th><th>Bản sửa</th></tr></thead><tbody>${rows}</tbody></table>
+    <p class="listen-hint">Xám: âm lượng · đường xanh: lên xuống giọng · vùng xanh nhạt: chỗ ngắt hơi. Tiếng Việt có thanh điệu nên đường cao độ phần lớn là thanh của từng tiếng; khác biệt đáng tin nhất là chỗ ngắt và đoạn dài nhất không ngắt. Giọng ${esc(features.voice || 'TTS')}, tốc độ ${SPEED[v.speed]}.</p></div>`;
+}
+
+// Chép lại đúng audio của bản vừa nghe, server so với chữ viết → chỗ máy đọc khác chữ viết.
+async function readback(f) {
+  if (tts.reading) return;
+  const which = tts.last[f.id] === 'fix' && ($(`#ed-${f.id}`) || f.suggestion) ? 'fix' : 'orig', text = listenText(f, which);
+  tts.reading = `${f.id}:rb`; paintListen();
+  try {
+    const audio = await blobBase64((await ttsAudio(text)).blob);
+    const res = await fetch('/api/readback', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify({text, audio})});
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) throw new Error(typeof data.detail === 'string' ? data.detail : `Lỗi ${res.status}`);
+    tts.readback.set(`${f.id}:${which}`, data);
+  } catch (e) {
+    toast(`Chưa xem được chữ máy đọc: ${e.message}`, true);
+  } finally {
+    tts.reading = null;
+    const box = $(`#rb-${f.id}`);
+    if (box) box.innerHTML = readbackHtml(f);
+    paintListen();
+  }
+}
+
+function browserSpeak(key, text, err) {
+  const voice = 'speechSynthesis' in window && speechSynthesis.getVoices().find(v => v.lang.toLowerCase().startsWith('vi'));
+  if (!voice) { tts.playing = null; return toast(`${err.message}. Máy này cũng không có giọng tiếng Việt để đọc thay.`, true); }
+  const u = new SpeechSynthesisUtterance(text);
+  u.voice = voice; u.lang = voice.lang; u.rate = BROWSER_RATE[speed];
+  paintSpeed('Vừa nghe: giọng trình duyệt');
+  u.onend = u.onerror = () => { if (tts.playing === key) { tts.playing = null; paintListen(); } };
+  speechSynthesis.speak(u);
+  toast(`${err.message}. Đang đọc bằng giọng trình duyệt (${voice.name}).`);
+}
+
+function decide(id, s, text = '') {
+  const f = find(id);
+  if (s === 'accepted' || s === 'edited') {
+    const clash = S.r.findings.find(g => g !== f && ['accepted', 'edited'].includes(S.st[g.id].s) && g.start < f.end && f.start < g.end);
+    if (clash) return toast(`Chỗ này chồng lên câu ${clash.sentence} đã sửa. Hoàn tác chỗ đó trước.`, true);
+  }
+  S.st[id] = {s, text};
+  ui.editing = null;
+  if (s === 'pending') { ui.tab = 'pending'; ui.active = id; }
+  else ui.active = (S.r.findings.find(g => !isDone(g) && g.start > f.start) || S.r.findings.find(g => !isDone(g)) || {}).id || null;
+  const ev = {session_id: S.r.session_id, finding_id: id, action: ACTION[s], sentence: f.sentence,
+    category: String(f.category).slice(0, 40), confidence: String(f.confidence).slice(0, 10),
+    span: span(f).slice(0, 4000), replacement: text.slice(0, 4000)};
+  S.audit.push({ts: new Date().toISOString(), ...ev});
+  save(); renderReview();
+  fetch('/api/audit', {method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(ev)})
+    .then(r => { if (!r.ok) throw new Error(); })
+    .catch(() => toast('Không ghi được audit lên máy chủ. Quyết định vẫn có trong audit report khi xuất.', true));
+}
+
+function select(id, from) {
+  const f = find(id);
+  ui.active = id; ui.tab = isDone(f) ? 'done' : 'pending';
+  if (ui.cat !== 'all' && ui.cat !== f.category) ui.cat = 'all';
+  renderDoc(); renderPanel();
+  const target = from === 'doc' ? $(`#card-${id}`) : $(`mark[data-id="${id}"]`);
+  target?.scrollIntoView({block: 'nearest', behavior: 'smooth'});
+}
+
+function finalText() {
+  let t = S.script;
+  const applied = S.r.findings.filter(f => ['accepted', 'edited'].includes(S.st[f.id].s)).sort((a, b) => b.start - a.start);
+  for (const f of applied) t = t.slice(0, f.start) + S.st[f.id].text + t.slice(f.end);
+  return t;
+}
+
+function openExport() {
+  const c = s => S.r.findings.filter(f => S.st[f.id].s === s).length, pend = c('pending');
+  $('#export-body').innerHTML = `<ul class="facts">
+      <li><strong>${c('accepted')}</strong>chỗ áp dụng gợi ý</li>
+      <li><strong>${c('edited')}</strong>chỗ sửa tay</li>
+      <li><strong>${c('rejected')}</strong>chỗ bỏ qua</li></ul>
+    ${pend ? `<div class="caution">Còn <b>${pend}</b> chỗ chưa quyết, những chỗ này giữ nguyên như bản gốc.</div>` : ''}`;
+  $('#dlg-export').showModal();
+}
+
+function download(name, content, type) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([content], {type}));
+  a.download = name; a.click();
+  setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+}
+
+const report = () => ({
+  session_id: S.r.session_id, exported_at: new Date().toISOString(), model: S.r.trace.model, trace: S.r.trace,
+  findings: S.r.findings.map(f => ({...f, span: span(f), status: S.st[f.id].s, final_text: S.st[f.id].text})),
+  decisions: S.audit,
+});
+
+const actions = {
+  run,
+  sample: () => { $('#script').value = SAMPLE; count(); $('#script').focus(); },
+  mark: (id) => select(id, 'doc'),
+  focus: (id) => select(id, 'card'),
+  tab: (_, el) => { ui.tab = el.dataset.v; ui.cat = 'all'; renderPanel(); },
+  speed: (_, el) => {
+    speed = el.dataset.v;
+    try { localStorage.setItem('ssqa-speed', speed); } catch {}
+    stopAudio(); paintSpeed(''); paintListen();
+  },
+  cat: (_, el) => { ui.cat = el.dataset.v; renderPanel(); },
+  accept: (id) => decide(id, 'accepted', find(id).suggestion),
+  edit: (id) => { ui.editing = ui.active = id; renderDoc(); renderPanel(); $(`#ed-${id}`)?.select(); },
+  save: (id) => decide(id, 'edited', $(`#ed-${id}`).value),
+  cancel: () => { ui.editing = null; renderPanel(); },
+  reject: (id) => decide(id, 'rejected'),
+  undo: (id) => decide(id, 'pending'),
+  listen: (id, el) => { tts.last[id] = el.dataset.which; speak(el.dataset.key, listenText(find(id), el.dataset.which)); },
+  readback: (id) => readback(find(id)),
+  compare: (id) => compareReading(find(id)),
+  new: () => {
+    if (S.r.findings.some(f => !isDone(f)) && !confirm('Còn chỗ chưa quyết. Bỏ phiên duyệt này?')) return;
+    stopAudio(); tts.cache.forEach(c => URL.revokeObjectURL(c.url)); tts.cache.clear(); tts.readback.clear(); tts.prosody.clear(); tts.last = {};
+    S = null; save(); $('#script').value = ''; count(); show('input'); $('#script').focus();
+  },
+  rewrite: () => $('#dlg-rewrite').showModal(),
+  export: openExport,
+  'dl-text': () => download('kich-ban-da-duyet.txt', finalText(), 'text/plain;charset=utf-8'),
+  'dl-audit': () => download(`audit-${S.r.session_id}.json`, JSON.stringify(report(), null, 2), 'application/json'),
+};
+
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-act], mark[data-id]');
+  if (el) actions[el.dataset.act || 'mark']?.(el.dataset.id, el);
+});
+document.addEventListener('keydown', e => {
+  const m = e.target.closest?.('mark[data-id]');
+  if (m && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); select(m.dataset.id, 'doc'); }
+});
+$('#script').addEventListener('input', count);
+
+if ('speechSynthesis' in window) speechSynthesis.getVoices();  // nạp sẵn danh sách giọng cho lần dự phòng đầu
+fetch('/api/features').then(r => r.json()).then(fe => {
+  features = fe;
+  if (S && !$('#v-review').hidden && !ui.editing) renderPanel();
+}).catch(() => {});
+count();
+paintSpeed();
+show(S ? 'review' : 'input');
+</script>
+</body>
+</html>
