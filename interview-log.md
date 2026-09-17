@@ -28,7 +28,7 @@ Nghe "mình thường…" → hỏi "lần gần nhất là khi nào?". Nghe đ�
 |---|---|---|---|---|---|
 | P1 | Nguyễn Đức Thái | 2A202602648 | Học viên cùng khoá — làm nội dung, tự thu voice-off (willing user) | 16/9 | Nguyễn Thọ Đạt |
 | P2 | Trần Hồng Sơn | 2A20262475 | Editor/reviewer kịch bản MC (willing user thứ hai) | 16/9 | Nguyễn Thọ Đạt |
-| P3 | `_________` | `_________` | **Người dùng cuối thật của C2** — Studio team / lab coach, xin BTC giới thiệu | `_________` | `_________` |
+| P3 | `_________` | `_________` | **Người dùng cuối thật của C2** — lab coach làm video bài giảng bằng AI (kể cả giọng đọc) | `_________` | `_________` |
 
 ## P1 · Nguyễn Đức Thái (2A202602648) — ngày hỏi: 16/9 · người hỏi: Nguyễn Thọ Đạt
 
@@ -79,7 +79,7 @@ TODO: điền tên + ngày hỏi + người hỏi ở tiêu đề mục này và
 - **n = 3 người ngoài nhóm** · **3/3 xác nhận** từng để lọt câu sượng xuống khâu sau (Q3).
 - **Cách họ soát hôm nay (Q1):** 3/3 đều **đọc thành tiếng hoặc đọc dò tay** — P1 in ra giấy gạch bút đỏ · P2 lẩm bẩm đọc to trên Google Docs · P3 đọc soát sau khi research nguồn.
 - **Chi phí đọc soát mỗi lần (Q2):** P1 45 phút / 5 trang · P2 1 tiếng / 10 trang · P3 nửa buổi đến 1 ngày (tính cả soạn).
-- **Chi phí khi lọt xuống khâu sau (Q4):** P1 **gần 1 tiếng** thu lại + cắt ghép audio · P2 MC vấp ngay trên sân khấu, sau đó phải bắt cả nhóm đọc nháp thành tiếng trước mặt — "tốn thêm cả đống thời gian prep" · P3 5 phút *(P3 soạn bài, không qua khâu thu)*.
+- **Chi phí khi lọt xuống khâu sau (Q4):** P1 **gần 1 tiếng** thu lại + cắt ghép audio · P2 MC vấp ngay trên sân khấu, sau đó phải bắt cả nhóm đọc nháp thành tiếng trước mặt — "tốn thêm cả đống thời gian prep" · P3 **5 phút** — lab coach dựng video bằng AI, giọng cũng là AI nên render lại gần như miễn phí.
 - **Tần suất (Q7):** P1 2–3 lần/tuần · P2 ~10 lần/tuần · P3 5 kịch bản/tuần.
 - **Alternatives (Q6):** Word check chính tả (P1) · Grammarly cho tiếng Anh, tiếng Việt "chịu" (P2) · AI soát logic + nguồn, không soát độ trôi (P3). **Không ai có công cụ soát được câu sượng tiếng Việt.**
 - **Kết luận:** pain **được xác nhận**.
@@ -99,6 +99,6 @@ TODO: điền tên + ngày hỏi + người hỏi ở tiêu đề mục này và
 | P2 Q5 | "Chúng ta hãy cùng nhau hân hoan chào đón sự hiện diện của..." | "Xin nhiệt liệt chào mừng..." | Register sáo, thừa từ |
 | P3 Q5 | "bạn phải làm cái gì" thay vì "làm cái đó" | — | Văn AI sinh, không giống văn người |
 
-**Một chỗ lệch cần ghi rõ, đừng giấu:** P3 trả lời Q4 là "5 phút là xong", khác hẳn P1 (gần 1 tiếng) và P2 (sự cố trên sân khấu). Lý do: P3 mô tả công việc **soạn** kịch bản và không qua khâu thu âm, nên chi phí sửa muộn của P3 thấp. Lập luận cost-of-error ở `spec.md` §4 đứng được nhờ P1 và P2, không nhờ P3.
+**Ba người ở ba khâu sau khác nhau — P3 mới là quy trình thật của khoá.** P3 trả lời Q4 "5 phút là xong" vì lab coach dựng video bằng AI và giọng cũng là AI: render lại gần như miễn phí. P1 tự thu mic (~1 tiếng làm lại), P2 để MC đọc trực tiếp (không làm lại được). Nên chi phí thật **không nằm ở việc làm lại**, mà ở 45'–1 tiếng đọc dò mỗi bài và ở chỗ giọng máy đọc trơn cả câu sượng nên nghe lại bản dựng cũng không phát hiện được.
 
-TODO: nếu BTC cho được đầu mối Studio team sản xuất video của khoá thì hỏi thêm P4 — cả ba người hiện có đều làm job này, nhưng không ai ở đúng quy trình đó.
+TODO: hỏi thêm 1–2 lab coach nữa — cả ba người hiện có đều làm job này, nhưng chỉ P3 ở đúng quy trình AI dựng video của khoá.

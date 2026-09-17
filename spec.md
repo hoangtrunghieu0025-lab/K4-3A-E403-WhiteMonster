@@ -8,14 +8,14 @@ Loại: [ ] Tối ưu tính năng có sẵn  [x] Tính năng mới
 - **Đội trưởng:** Hoàng Trung Hiếu — MSSV 2A202602945 (mã học viên nộp cả 5 mốc phải là người này)
 - **Phòng / cụm:** E403 / cụm C1
 - **Thành viên:** Nguyễn Thọ Đạt (2A202602484) · Đinh Trường An (2A202602393) · Phan Đức Duy (2A202602397)
-- **Track/đề:** C2 — Vietnamese Spoken-Script QA (agent review kịch bản video trước khi thu âm/dựng hình)
+- **Track/đề:** C2 — Vietnamese Spoken-Script QA (agent review kịch bản video trước khi dựng video)
 
 ## §1. User & Job
 
-- **Job executor + workflow:** Biên tập viên/người viết kịch bản của Studio team; giảng viên duyệt kịch bản trước khi kịch bản được chuyển sang thu âm. Worksheet JTBD (job map 8 bước · job story · alternatives): [`jtbd-worksheet.md`](jtbd-worksheet.md)
-- **Core JTBD:** Đọc lại kịch bản trước khi duyệt để tìm câu nghe sượng/khó đọc thành lời, trước khi đưa vào thu âm hoặc đọc trước khán giả. *(Vế "hoặc đọc trước khán giả" thêm sau phỏng vấn P2 — kịch bản MC không qua thu âm nhưng chịu đúng hậu quả đó khi MC vấp trên sân khấu.)*
+- **Job executor + workflow:** **Lab coach của khoá** — học viên khoá trước làm video bài giảng: tự viết hoặc để AI sinh kịch bản, rồi dựng video bằng AI **kể cả giọng đọc (TTS)**. Không có khâu thu mic, không có giảng viên ngồi duyệt kịch bản — mentor là chuyên gia đi làm, không tham gia khâu này. Người này vừa viết, vừa duyệt, vừa xuất bản. Worksheet JTBD (job map 8 bước · job story · alternatives): [`jtbd-worksheet.md`](jtbd-worksheet.md)
+- **Core JTBD:** Đọc lại kịch bản để tìm câu nghe sượng/khó đọc thành lời, trước khi đưa nó thành giọng đọc — dù giọng đó là AI, là mình tự thu, hay là người đọc trực tiếp.
 - **Job stories:**
-  1. **JS1** — *When* tôi vừa viết xong kịch bản ~40 câu sắp gửi thu âm, *I want to* biết ngay câu nào sẽ vấp khi đọc thành lời mà không phải đọc to cả bài, *so I can* sửa trước khi giọng được thu và cảnh được dựng khớp theo.
+  1. **JS1** — *When* tôi sắp cho AI dựng video từ kịch bản này, *I want to* biết câu nào nghe sẽ sượng **trước khi render** — vì nghe lại bản đã dựng không phát hiện được, giọng máy đọc trôi hết, *so I can* bài giảng đăng ra không nghe như máy đọc.
   2. **JS2** — *When* một công cụ gắn cờ hàng loạt câu dài trong bài tôi viết, *I want to* hiểu vì sao từng câu bị gắn cờ chứ không chỉ thấy cảnh báo "câu quá dài", *so I can* bỏ qua những câu tuy dài nhưng đọc vẫn xuôi thay vì cắt vụn cả bài.
   3. **JS3** — *When* tôi cân nhắc đưa bài cho một công cụ soát, *I want to* được chỉ đúng chỗ sượng kèm gợi ý sửa tối thiểu chứ không bị viết lại hộ, *so I can* giữ nguyên giọng văn của mình. *(P1 Q6 — chưa dùng tool AI nào vì "sợ dùng máy móc nó sửa mất cái 'chất' giọng của mình".)*
 - **Alternatives hôm nay + chỗ fail:**
@@ -27,7 +27,7 @@ Loại: [ ] Tối ưu tính năng có sẵn  [x] Tính năng mới
   | Grammarly | Dùng được cho tiếng Anh, tiếng Việt thì "chịu" | Vẫn giữ cho phần tiếng Anh (P2) |
   | Cho AI soát | P3 đã dùng — nhưng soát **logic và nguồn**, không soát độ trôi khi đọc | Giải được phần factuality, không giải phần đọc (P3) |
   | Nhờ AI viết lại cả bài | Mất giọng tác giả | *"sợ dùng máy móc nó sửa mất cái 'chất' giọng của mình"* — P1 **không dùng** vì lý do này |
-- **Problem statement (không chữ AI):** Biên tập viên — đang đọc dò từng kịch bản trước khi duyệt để bắt câu "sượng" (dịch cứng, sai sắc thái, quá dài để đọc một hơi, số/viết tắt chưa chuẩn hoá), mất 45 phút đến 1 tiếng mỗi bài — không có công cụ nào chỉ đúng câu và loại lỗi, phải đọc hết cả bài mới phát hiện — nên vẫn lọt (3/3 người được hỏi đều từng lọt), và lọt xuống khâu sau thì phải thu lại giọng rồi cắt ghép lại audio, hoặc để người đọc vấp ngay trước khán giả.
+- **Problem statement (không chữ AI):** Người làm video bài giảng — đang đọc dò từng kịch bản để bắt câu "sượng" (dịch cứng, sai sắc thái, quá dài để đọc một hơi, số/viết tắt chưa chuẩn hoá), mất **45 phút đến 1 tiếng mỗi bài, 2–10 lần mỗi tuần** — không có công cụ nào chỉ đúng câu và nói nó sai loại gì, phải đọc hết cả bài mới phát hiện, nên vẫn lọt: 3/3 người được hỏi đều từng để sót. **Nghe lại bản đã dựng cũng không cứu được** — giọng máy đọc trơn tru cả câu sượng, không hụt hơi, không líu lưỡi, nên lỗi chỉ lộ ra khi người xem thấy bài giảng nghe như máy đọc.
 - **Evidence — chuẩn B, mining `data/vlearn-pack/`:**
 
   Phân bố độ dài câu trên 6 transcript giảng viên, đối chiếu với văn viết cùng domain (tutor reply K4):
@@ -71,7 +71,15 @@ Loại: [ ] Tối ưu tính năng có sẵn  [x] Tính năng mới
   3. *"tiếng Việt lắt léo, đọc không có ngữ điệu là không biết câu đó sượng."* — P2, Q6
   4. *"sợ dùng máy móc nó sửa mất cái 'chất' giọng của mình."* — P1, Q6
 
-  **Chỗ lệch giữa ba người:** P3 sửa muộn chỉ mất 5 phút, khác hẳn P1 và P2 — vì P3 mô tả việc **soạn** kịch bản và không qua khâu thu âm. Lập luận cost-of-error ở §4 đứng trên P1 và P2, không trên P3.
+  **Ba người, ba khâu sau khác nhau — và P3 mới là người dùng đại diện:**
+
+  | | Khâu sau | Sửa muộn tốn gì |
+  |---|---|---|
+  | P3 · lab coach | **AI dựng video, AI đọc giọng** | 5 phút — render lại gần như miễn phí |
+  | P1 | Tự thu mic voice-off | ~1 tiếng thu lại + cắt ghép |
+  | P2 | MC đọc trực tiếp trên sân khấu | Sự cố trước khán giả, không sửa lại được |
+
+  Video bài giảng của khoá do lab coach làm bằng AI, giọng là TTS — **nên chi phí thật không nằm ở việc làm lại, mà nằm ở 45'–1 tiếng đọc dò mỗi bài và ở chất lượng bài giảng đăng ra**. P1 và P2 giữ trong evidence để cho thấy job tồn tại ngoài phạm vi một quy trình, nhưng lập luận §4 **không dựa vào chi phí thu lại của họ**.
 
   **Chuẩn khai:** B (mining) + 3 phỏng vấn có log nguyên văn. **Không khai chuẩn A** — A cần ≥20 người.
 
@@ -79,7 +87,7 @@ Loại: [ ] Tối ưu tính năng có sẵn  [x] Tính năng mới
 
 | Ứng viên | Bao nhiêu người gặp | Tần suất | Mỗi lần tốn gì | Khả thi trong sự kiện? |
 |---|---|---|---|---|
-| **A. Agent QA kịch bản trước thu âm, chỉ đúng câu sượng + gợi ý sửa tối thiểu (C2 — đã chọn)** | **3/3 người được hỏi đều gặp**; đều không có công cụ nào soát được | **2–10 lần/tuần** mỗi người (P1 2–3 · P3 5 · P2 ~10) | 45'–1 tiếng đọc dò mỗi kịch bản; lọt xuống khâu sau thì **~1 tiếng thu lại + cắt ghép audio** (P1) hoặc MC vấp trên sân khấu (P2) | Trung bình — cần tự viết + gắn nhãn tay ≥10 case kịch bản lỗi làm golden set (pack không có sẵn) |
+| **A. Agent QA kịch bản trước khi dựng video, chỉ đúng câu sượng + gợi ý sửa tối thiểu (C2 — đã chọn)** | **3/3 người được hỏi đều gặp**; đều không có công cụ nào soát được | **2–10 lần/tuần** mỗi người (P1 2–3 · P3 5 · P2 ~10) | **45'–1 tiếng đọc dò mỗi kịch bản**, mà vẫn lọt; lọt rồi thì bài giảng đăng ra nghe như máy đọc — giọng TTS không để lộ câu sượng | Trung bình — cần tự viết + gắn nhãn tay ≥10 case kịch bản lỗi làm golden set (pack không có sẵn) |
 | B. Sinh graph tri thức + quiz có trích nguồn từ transcript (C1) | Giảng viên soạn quiz + học viên toàn khoá | Mỗi bài giảng mới | Giảng viên tự soạn tay câu hỏi; học viên học theo lộ trình tuyến tính dù đã hiểu một phần | Khó hơn — cần xây graph tri thức từ đầu, phạm vi rộng hơn nhiều so với 3 buổi build |
 | C. ScriptScout — agent tự tìm tài liệu viết kịch bản có dẫn nguồn (C3) | Người viết kịch bản Studio team | Mỗi video mới cần kịch bản từ đầu | Nhiều ngày tự đọc tài liệu + viết + không ai kiểm được câu nào lấy từ đâu | Khó hơn — agent phải tự tìm & thẩm định nguồn web, rủi ro cao hơn (prompt injection từ trang lạ, hai nguồn mâu thuẫn) |
 | D. FeedbackRadar — gom góp ý người học thành kế hoạch sửa video (C5) | Đội sản xuất + giảng viên, gián tiếp là người học | Sau mỗi đợt học có video mới | Đọc tay từng góp ý rồi tự quyết định sửa gì, hay làm lại gần cả video dù chỉ vài câu có vấn đề | Trung bình — cần tự thu thập ~100 góp ý thật (khảo sát bạn cùng lớp) để làm golden set |
@@ -100,7 +108,7 @@ TODO: mỗi người thử 1 sản phẩm gần giống rồi điền 4 ô — g
 
 ## §4. Thiết kế
 
-- **Lát cắt MỘT CÂU:** Một biên tập viên · duyệt một kịch bản ~40 câu trước khi thu âm · AI chỉ đúng câu/đoạn nghe sượng kèm loại lỗi + lý do + gợi ý sửa tối thiểu · biên tập có bản kịch bản đã sạch câu sượng trước khi chuyển thu âm, không phải đọc dò lại cả bài.
+- **Lát cắt MỘT CÂU:** Một lab coach · duyệt một kịch bản ~40 câu trước khi cho AI dựng video · AI chỉ đúng câu/đoạn nghe sượng kèm loại lỗi + lý do + gợi ý sửa tối thiểu · biên tập có bản kịch bản đã sạch câu sượng trước khi chuyển thu âm, không phải đọc dò lại cả bài.
 - **Non-goals (≥3 thứ KHÔNG build):**
   1. Không tự động viết lại hoặc xuất bản toàn bộ kịch bản.
   2. Không dùng nhãn "AI-generated" để kết luận về tác giả (chỉ chỉ ra câu khó đọc, không phán đoán ai viết).
@@ -108,11 +116,12 @@ TODO: mỗi người thử 1 sản phẩm gần giống rồi điền 4 ô — g
   4. Không tự thêm claim/số liệu mới không có trong kịch bản gốc.
 - **Mức prototype nhắm tới:** [ ] Sketch [x] Mock [ ] Working — **thật:** luồng duyệt end-to-end trong `codebase/mockup.html` (hiển thị span, Accept / Sửa tay / Bỏ qua, hoàn tác, lọc theo nhóm lỗi, audit trail) · **mock:** 7 finding là dữ liệu tĩnh, chưa gọi AI. TODO: đổi sang Working nếu CP3 nối được lời gọi AI thật.
 - **Automation:** [x] augment [ ] conditional [ ] automate — **lý do theo cost-of-error:**
-  - **Bỏ sót thì đắt.** P1: lọt một đoạn quá dài xuống khâu thu, phải set up lại mic thu lại và cắt ghép audio — *"mất toi thêm gần tiếng đồng hồ"*. P2: câu không hợp văn nói lọt tới sân khấu, MC líu lưỡi vấp trước khán giả; sau vụ đó phải bắt cả nhóm đọc nháp thành tiếng, tốn thêm thời gian prep cho mọi kịch bản sau.
-  - **AI tự sửa cũng đắt — và chính user từ chối.** P1 chưa dùng tool AI nào vì *"sợ dùng máy móc nó sửa mất cái 'chất' giọng của mình"*. Nếu agent tự viết lại, nó đánh mất đúng thứ người dùng sợ mất, và họ sẽ không dùng.
-  - **Gợi ý sai thì rẻ** — người duyệt bấm Bỏ qua là xong, highlight biến mất.
+  - **Lỗi không lộ ra ở khâu nghe, nên phải bắt ở khâu văn bản.** Giọng TTS đọc trơn tru cả câu sượng — không hụt hơi, không líu lưỡi, không vấp. Người làm video nghe lại bản đã dựng vẫn thấy "ổn", lỗi chỉ lộ khi người học xem và thấy bài giảng nghe như máy đọc. Đây là lý do khâu duyệt văn bản là chỗ duy nhất chặn được, và cũng là ranh giới đề C2 yêu cầu: tách lỗi nội dung khỏi lỗi chỉ liên quan cách đọc.
+  - **Bỏ sót thì mất chất lượng bài giảng, không chỉ mất thời gian.** Render lại video rẻ, nhưng không ai render lại thứ mình tưởng là đúng. Cái đắt là bài đã đăng cho cả khoá xem.
+  - **AI tự sửa thì user không dùng.** P1: *"sợ dùng máy móc nó sửa mất cái 'chất' giọng của mình"* — đó là lý do P1 chưa đụng tool AI nào. Agent tự viết lại sẽ phá đúng thứ người dùng sợ mất, và họ bỏ công cụ.
+  - **Gợi ý sai thì rẻ** — bấm Bỏ qua là xong, highlight biến mất, hoàn tác được.
 
-  Nên AI gắn cờ + phân loại + giải thích + gợi ý sửa tối thiểu; người quyết từng chỗ bằng Accept / Sửa tay / Bỏ qua, và mọi quyết định đều hoàn tác được.
+  Nên AI gắn cờ + phân loại + giải thích + gợi ý sửa tối thiểu; người quyết từng chỗ bằng Accept / Sửa tay / Bỏ qua.
 - **§4b. Nguyên tắc đã áp dụng (≥4 — HAX/PAIR):**
 
   | Nguyên tắc | Áp cụ thể vào đâu trong prototype |
@@ -138,7 +147,7 @@ TODO: mỗi người thử 1 sản phẩm gần giống rồi điền 4 ô — g
 | 6 | Câu 1 xưng "các bạn", câu sau đổi sang "bạn" + khẩu ngữ | ④ | Gắn cờ register lệch, độ chắc **vừa**, gợi ý sửa tối thiểu giữ nguyên phần còn lại | G2 · G9 |
 | 7 | Ẩn dụ chê nặng ("tự đâm đầu vào tường") lệch giọng giảng trung tính | ④ | Gắn cờ sai sắc thái kèm lý do gắn với đối tượng người học, gợi ý bản trung tính hơn | G11 |
 | 8 | Người duyệt yêu cầu agent viết lại cả kịch bản cho mượt | ③ | `_________` — TODO: hành vi từ chối + giải thích phạm vi, chưa dựng trong `mockup.html` |  `_________` |
-| 9 | Đoạn dài liên tục không có chỗ ngắt hơi — người đọc hụt hơi khi thu (case thật của P1) | ④ | Gắn cờ breath-group overload, chỉ chỗ tách câu, **không rút gọn ý** | G11 · G9 |
+| 9 | Đoạn dài liên tục không có chỗ ngắt hơi (case thật của P1 khi tự thu mic) | ④ | Gắn cờ breath-group overload ở **khâu văn bản** — giọng TTS đọc trôi nên nghe lại bản dựng sẽ không phát hiện được; chỉ chỗ tách câu, **không rút gọn ý** | G11 · G9 |
 
 TODO: mỗi lớp ①②③④ cần ≥2 case tương ứng trong golden set §7 — hiện ① và ③ mới có 1.
 
@@ -180,7 +189,7 @@ TODO: mỗi lớp ①②③④ cần ≥2 case tương ứng trong golden set §
   | Đinh Trường An | 2A202602393 | **Prompt + eval** — prompt cho agent QA; golden set trong `eval/` (≥10 case lỗi gắn nhãn + ≥1 đoạn sạch); chạy eval, bảng kết quả §7; chốt quality bar trước CP4 |
   | Phan Đức Duy | 2A202602397 | **Prototype + demo** — `codebase/` (flow duyệt, accept/reject từng finding), lời gọi AI thật + log/trace; video CP3 và video dự phòng CP5 |
 - **Willing users:** Nguyễn Đức Thái (2A202602648) · Trần Hồng Sơn (2A20262475) — đã phỏng vấn 16/9, đồng ý thử prototype · lab coach (P3) — đã phỏng vấn, tên ở [`interview-log.md`](interview-log.md)
-  TODO: xin BTC đầu mối Studio team sản xuất video của khoá — chưa ai trong 3 người thuộc đúng quy trình đó
+  TODO: xin thêm 1–2 lab coach khác — hiện chỉ P3 ở đúng quy trình AI dựng video của khoá
 - Multi-prototype: không áp dụng.
 
 ## §9. Changelog
@@ -190,5 +199,7 @@ TODO: mỗi lớp ①②③④ cần ≥2 case tương ứng trong golden set §
 | CP1 | Chốt hướng B2 (Trợ lý Discord) + lát cắt + evidence mining ban đầu | Canvas CP1 |
 | CP1 (cập nhật) | Đổi sang hướng C2 (Vietnamese Spoken-Script QA) | Nhóm muốn thử hướng Lesson Studio; đánh đổi: mất evidence đếm-được sẵn có của B2, đổi lấy phạm vi kỹ thuật hẹp hơn trong Track C. Cần phỏng vấn Studio team trước CP4 để xác nhận hoặc quay lại B2 |
 | 17/9 | Thêm 3 phỏng vấn vào §1, điền số cho bảng impact §2, viết lại lý do augment §4 | Phỏng vấn P1/P2/P3 (`interview-log.md`) — 3/3 xác nhận pain, cho con số tần suất và chi phí mà mining không đo được |
-| 17/9 | Core JTBD thêm vế "hoặc đọc trước khán giả" | P2 duyệt kịch bản MC, không qua thu âm nhưng chịu đúng hậu quả — job giống nhau, khác khâu sau |
-| 17/9 | Bỏ vế "dựng hình khớp độ dài giọng" khỏi lập luận cost-of-error §4 | Không ai trong 3 người nhắc tới việc dựng hình; chi phí thu lại audio (P1, ~1 tiếng) một mình đã đủ chống lưng |
+| 17/9 | Core JTBD bỏ tên khâu sau, chỉ giữ "trước khi đưa nó thành giọng đọc" | Ba người được hỏi có ba khâu sau khác nhau (AI đọc · tự thu mic · MC đọc trực tiếp) nhưng cùng một job |
+| 17/9 | Bỏ vế "dựng hình khớp độ dài giọng" khỏi lập luận cost-of-error §4 | Không ai trong 3 người nhắc tới việc dựng hình |
+| 17/9 (sau) | **Đổi job executor: không phải "biên tập viên Studio team" mà là lab coach của khoá** — học viên khoá trước làm video bằng AI, giọng TTS. Bỏ luôn vai "giảng viên duyệt kịch bản" | Hỏi lại về quy trình thật của khoá: không có Studio team, mentor là chuyên gia đi làm nên không tham gia khâu video |
+| 17/9 (sau) | **Đổi trục cost-of-error §4**: bỏ "sửa muộn thì đắt", thay bằng "giọng TTS đọc trơn cả câu sượng nên lỗi chỉ bắt được ở khâu văn bản" | Giọng là AI nên render lại gần như miễn phí — chi phí thu lại của P1 không áp dụng cho người dùng thật. P3 trả lời "5 phút là xong" hoá ra không phải ngoại lệ mà là đúng quy trình |
