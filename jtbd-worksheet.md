@@ -17,19 +17,21 @@ Job: *đọc lại kịch bản trước khi duyệt để tìm câu nghe sượ
 | # | Bước | Họ đang cố làm gì | Hôm nay dùng gì | Kẹt ở đâu | Đau |
 |---|---|---|---|---|---|
 | 1 | Define | Xác định "nghe được" nghĩa là gì với kịch bản này | Cảm tính cá nhân, không có chuẩn viết ra | Mỗi người một ngưỡng; hai người duyệt có thể không đồng ý | M |
-| 2 | Locate | Tìm bản kịch bản mới nhất + tài liệu gốc để đối chiếu | `_________` (Q1) | `_________` | `__` |
+| 2 | Locate | Tìm bản kịch bản mới nhất + tài liệu gốc để đối chiếu | P3: coi slide → research nguồn trên mạng → so sánh nguồn nào chất lượng hơn | `_________` | `__` |
 | 3 | Prepare | Thu xếp thời gian và chỗ đủ yên tĩnh để đọc thành tiếng | Tự sắp lịch | Đọc thành tiếng cả bài không làm được ở chỗ đông người | M |
 | 4 | Confirm | Chắc chắn bản đang soát đúng là bản sẽ đem thu | `_________` (Q1) | `_________` | `__` |
-| 5 | **Execute** | **Đọc thành tiếng từng câu, nghe chỗ nào vấp** | Miệng + mắt, không công cụ | **Phải đọc hết cả bài mới biết câu nào sượng; không có gì chỉ thẳng vào câu và nói nó sai loại gì** | **H** |
-| 6 | **Monitor** | Biết đã soát hết chưa, câu nào còn nghi ngờ | Trí nhớ / ghi chú tay | **Cuối bài mệt nên bỏ sót; không lưu vết vì sao một câu bị bỏ qua** | **H** |
+| 5 | **Execute** | **Đọc thành tiếng từng câu, nghe chỗ nào vấp** | P1 in ra giấy, cầm bút đỏ gạch chân · P2 mở Google Docs màn hình to, lẩm bẩm đọc to "xem có lọt lỗ tai không" | **Phải đọc hết cả bài mới biết câu nào sượng; không có gì chỉ thẳng vào câu và nói nó sai loại gì.** 45' cho 5 trang (P1), 1 tiếng cho 10 trang (P2) | **H** |
+| 6 | **Monitor** | Biết đã soát hết chưa, câu nào còn nghi ngờ | Trí nhớ / ghi chú tay | **Vẫn lọt — 3/3 người từng để sót;** không lưu vết vì sao một câu bị bỏ qua | **H** |
 | 7 | Modify | Sửa câu vấp mà vẫn giữ giọng tác giả | Tự viết lại, hoặc nhờ công cụ viết lại cả bài | Công cụ viết lại cả bài thì mất giọng gốc; sửa tay thì tốn thời gian | M |
-| 8 | Conclude | Chốt bản sạch, bàn giao sang thu âm | Gửi file | Lỗi lọt xuống đây mới lộ thì phải thu lại giọng + dựng lại cảnh | **H** |
+| 8 | Conclude | Chốt bản sạch, bàn giao sang thu âm / lên sân khấu | Gửi file | **Lọt xuống đây thì đắt:** P1 thu lại + cắt ghép audio mất ~1 tiếng · P2 để MC vấp ngay trên sân khấu | **H** |
 
 **Hai chỗ đau nhất:** #1 bước 5 Execute · #2 bước 6 Monitor.
 
-**Bằng chứng cho 2 chỗ này:** mining 3.665 câu văn nói trong `data/vlearn-pack/` ([`spec.md`](spec.md) §1) — 19,1% câu giảng viên dài hơn 40 từ mà vẫn nghe bình thường, nên bước 5 không rút gọn được bằng một luật đếm từ.
+**Bằng chứng cho 2 chỗ này:**
+- Mining 3.665 câu văn nói trong `data/vlearn-pack/` — 19,1% câu giảng viên dài hơn 40 từ mà vẫn nghe bình thường, nên bước 5 không rút gọn được bằng một luật đếm từ.
+- 3/3 người phỏng vấn đang làm bước 5 bằng tay, mất 45'–1 tiếng mỗi kịch bản, và 3/3 vẫn để lọt ([`interview-log.md`](interview-log.md)).
 
-TODO (Q3/Q4): xác nhận quy trình "thu giọng trước → dựng hình khớp độ dài giọng". Đây đang là giả định của nhóm, chưa ai trong Studio team xác nhận — nếu sai thì cột "Đau" của bước 8 sụp, và cả lý do chọn augment ở [`spec.md`](spec.md) §4 phải viết lại.
+**Giả định đã được xác nhận một phần:** P1 xác nhận chi phí thu lại giọng là thật (*"set up lại mic thu lại nguyên đoạn đó, mất toi thêm gần tiếng đồng hồ tính cả lúc cắt ghép lại audio"*). Riêng vế **"dựng hình khớp theo độ dài giọng"** thì chưa ai nhắc tới — bỏ vế đó ra khỏi lập luận, chi phí thu lại audio một mình đã đủ.
 
 ## 3. Core JTBD
 
@@ -37,31 +39,30 @@ TODO (Q3/Q4): xác nhận quy trình "thu giọng trước → dựng hình kh�
 - **Từ solution lỡ nhét vào (gạch bỏ):** ~~dùng AI~~ · ~~kiểm tra tự động~~ · ~~agent QA~~
 - **Bản chốt:**
 
-> **Đọc lại kịch bản trước khi duyệt để tìm câu nghe sượng / khó đọc thành lời, trước khi đưa vào thu âm.**
+> **Đọc lại kịch bản trước khi duyệt để tìm câu nghe sượng / khó đọc thành lời, trước khi đưa vào thu âm hoặc đọc trước khán giả.**
+
+*Đổi sau phỏng vấn:* bản cũ dừng ở "trước khi đưa vào thu âm". P2 duyệt kịch bản MC cho sự kiện — không qua thu âm, nhưng chịu đúng hậu quả đó ở dạng khác (MC vấp trên sân khấu). Job giống nhau, chỉ khác khâu sau.
 
 ## 4. Ba job stories
 
 | # | When | I want to | So I can | Nguồn |
 |---|---|---|---|---|
-| **JS1** | Tôi vừa viết xong một kịch bản ~40 câu và sắp gửi sang thu âm | Biết ngay câu nào sẽ vấp khi đọc thành lời, không phải đọc to cả bài | Sửa xong trước khi giọng được thu và cảnh được dựng khớp theo | Suy từ lát cắt C2 |
+| **JS1** | Tôi sắp gửi kịch bản sang thu âm / sắp đưa MC lên đọc | Biết ngay câu nào sẽ vấp khi đọc thành lời, không phải đọc dò cả bài | Sửa trước khi lọt xuống khâu thu hoặc lên sân khấu | **P1 Q3** — lọt xuống khâu thu, hụt hơi, thu lại mất ~1 tiếng · **P2 Q3** — MC vấp trên sân khấu |
 | **JS2** | Một công cụ gắn cờ hàng loạt câu dài trong bài tôi viết | Hiểu vì sao từng câu bị gắn cờ, không chỉ thấy cảnh báo "câu quá dài" | Bỏ qua những câu tuy dài nhưng đọc vẫn xuôi, thay vì cắt vụn cả bài | Mining: 699/3.665 câu (19,1%) dài hơn 40 từ vẫn nghe được |
-| **JS3** | Tôi nhận lại kịch bản người khác viết, hoặc một đoạn dịch từ tiếng Anh | Được chỉ đúng chỗ sượng kèm gợi ý sửa tối thiểu | Sửa mà không viết lại cả bài, giữ nguyên giọng văn tác giả | Đề C2 + [`canvas.md`](canvas.md) ô 1 |
-
-TODO (Q3/Q5): thay JS1 và JS3 bằng tình huống nguyên văn của người thật — hai story này hiện suy từ đề bài, chỉ JS2 đứng trên số đo.
+| **JS3** | Tôi cân nhắc đưa bài cho công cụ soát | Được chỉ đúng chỗ sượng kèm gợi ý sửa tối thiểu, không bị viết lại hộ | Giữ nguyên giọng văn của mình | **P1 Q6** — *"sợ dùng máy móc nó sửa mất cái 'chất' giọng của mình"*, nên chưa dùng tool AI nào |
 
 ## 5. Current alternatives
 
 | Alternative | Làm tốt gì | Fail ở đâu | Vì sao chưa bỏ nó |
 |---|---|---|---|
-| **Tự đọc thành tiếng cả bài** | Bắt đúng thứ tai nghe thấy | Phải đọc hết mới biết; cuối bài mệt nên bỏ sót; không để lại vết vì sao bỏ qua một câu | Cách duy nhất hiện bắt được lỗi "nghe" |
-| **Nhờ LLM viết lại cả bài** | Nhanh, câu ra mượt | Mất giọng tác giả; không nói câu nào sai và sai loại gì; có thể thêm claim không có trong bản gốc | Khi gấp vẫn nhanh hơn sửa tay |
-| **Soát chính tả / ngữ pháp** (Word, LanguageTool) | Bắt lỗi chính tả, lỗi ngữ pháp rõ ràng | Không bắt được câu đúng ngữ pháp mà đọc lên vẫn sượng | Miễn phí, có sẵn trong trình soạn thảo |
-| **Nghe thử bằng TTS** | Nghe đúng thứ máy sẽ đọc; bắt tốt lỗi số / viết tắt | Phải render cả bài mới nghe được; TTS đọc trơn cả câu sượng nên lỗi ngữ nghĩa vẫn lọt | Gần khâu thu âm nhất |
-| **Bỏ qua, để lộ ở khâu thu** | Tốn 0 công ở bước kịch bản | Đẩy chi phí sang thu lại giọng + dựng lại cảnh | Lịch sản xuất gấp |
+| **Tự đọc thành tiếng / đọc dò tay** (3/3 đang dùng) | Bắt đúng thứ tai nghe thấy | Phải đọc hết mới biết; **vẫn lọt — 3/3 từng để sót**; không để lại vết vì sao bỏ qua một câu | *"tiếng Việt lắt léo, đọc không có ngữ điệu là không biết câu đó sượng"* (P2 Q6) |
+| **Word check chính tả** (P1) | Bắt lỗi chính tả | Không bắt được câu đúng ngữ pháp mà đọc lên vẫn sượng | *"quen đọc bằng mắt rồi"*; miễn phí, có sẵn |
+| **Grammarly** (P2) | Dùng tốt cho tiếng Anh | *"tiếng Việt thì chịu"* | Vẫn giữ cho phần tiếng Anh |
+| **Cho AI soát** (P3) | Kiểm được logic, nguồn, kiến thức có chuẩn không | Không soát độ trôi khi đọc — đúng phần C2 nhắm | Giải được phần factuality |
+| **Nhờ AI viết lại cả bài** | Nhanh, câu ra mượt | Mất giọng tác giả | **P1 không dùng** — *"sợ dùng máy móc nó sửa mất cái 'chất' giọng của mình"* |
+| **Bắt cả nhóm đọc nháp thành tiếng trước mặt mình** (P2, sau sự cố) | Chắc chắn bắt được lỗi nghe | *"Tốn thêm cả đống thời gian prep"* — mỗi kịch bản mất thêm người và thêm buổi | Đắt nhưng an toàn hơn để MC vấp trên sân khấu |
 
-**Nếu sản phẩm nhóm không ra đời, user sẽ tiếp tục:** đọc thành tiếng cả bài bằng tay và chấp nhận tỉ lệ bỏ sót; thỉnh thoảng nhờ LLM viết lại khi quá gấp, đổi lại mất giọng tác giả.
-
-TODO (Q6): cột "Vì sao chưa bỏ nó" hiện là suy đoán — thay bằng câu trả lời thật, [`interview-log.md`](interview-log.md).
+**Nếu sản phẩm nhóm không ra đời, user sẽ tiếp tục:** đọc dò bằng tay và chấp nhận tỉ lệ lọt — hoặc trả giá bằng cách của P2: bắt cả nhóm đọc nháp thành tiếng, tốn thời gian prep cho mọi kịch bản.
 
 ## 6. AI leverage point
 
@@ -78,5 +79,5 @@ TODO (Q6): cột "Vì sao chưa bỏ nó" hiện là suy đoán — thay bằng 
 
 **Assumption nguy hiểm nhất nếu nhóm đang sai:**
 
-1. **Chưa ai trong Studio team xác nhận job này đủ đau.** Evidence hiện có chứng minh *lỗi khó phân loại tồn tại*, chưa chứng minh *biên tập viên đau vì nó*. Kiểm bằng phỏng vấn P3 trước CP4.
+1. **Đã hỏi 3 người, cả 3 xác nhận — nhưng chưa ai thuộc đúng Studio team sản xuất video của khoá.** P1 là học viên tự thu voice-off, P2 làm kịch bản MC sự kiện, P3 là lab coach soạn bài giảng. Job và hậu quả giống nhau, nhưng nếu quy trình của Studio team khác hẳn thì lát cắt phải chỉnh. Hỏi thêm khi BTC cho đầu mối.
 2. **Precision phải đủ cao thì người ta mới tin.** Mining đã bác bỏ giả thuyết ban đầu ("câu dài = câu sượng"): ngưỡng 40 từ gắn cờ oan 19,1% lời giảng thật. Nếu agent báo oan ở mức đó, biên tập viên quay lại tự đọc. Kiểm bằng golden set + đo false positive ([`spec.md`](spec.md) §7).
