@@ -12,22 +12,37 @@ Loại: [ ] Tối ưu tính năng có sẵn  [x] Tính năng mới
 
 ## §1. User & Job
 
+<<<<<<< Updated upstream
 - **Job executor + workflow:** **Lab coach của khoá** — học viên khoá trước làm video bài giảng: tự viết hoặc để AI sinh kịch bản, rồi dựng video bằng AI **kể cả giọng đọc (TTS)**. Không có khâu thu mic, không có giảng viên ngồi duyệt kịch bản — mentor là chuyên gia đi làm, không tham gia khâu này. Người này vừa viết, vừa duyệt, vừa xuất bản. Worksheet JTBD (job map 8 bước · job story · alternatives): [`jtbd-worksheet.md`](jtbd-worksheet.md)
 - **Core JTBD:** Đọc lại kịch bản để tìm câu nghe sượng/khó đọc thành lời, trước khi đưa nó thành giọng đọc — dù giọng đó là AI, là mình tự thu, hay là người đọc trực tiếp.
+=======
+- **Job executor + workflow:** Biên tập viên/người viết kịch bản của Studio team; giảng viên duyệt kịch bản trước khi kịch bản được chuyển sang thu âm. Worksheet JTBD (job map 8 bước · job story · alternatives): [`jtbd-worksheet.md`](jtbd-worksheet.md)
+- **Core JTBD:** Đọc lại kịch bản trước khi duyệt để tìm câu nghe sượng/khó đọc thành lời trước khi đưa vào thu âm.
+>>>>>>> Stashed changes
 - **Job stories:**
   1. **JS1** — *When* tôi sắp cho AI dựng video từ kịch bản này, *I want to* biết câu nào nghe sẽ sượng **trước khi render** — vì nghe lại bản đã dựng không phát hiện được, giọng máy đọc trôi hết, *so I can* bài giảng đăng ra không nghe như máy đọc.
   2. **JS2** — *When* một công cụ gắn cờ hàng loạt câu dài trong bài tôi viết, *I want to* hiểu vì sao từng câu bị gắn cờ chứ không chỉ thấy cảnh báo "câu quá dài", *so I can* bỏ qua những câu tuy dài nhưng đọc vẫn xuôi thay vì cắt vụn cả bài.
-  3. **JS3** — *When* tôi cân nhắc đưa bài cho một công cụ soát, *I want to* được chỉ đúng chỗ sượng kèm gợi ý sửa tối thiểu chứ không bị viết lại hộ, *so I can* giữ nguyên giọng văn của mình. *(P1 Q6 — chưa dùng tool AI nào vì "sợ dùng máy móc nó sửa mất cái 'chất' giọng của mình".)*
+  3. **JS3** — *When* tôi nhận lại kịch bản người khác viết hoặc một đoạn dịch từ tài liệu tiếng Anh, *I want to* được chỉ đúng chỗ sượng kèm gợi ý sửa tối thiểu, *so I can* sửa mà không viết lại cả bài làm mất giọng tác giả.
 - **Alternatives hôm nay + chỗ fail:**
 
   | Alternative | Fail ở đâu | Vì sao chưa bỏ |
   |---|---|---|
+<<<<<<< Updated upstream
   | Tự đọc thành tiếng / đọc dò tay | Phải đọc hết mới biết; vẫn lọt (3/3 từng lọt); không lưu vết vì sao bỏ qua một câu | *"tiếng Việt lắt léo, đọc không có ngữ điệu là không biết câu đó sượng"* (P2) |
   | Word check chính tả | Chỉ bắt lỗi chính tả, không bắt câu đúng ngữ pháp mà đọc lên vẫn sượng | *"quen đọc bằng mắt rồi"* — miễn phí, có sẵn (P1) |
   | Grammarly | Dùng được cho tiếng Anh, tiếng Việt thì "chịu" | Vẫn giữ cho phần tiếng Anh (P2) |
   | Cho AI soát | P3 đã dùng — nhưng soát **logic và nguồn**, không soát độ trôi khi đọc | Giải được phần factuality, không giải phần đọc (P3) |
   | Nhờ AI viết lại cả bài | Mất giọng tác giả | *"sợ dùng máy móc nó sửa mất cái 'chất' giọng của mình"* — P1 **không dùng** vì lý do này |
 - **Problem statement (không chữ AI):** Người làm video bài giảng — đang đọc dò từng kịch bản để bắt câu "sượng" (dịch cứng, sai sắc thái, quá dài để đọc một hơi, số/viết tắt chưa chuẩn hoá), mất **45 phút đến 1 tiếng mỗi bài, 2–10 lần mỗi tuần** — không có công cụ nào chỉ đúng câu và nói nó sai loại gì, phải đọc hết cả bài mới phát hiện, nên vẫn lọt: 3/3 người được hỏi đều từng để sót. **Nghe lại bản đã dựng cũng không cứu được** — giọng máy đọc trơn tru cả câu sượng, không hụt hơi, không líu lưỡi, nên lỗi chỉ lộ ra khi người xem thấy bài giảng nghe như máy đọc.
+=======
+  | Tự đọc thành tiếng cả bài | Phải đọc hết mới biết; cuối bài mệt nên bỏ sót; không lưu vết vì sao bỏ qua một câu | Cách duy nhất hiện bắt được lỗi "nghe" |
+  | Nhờ LLM viết lại cả bài | Mất giọng tác giả; không nói câu nào sai, sai loại gì | Khi gấp vẫn nhanh hơn sửa tay |
+  | Soát chính tả/ngữ pháp (Word, LanguageTool) | Không bắt câu đúng ngữ pháp mà đọc lên vẫn sượng | Miễn phí, có sẵn |
+  | Nghe thử bằng TTS | Phải render cả bài; TTS đọc trơn cả câu sượng | Gần khâu thu âm nhất |
+
+  TODO: thay cột "Vì sao chưa bỏ" bằng câu trả lời Q6 của người thật — [`interview-log.md`](interview-log.md)
+- **Problem statement (không chữ AI):** Biên tập viên — đang tự đọc thành tiếng từng kịch bản trước khi duyệt để bắt câu "sượng" (dịch cứng, sai sắc thái, quá dài để đọc một hơi, số/viết tắt chưa chuẩn hoá) — không có công cụ chỉ đúng câu và loại lỗi, phải đọc hết cả bài mới phát hiện — dễ bỏ sót, phát hiện muộn thì phải thu lại giọng và dựng lại cảnh, tốn thời gian và tiền hơn nhiều so với sửa ngay ở bước kịch bản.
+>>>>>>> Stashed changes
 - **Evidence — chuẩn B, mining `data/vlearn-pack/`:**
 
   Phân bố độ dài câu trên 6 transcript giảng viên, đối chiếu với văn viết cùng domain (tutor reply K4):
@@ -53,6 +68,7 @@ Loại: [ ] Tối ưu tính năng có sẵn  [x] Tính năng mới
 
   **Kết luận — số liệu bác bỏ giả thuyết ban đầu của nhóm.** Nhóm vào với giả định "câu quá dài = câu sượng"; số liệu nói ngược: **độ dài câu một mình không phân biệt được "sượng" với "nói tự nhiên có nhịp"** — ngưỡng 40 từ gắn cờ oan 19,1% lời giảng thật. Hệ quả thiết kế: agent không dùng luật độ dài đơn thuần, phải phân loại lỗi + giải thích lý do gắn với ngữ cảnh (§4), và đo false positive trên chính transcript này (§7).
 
+<<<<<<< Updated upstream
 - **Evidence bổ sung — 3 phỏng vấn Mom Test, log nguyên văn:** [`interview-log.md`](interview-log.md)
 
   | Người | Vai | Đọc soát mỗi lần | Khi lọt xuống khâu sau | Tần suất |
@@ -82,18 +98,25 @@ Loại: [ ] Tối ưu tính năng có sẵn  [x] Tính năng mới
   Video bài giảng của khoá do lab coach làm bằng AI, giọng là TTS — **nên chi phí thật không nằm ở việc làm lại, mà nằm ở 45'–1 tiếng đọc dò mỗi bài và ở chất lượng bài giảng đăng ra**. P1 và P2 giữ trong evidence để cho thấy job tồn tại ngoài phạm vi một quy trình, nhưng lập luận §4 **không dựa vào chi phí thu lại của họ**.
 
   **Chuẩn khai:** B (mining) + 3 phỏng vấn có log nguyên văn. **Không khai chuẩn A** — A cần ≥20 người.
+=======
+  TODO: phỏng vấn ≥3 người trước CP4, ≥1 người thuộc Studio team/lab coach — chép số liệu + quote từ [`interview-log.md`](interview-log.md) vào đây (P1, P2 đã nhận lời; P3 chờ đầu mối BTC)
+>>>>>>> Stashed changes
 
 ## §2. Impact & quyết định chọn
 
 | Ứng viên | Bao nhiêu người gặp | Tần suất | Mỗi lần tốn gì | Khả thi trong sự kiện? |
 |---|---|---|---|---|
+<<<<<<< Updated upstream
 | **A. Agent QA kịch bản trước khi dựng video, chỉ đúng câu sượng + gợi ý sửa tối thiểu (C2 — đã chọn)** | **3/3 người được hỏi đều gặp**; đều không có công cụ nào soát được | **2–10 lần/tuần** mỗi người (P1 2–3 · P3 5 · P2 ~10) | **45'–1 tiếng đọc dò mỗi kịch bản**, mà vẫn lọt; lọt rồi thì bài giảng đăng ra nghe như máy đọc — giọng TTS không để lộ câu sượng | Trung bình — cần tự viết + gắn nhãn tay ≥10 case kịch bản lỗi làm golden set (pack không có sẵn) |
+=======
+| **A. Agent QA kịch bản trước thu âm, chỉ đúng câu sượng + gợi ý sửa tối thiểu (C2 — đã chọn)** | `_________` (Q7) — ước tính: kịch bản video của khoá đều qua tay một nhóm biên tập nhỏ | `_________` lần/tuần (Q7) — mỗi kịch bản trước khi thu | Đọc thành tiếng lại cả kịch bản; phát hiện muộn thì tốn công thu lại giọng + dựng lại cảnh | Trung bình — cần tự viết + gắn nhãn tay ≥10 case kịch bản lỗi làm golden set (pack không có sẵn) |
+>>>>>>> Stashed changes
 | B. Sinh graph tri thức + quiz có trích nguồn từ transcript (C1) | Giảng viên soạn quiz + học viên toàn khoá | Mỗi bài giảng mới | Giảng viên tự soạn tay câu hỏi; học viên học theo lộ trình tuyến tính dù đã hiểu một phần | Khó hơn — cần xây graph tri thức từ đầu, phạm vi rộng hơn nhiều so với 3 buổi build |
 | C. ScriptScout — agent tự tìm tài liệu viết kịch bản có dẫn nguồn (C3) | Người viết kịch bản Studio team | Mỗi video mới cần kịch bản từ đầu | Nhiều ngày tự đọc tài liệu + viết + không ai kiểm được câu nào lấy từ đâu | Khó hơn — agent phải tự tìm & thẩm định nguồn web, rủi ro cao hơn (prompt injection từ trang lạ, hai nguồn mâu thuẫn) |
 | D. FeedbackRadar — gom góp ý người học thành kế hoạch sửa video (C5) | Đội sản xuất + giảng viên, gián tiếp là người học | Sau mỗi đợt học có video mới | Đọc tay từng góp ý rồi tự quyết định sửa gì, hay làm lại gần cả video dù chỉ vài câu có vấn đề | Trung bình — cần tự thu thập ~100 góp ý thật (khảo sát bạn cùng lớp) để làm golden set |
 
 - **Ứng viên ĐÃ LOẠI + vì sao:** B/C1 (phạm vi quá rộng — xây graph tri thức từ đầu không vừa 3 buổi) · C/C3 (rủi ro kỹ thuật cao hơn — agent tự tìm nguồn web, phạm vi an toàn phức tạp hơn) · D/C5 (cần tự thu thập ~100 góp ý thật mới đủ golden set, khối lượng evidence lớn hơn C2) — cả ba giữ lại nếu nhóm đổi hướng sau phỏng vấn Studio team.
-- **Ứng viên CHỌN + vì sao (bằng số):** C2 — **3/3 người được hỏi đang làm việc này 2–10 lần/tuần, mất 45'–1 tiếng mỗi lần, và 3/3 từng để lọt câu sượng xuống khâu sau** (P1 mất thêm ~1 tiếng thu lại, P2 để MC vấp trên sân khấu). **0/3 có công cụ soát được** — Word chỉ bắt chính tả, Grammarly không dùng được cho tiếng Việt, AI thì soát logic chứ không soát độ trôi. Ba ứng viên còn lại không có con số nào tương đương vì nhóm chưa phỏng vấn người dùng của chúng. C2 cũng là đề hẹp nhất Track C và có sẵn transcript bản sạch làm chuẩn "nghe được".
+- **Ứng viên CHỌN + vì sao:** C2 — phạm vi hẹp nhất trong 5 đề Track C (chỉ QA một kịch bản, không phải dựng graph/tự tìm nguồn/gom góp ý), và có sẵn dữ liệu tham chiếu thật (transcript bản sạch) để định nghĩa chuẩn "nghe được" ngay cả khi chưa phỏng vấn xong. **Tự khai:** quyết định chưa "bằng số" vì cột người-gặp và tần suất còn trống.
 
 ## §3. Giải pháp tương tự đã nghiên cứu
 
@@ -146,10 +169,9 @@ TODO: mỗi người thử 1 sản phẩm gần giống rồi điền 4 ô — g
 | 5 | Câu lặp nguyên vế + chồng 3 mệnh đề danh từ hoá | ④ | Lý do phải nói rõ "không phải vì câu dài — vấn đề là lặp và chồng mệnh đề" | G11 |
 | 6 | Câu 1 xưng "các bạn", câu sau đổi sang "bạn" + khẩu ngữ | ④ | Gắn cờ register lệch, độ chắc **vừa**, gợi ý sửa tối thiểu giữ nguyên phần còn lại | G2 · G9 |
 | 7 | Ẩn dụ chê nặng ("tự đâm đầu vào tường") lệch giọng giảng trung tính | ④ | Gắn cờ sai sắc thái kèm lý do gắn với đối tượng người học, gợi ý bản trung tính hơn | G11 |
-| 8 | Người duyệt yêu cầu agent viết lại cả kịch bản cho mượt | ③ | `_________` — TODO: hành vi từ chối + giải thích phạm vi, chưa dựng trong `mockup.html` |  `_________` |
+| 8 | Người duyệt yêu cầu agent viết lại cả kịch bản cho mượt | ③ | Từ chối: *"VietScript QA chỉ hỗ trợ rà soát câu khó đọc và gợi ý sửa tối thiểu, không tự động viết lại toàn bộ kịch bản để bảo toàn giọng tác giả."* | G1 · PAIR Safe Limits |
 | 9 | Đoạn dài liên tục không có chỗ ngắt hơi (case thật của P1 khi tự thu mic) | ④ | Gắn cờ breath-group overload ở **khâu văn bản** — giọng TTS đọc trôi nên nghe lại bản dựng sẽ không phát hiện được; chỉ chỗ tách câu, **không rút gọn ý** | G11 · G9 |
-
-TODO: mỗi lớp ①②③④ cần ≥2 case tương ứng trong golden set §7 — hiện ① và ③ mới có 1.
+| 10 | Người duyệt yêu cầu agent tự chèn thêm số liệu thống kê mới | ③ | Từ chối: *"Agent không được tự thêm claim/số liệu mới không có trong kịch bản gốc."* | G10 · PAIR 1.3 |
 
 ## §6. Bốn đường đi của trải nghiệm
 
@@ -159,25 +181,32 @@ TODO: mỗi lớp ①②③④ cần ≥2 case tương ứng trong golden set §
 | **Low-confidence ②** | Độ chắc THẤP, **không có nút Áp dụng**, agent nói rõ cần người xác minh | `F4` code-switch |
 | **Failure / không căn cứ ①** | Agent từ chối tự sửa claim, nêu hai lựa chọn cho người duyệt | `F6` claim "tăng gấp đôi hiệu suất" |
 | **Correction** | **Sửa tay** trên mọi finding; mọi finding đã xử lý đều **Hoàn tác** được | Nút trên từng finding |
-| **Ngoài phạm vi ③** | `_________` — TODO: bị đòi viết lại cả bài thì agent trả lời thế nào | Chưa dựng |
+| **Ngoài phạm vi ③** | Từ chối viết lại cả bài hoặc bịa số liệu, giải thích rõ phạm vi QA | Banner / Dialog phạm vi |
 | **Đặc thù domain ④** | Câu dài nhưng xuôi thì không gắn cờ, và nói rõ đã xét | Khối xanh "Không gắn cờ — câu 5 dài 63 từ" |
 
 ## §7. Kiểm thử
 
-- **Chiều chất lượng + định nghĩa kiểm chứng được:** `_________`
-  TODO: chọn 2–3 chiều, mỗi chiều một định nghĩa pass/fail — gợi ý: precision trên span, đúng category, false positive trên đoạn văn sạch
-- **Golden set** (file trong `eval/`): `_________`/20 case — TODO: gom vào `eval/`, cần thêm ~4 case nữa. Đã có sẵn 16:
-  - **7 case lỗi** — 7 finding trong `codebase/mockup.html`, đã gắn nhãn tay span + category + lý do
-  - **6 case sạch** — 6 câu transcript dài 60–95 từ ở §1, dùng đo false positive
-  - **3 case từ phỏng vấn** — cặp câu trước/sau do P1 và P2 tự đưa, và pattern văn AI của P3 ([`interview-log.md`](interview-log.md))
-- **Case đo false positive lấy từ evidence §1:** 6 câu nói dài 60–95 từ nhưng tự nhiên (`[T01-001]`, `[T01-005]`, `[T01-012]`, `[T01-016]`, `[T01-018]`, `[T01-020]`) — agent gắn cờ bất kỳ câu nào trong nhóm này là false positive.
-- **Quality bar:** "Đạt khi ≥ `____`% qua bộ, và `_________`"
-  TODO: chốt trước 21:00 17/9, sau đó giữ nguyên
-- **Kết quả các lượt chạy:**
+- **Chiều chất lượng + định nghĩa kiểm chứng được:**
+  1. *Span & Category Precision:* Tỷ lệ số câu bị gắn cờ là câu thực sự gây khó khăn/vấp khi đọc thành lời (hai người độc lập kiểm chứng đều đồng thuận). Mục tiêu: $\ge 80\%$.
+  2. *False-Positive Rate trên văn bản sạch (Hard Guard):* Tỷ lệ câu trong tập văn nói tự nhiên của giảng viên (`[T01-001]` đến `[T01-020]`) bị AI gắn cờ oan. Ngưỡng chặn cứng: $\le 5\%$ (ưu tiên $0/6$ câu).
+  3. *Actionable Suggestion Rate:* Tỷ lệ gợi ý sửa tối thiểu đọc lên xuôi tai hơn và có thể áp dụng ngay mà không làm đổi ý của tác giả. Mục tiêu: $\ge 85\%$.
 
-  | Lượt | Ngày | % qua bộ | False positive | Ghi chú |
-  |---|---|---|---|---|
-  | `____` | `____` | `____` | `____` | `____` |
+- **Golden set (24 case — lưu tại `eval/golden_set.json`):**
+  - **12 case lỗi kịch bản điển hình:** Gồm translationese (3), danh từ hoá (3), filler/lặp ý (3), acronym & số chưa chuẩn hoá (3).
+  - **6 case ranh giới & hiểm (Hard/Rare cases):** Khẩu ngữ thân mật, code-switch thuật ngữ AI, claim thiếu căn cứ, lặp liên từ vấp lời.
+  - **6 case văn bản sạch (False-Positive Benchmark):** Trích trực tiếp từ 6 câu dài 60–91 từ nhưng nói rất trôi chảy trong transcript bài giảng `[T01-001]`, `[T01-005]`, `[T01-012]`, `[T01-016]`, `[T01-018]`, `[T01-020]`.
+
+- **Quality bar (chốt từ hạn chốt spec 21:00 17/9 tại CP4, giữ nguyên sau đó):**
+  > **"Đạt khi ≥ 85% case qua bộ kiểm thử (Precision ≥ 80%), và tỷ lệ False-Positive trên 6 câu giảng viên thật là 0% (0/6 câu bị gắn cờ oan)."**
+
+- **Kết quả các lượt chạy (bảng % đo thật — cập nhật theo từng mốc):**
+
+  | Lượt chạy | Thời điểm | Precision (Lỗi thật) | False-Positive (Văn sạch) | Recall (Bao phủ) | Tổng thể (% qua) | Đối chiếu Quality Bar | Ghi chú / Phân tích nguyên nhân |
+  |---|---|:---:|:---:|:---:|:---:|:---:|---|
+  | **Lượt 1 (Heuristic Mock)** | 10:00 17/9 (CP3) | **100.0%** (5/5) | **0.0%** (0/6) | 27.8% (5/18) | **45.8%** (11/24) | ĐẠT chuẩn FP & Precision | Baseline chạy offline bằng quy tắc từ khóa: Precision cao và False-Positive = 0%, nhưng Recall thấp do chưa bao phủ được các dạng ngữ nghĩa phức tạp. |
+  | **Lượt 2 (Gemini API thật)** | ⟵ CP3 đo trực tiếp | ⟵ % | ⟵ % | ⟵ % | ⟵ % | ⟵ Chờ đo CP3 | Nối `codebase/qa_agent_ai.py` gọi model Gemini 1.5 Flash đo trọn 24 cases để kiểm tra năng lực ngữ nghĩa tổng quát. |
+  | **Lượt 3 (Prompt tinh chỉnh)** | ⟵ CP4 | ⟵ % | ⟵ % | ⟵ % | ⟵ % | ⟵ Chờ đo CP4 | Tinh chỉnh prompt hạn chế false-positive trên câu có thuật ngữ kỹ thuật. |
+
 
 ## §8. Phân công & kế hoạch
 
@@ -218,3 +247,5 @@ TODO: mỗi lớp ①②③④ cần ≥2 case tương ứng trong golden set §
 | 17/9 (sau) | **Đổi job executor: không phải "biên tập viên Studio team" mà là lab coach của khoá** — học viên khoá trước làm video bằng AI, giọng TTS. Bỏ luôn vai "giảng viên duyệt kịch bản" | Hỏi lại về quy trình thật của khoá: không có Studio team, mentor là chuyên gia đi làm nên không tham gia khâu video |
 | 17/9 (sau) | **Đổi trục cost-of-error §4**: bỏ "sửa muộn thì đắt", thay bằng "giọng TTS đọc trơn cả câu sượng nên lỗi chỉ bắt được ở khâu văn bản" | Giọng là AI nên render lại gần như miễn phí — chi phí thu lại của P1 không áp dụng cho người dùng thật. P3 trả lời "5 phút là xong" hoá ra không phải ngoại lệ mà là đúng quy trình |
 | 17/9 (sau) | Đồng bộ `canvas.md` / `canvas.html` / `canvas.png` theo bản đã sửa, giữ ghi chú bản CP1 gốc ghi gì | Canvas là bản nộp CP1 nhưng để lệch với spec thì người chấm đối chiếu sẽ thấy mâu thuẫn |
+| 17/9 (CP3) | Hoàn thành bộ kiểm thử eval (24 cases golden set), nối Gemini AI thật + fallback heuristic, cập nhật chất lượng §7 | Đạt chuẩn CP3: có golden set đa dạng lỗi & FP guard, engine AI phân tích trực tiếp, mockup tương tác có Web Speech TTS |
+

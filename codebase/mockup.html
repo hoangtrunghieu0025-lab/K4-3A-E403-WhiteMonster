@@ -77,7 +77,8 @@
 
 <header>
   <span class="logo">Spoken-Script QA</span>
-  <span class="mockbadge">MOCK · CP2 — findings là dữ liệu tĩnh, chưa gọi AI thật</span>
+  <span class="mockbadge" id="mode-badge">MOCK · CP2 — findings tĩnh</span>
+  <button class="primary" id="btn-ai-mode" style="background:#059669;border-color:#059669;padding:6px 12px;font-size:13px;" onclick="openAiModal()">⚡ Chạy AI Thật (Gemini CP3)</button>
   <span class="spacer"></span>
   <span class="progress">Đã xử lý <b id="done">0</b>/<b id="total">7</b> · còn <b id="left">7</b></span>
   <button class="ghost" id="btn-reset">Đặt lại</button>
@@ -118,6 +119,35 @@
   <div class="dlg-head"><h3 id="dlg-title">Kịch bản đã duyệt</h3></div>
   <div class="dlg-body" id="dlg-body"></div>
   <div class="dlg-foot"><button class="ghost" id="dlg-close">Đóng</button></div>
+</dialog>
+
+<dialog id="ai-dlg" style="border:none;border-radius:14px;padding:0;max-width:560px;width:92vw;box-shadow:0 18px 50px rgba(15,15,35,.28);">
+  <div class="dlg-head"><h3 style="color:#059669;">⚡ Chạy AI Thật — Gemini 1.5 Flash (CP3)</h3></div>
+  <div class="dlg-body">
+    <p style="font-size:13.5px;color:#55555f;margin-bottom:14px;line-height:1.55;">
+      Nhập API Key miễn phí từ Google AI Studio để gọi model phân tích trực tiếp. Key được lưu an toàn trong trình duyệt (localStorage), không commit lên repo.
+    </p>
+    <div style="margin-bottom:14px;">
+      <label style="display:block;font-size:12.5px;font-weight:700;color:#33333d;margin-bottom:6px;">Gemini API Key:</label>
+      <input type="password" id="ai-key-input" placeholder="AIzaSy..." style="width:100%;padding:9px 12px;border:1px solid #cdd0da;border-radius:7px;font-family:monospace;font-size:13px;">
+    </div>
+    <div style="margin-bottom:16px;">
+      <label style="display:block;font-size:12.5px;font-weight:700;color:#33333d;margin-bottom:6px;">Chọn kịch bản rà soát:</label>
+      <select id="ai-script-select" style="width:100%;padding:8px 10px;border:1px solid #cdd0da;border-radius:7px;font-size:13.5px;margin-bottom:8px;" onchange="toggleCustomScript(this.value)">
+        <option value="current">Kịch bản hiện tại (14 câu — Bài 3 VLearn)</option>
+        <option value="custom">Dán kịch bản tuỳ ý khác...</option>
+      </select>
+      <textarea id="ai-custom-script" style="display:none;width:100%;height:110px;padding:9px;border:1px solid #cdd0da;border-radius:7px;font-size:13px;resize:vertical;" placeholder="Dán các câu kịch bản cần rà soát vào đây..."></textarea>
+    </div>
+    <div id="ai-loading" style="display:none;padding:10px 14px;background:#ecfdf5;border:1px solid #a7f3d0;border-radius:7px;color:#047857;font-size:13px;font-weight:600;margin-bottom:14px;">
+      ⏳ Đang gửi request tới Gemini API và phân tích từng câu theo taxonomy C2...
+    </div>
+  </div>
+  <div class="dlg-foot">
+    <button class="ghost" onclick="closeAiModal()">Đóng</button>
+    <button class="ghost" onclick="switchToMock()">Về Mock baseline</button>
+    <button class="primary" id="btn-run-ai-submit" style="background:#059669;border-color:#059669;" onclick="runRealAi()">🚀 Phân tích ngay với AI</button>
+  </div>
 </dialog>
 
 <script>
@@ -222,6 +252,7 @@ function renderFindings(){
                 ${f.sugg ? `<button class="ok" data-act="accept" data-id="${f.id}">Áp dụng</button>` : ""}
                 <button class="ghost" data-act="edit" data-id="${f.id}">Sửa tay</button>
                 <button class="ghost" data-act="reject" data-id="${f.id}">Bỏ qua</button>
+                <button class="ghost" onclick="event.stopPropagation(); speakText('${esc(f.span)}')">🔊 Nghe</button>
               </div>`;
     return `<div class="${cls}" data-id="${f.id}">
       <div class="f-top">
@@ -310,6 +341,163 @@ $("#btn-export").addEventListener("click", () => {
   $("#dlg").showModal();
 });
 $("#dlg-close").addEventListener("click", () => $("#dlg").close());
+
+// TTS Web Speech Preview
+function speakText(text) {
+  if (!('speechSynthesis' in window)) {
+    alert("Trình duyệt không hỗ trợ Web Speech Synthesis.");
+    return;
+  }
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = 'vi-VN';
+  u.rate = 1.0;
+  window.speechSynthesis.speak(u);
+}
+
+// AI Modal & Gemini Execution
+function openAiModal() {
+  const savedKey = localStorage.getItem("gemini_api_key") || "";
+  $("#ai-key-input").value = savedKey;
+  $("#ai-dlg").showModal();
+}
+
+function closeAiModal() {
+  $("#ai-dlg").close();
+}
+
+function toggleCustomScript(val) {
+  $("#ai-custom-script").style.display = (val === "custom") ? "block" : "none";
+}
+
+const ORIGINAL_MOCK_FINDINGS = JSON.parse(JSON.stringify(FINDINGS));
+const ORIGINAL_MOCK_SENTENCES = [...SENTENCES];
+
+function switchToMock() {
+  FINDINGS.length = 0;
+  ORIGINAL_MOCK_FINDINGS.forEach(f => FINDINGS.push(f));
+  SENTENCES.length = 0;
+  ORIGINAL_MOCK_SENTENCES.forEach(s => SENTENCES.push(s));
+  Object.keys(state).forEach(k => delete state[k]);
+  activeId = null;
+  filter = "all";
+  $("#mode-badge").textContent = "MOCK · CP2 — findings tĩnh";
+  $("#mode-badge").style.background = "#fff4e5";
+  $("#mode-badge").style.color = "#b45309";
+  $("#mode-badge").style.borderColor = "#fcd9a4";
+  closeAiModal();
+  render();
+}
+
+async function runRealAi() {
+  const key = $("#ai-key-input").value.trim();
+  if (!key) {
+    alert("Vui lòng nhập Gemini API Key (từ Google AI Studio)!");
+    return;
+  }
+  localStorage.setItem("gemini_api_key", key);
+
+  const sel = $("#ai-script-select").value;
+  let textToAnalyze = "";
+  if (sel === "custom") {
+    textToAnalyze = $("#ai-custom-script").value.trim();
+    if (!textToAnalyze) {
+      alert("Vui lòng nhập kịch bản cần rà soát!");
+      return;
+    }
+  } else {
+    textToAnalyze = SENTENCES.join("\n");
+  }
+
+  const loadEl = $("#ai-loading");
+  const btn = $("#btn-run-ai-submit");
+  loadEl.style.display = "block";
+  btn.disabled = true;
+
+  const startTime = performance.now();
+
+  const prompt = `Bạn là Spoken-Script QA Agent cho đội sản xuất bài giảng video VLearn (Track C2 - Lesson Studio).
+Nhiệm vụ: Rà soát kịch bản video tiếng Việt để phát hiện các câu nghe SƯỢNG hoặc KHÓ ĐỌC THÀNH LỜI trước khi thu âm.
+Phân loại theo taxonomy: 'Cú pháp dịch', 'Danh từ hóa', 'Lặp ý / Filler', 'Số / Acronym TTS', 'Xưng hô', 'Sai sắc thái'.
+LƯU Ý FALSE-POSITIVE: Những câu dài (50-90 từ) nhưng có nhịp ngắt tự nhiên và xưng hô thân mật của giảng viên KHÔNG ĐƯỢC BẮT LỖI.
+Chỉ gợi ý sửa tối thiểu.
+
+Trả về DUY NHẤT một JSON array thuần túy:
+[
+  {
+    "id": "AI_1",
+    "s": 0,
+    "span": "đoạn sượng trong câu",
+    "cat": "Tên loại lỗi",
+    "sev": "cao | vua | thap",
+    "conf": "Độ chắc: cao",
+    "why": "Lý do vì sao sượng khi đọc thành lời",
+    "sugg": "gợi ý sửa tối thiểu"
+  }
+]
+KỊCH BẢN:
+${textToAnalyze}`;
+
+  try {
+    const resp = await fetch(\`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=\${key}\`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: prompt }] }],
+        generationConfig: { temperature: 0.1, responseMimeType: "application/json" }
+      })
+    });
+
+    if (!resp.ok) {
+      throw new Error(\`API returned \${resp.status}\`);
+    }
+
+    const data = await resp.json();
+    const rawContent = data.candidates[0].content.parts[0].text;
+    const cleanJson = rawContent.replace(/^\\\`\\\`\\\`json\\s*/, "").replace(/\\s*\\\`\\\`\\\`$/, "");
+    const aiFindings = JSON.parse(cleanJson);
+
+    const elapsed = Math.round(performance.now() - startTime);
+
+    if (sel === "custom") {
+      SENTENCES.length = 0;
+      textToAnalyze.split(/\\n+/).filter(s => s.trim()).forEach(s => SENTENCES.push(s.trim()));
+    }
+
+    FINDINGS.length = 0;
+    aiFindings.forEach((f, idx) => {
+      FINDINGS.push({
+        id: f.id || \`AI_\${idx+1}\`,
+        s: typeof f.s === 'number' ? f.s : 0,
+        span: f.span || "",
+        cat: f.cat || "Lỗi kịch bản",
+        sev: f.sev || "vua",
+        conf: f.conf || "Độ chắc: cao (Gemini AI)",
+        why: f.why || "",
+        sugg: f.sugg || null,
+        suggNote: f.suggNote || "Cần người xác minh."
+      });
+    });
+
+    Object.keys(state).forEach(k => delete state[k]);
+    activeId = null;
+    filter = "all";
+
+    $("#mode-badge").textContent = \`AI THẬT · Gemini 1.5 Flash (\${elapsed}ms)\`;
+    $("#mode-badge").style.background = "#ecfdf5";
+    $("#mode-badge").style.color = "#047857";
+    $("#mode-badge").style.borderColor = "#a7f3d0";
+
+    closeAiModal();
+    render();
+    alert(\`⚡ AI đã phân tích xong trong \${elapsed}ms! Tìm thấy \${FINDINGS.length} điểm lưu ý.\`);
+  } catch (err) {
+    alert("Lỗi khi gọi Gemini API: " + err.message);
+  } finally {
+    loadEl.style.display = "none";
+    btn.disabled = false;
+  }
+}
 
 render();
 </script>

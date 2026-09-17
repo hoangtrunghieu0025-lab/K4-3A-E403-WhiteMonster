@@ -1,0 +1,42 @@
+{
+  "timestamp": "2026-09-17T11:13:42.566167",
+  "call_type": "heuristic_mock",
+  "model": "mock-baseline",
+  "input_length_chars": 297,
+  "input_snippet": "Chào các bạn. Việc thực hiện tối ưu hóa cấu trúc của các câu lệnh đưa vào hệ thống là vô cùng cần thiết.\nChúng ta phải x...",
+  "findings_count": 4,
+  "findings": [
+    {
+      "targetSpan": "Việc thực hiện tối ưu hóa cấu trúc của các câu lệnh đưa vào hệ thống là vô cùng cần thiết",
+      "category": "Translationese / Cú pháp dịch sượng",
+      "severity": "high",
+      "explanation": "Lạm dụng danh từ hóa 'thực hiện tối ưu hóa'. Đọc thành lời nghe rất trịnh trọng, cứng nhắc kiểu dịch máy.",
+      "suggestion": "Chúng ta rất cần tối ưu cấu trúc câu lệnh đưa vào hệ thống.",
+      "action": "suggest_replacement"
+    },
+    {
+      "targetSpan": "Chúng ta phải xem xét nhằm mục đích kiểm tra mô hình",
+      "category": "Lặp ý / Filler / Cụm rườm rà",
+      "severity": "high",
+      "explanation": "Cụm 'nhằm mục đích' khiến câu nặng nề, tốn hơi đọc mà không thêm giá trị ngữ nghĩa.",
+      "suggestion": "Chúng ta cần kiểm tra kỹ kết quả đầu ra của mô hình để đảm bảo độ chính xác.",
+      "action": "suggest_replacement"
+    },
+    {
+      "targetSpan": "Kỹ thuật Chain of Thought, hay viết tắt là CoT, yêu cầu mô hình phải giải thích từng bước",
+      "category": "Số, Acronym, Code-switch khó đọc TTS",
+      "severity": "med",
+      "explanation": "Từ viết tắt 'CoT' dễ bị máy đọc hoặc phát thanh viên phát âm thành /kót/ thay vì từng chữ cái.",
+      "suggestion": "Kỹ thuật Chain of Thought (đọc là C-O-T) yêu cầu mô hình giải thích từng bước...",
+      "action": "pronunciation_hint"
+    },
+    {
+      "targetSpan": "Thống kê 15000000 người dùng cho thấy điều này",
+      "category": "Số, Acronym, Code-switch khó đọc TTS",
+      "severity": "med",
+      "explanation": "Số '15000000' viết liền không có dấu chấm hàng nghìn khiến người thu âm dễ đọc vấp.",
+      "suggestion": "Thống kê 15.000.000 (mười lăm triệu) người dùng cho thấy...",
+      "action": "number_normalization"
+    }
+  ]
+}

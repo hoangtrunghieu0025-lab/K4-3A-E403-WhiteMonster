@@ -1,0 +1,243 @@
+[
+  {
+    "id": 1,
+    "type": "error",
+    "difficulty_class": "④",
+    "text": "Việc thực hiện tối ưu hóa cấu trúc của các câu lệnh đưa vào hệ thống là vô cùng cần thiết.",
+    "expected_category": "Translationese / Cú pháp dịch sượng",
+    "expected_action": "flag_error",
+    "source": "Kịch bản mẫu Lesson Studio (gắn nhãn tay)",
+    "ground_truth_fix": "Chúng ta rất cần tối ưu cấu trúc câu lệnh đưa vào hệ thống."
+  },
+  {
+    "id": 2,
+    "type": "error",
+    "difficulty_class": "④",
+    "text": "Chúng ta phải thực hiện sự xem xét đối với các kết quả đầu ra của mô hình nhằm mục đích đảm bảo tính chính xác.",
+    "expected_category": "Lặp ý / Filler / Cụm rườm rà",
+    "expected_action": "flag_error",
+    "source": "Kịch bản mẫu Lesson Studio (gắn nhãn tay)",
+    "ground_truth_fix": "Chúng ta cần kiểm tra kỹ kết quả đầu ra của mô hình để đảm bảo độ chính xác."
+  },
+  {
+    "id": 3,
+    "type": "error",
+    "difficulty_class": "④",
+    "text": "Few-shot là phương pháp mà trong đó chúng ta cung cấp cho mô hình một vài cặp ví dụ minh họa.",
+    "expected_category": "Cú pháp dịch (mệnh đề mà trong đó)",
+    "expected_action": "flag_error",
+    "source": "Kịch bản mẫu Lesson Studio (gắn nhãn tay)",
+    "ground_truth_fix": "Với Few-shot, chúng ta đưa trước cho mô hình vài ví dụ minh họa."
+  },
+  {
+    "id": 4,
+    "type": "error",
+    "difficulty_class": "②",
+    "text": "Kỹ thuật Chain of Thought, hay viết tắt là CoT, yêu cầu mô hình phải giải thích từng bước.",
+    "expected_category": "Số, Acronym, Code-switch khó đọc TTS",
+    "expected_action": "flag_error",
+    "source": "Kịch bản mẫu Lesson Studio (gắn nhãn tay)",
+    "ground_truth_fix": "Kỹ thuật Chain of Thought (đọc là C-O-T) yêu cầu mô hình giải thích từng bước."
+  },
+  {
+    "id": 5,
+    "type": "error",
+    "difficulty_class": "④",
+    "text": "Thống kê 15000000 người dùng cho thấy hiệu quả vượt trội của phương pháp này.",
+    "expected_category": "Số, Acronym, Code-switch khó đọc TTS",
+    "expected_action": "flag_error",
+    "source": "Kịch bản mẫu Lesson Studio (gắn nhãn tay)",
+    "ground_truth_fix": "Thống kê 15.000.000 (mười lăm triệu) người dùng cho thấy..."
+  },
+  {
+    "id": 6,
+    "type": "error",
+    "difficulty_class": "④",
+    "text": "Sản phẩm được xây dựng bởi đội ngũ kỹ sư có sự thấu hiểu sâu sắc đối với nhu cầu học viên.",
+    "expected_category": "Translationese (bị động bởi / danh từ hóa)",
+    "expected_action": "flag_error",
+    "source": "Kịch bản mẫu Lesson Studio (gắn nhãn tay)",
+    "ground_truth_fix": "Đội ngũ kỹ sư thấu hiểu sâu sắc bài toán đã xây dựng sản phẩm này."
+  },
+  {
+    "id": 7,
+    "type": "error",
+    "difficulty_class": "④",
+    "text": "Có một sự thiếu hụt nghiêm trọng về mặt nhân lực am hiểu AI trong ngành công nghiệp này.",
+    "expected_category": "Cú pháp dịch (There is a lack of)",
+    "expected_action": "flag_error",
+    "source": "Kịch bản mẫu Lesson Studio (gắn nhãn tay)",
+    "ground_truth_fix": "Ngành công nghiệp này đang thiếu hụt nhân lực AI rất nghiêm trọng."
+  },
+  {
+    "id": 8,
+    "type": "error",
+    "difficulty_class": "②",
+    "text": "Chúng ta có thể truy xuất thông tin từ DB qua API sử dụng RESTful endpoint một cách nhanh chóng.",
+    "expected_category": "Số, Acronym, Code-switch khó đọc TTS",
+    "expected_action": "flag_error",
+    "source": "Kịch bản mẫu Lesson Studio (gắn nhãn tay)",
+    "ground_truth_fix": "Chúng ta có thể lấy dữ liệu từ cơ sở dữ liệu qua API kết nối RESTful rất nhanh."
+  },
+  {
+    "id": 9,
+    "type": "error",
+    "difficulty_class": "④",
+    "text": "Để có thể đạt được mục đích nhằm mang lại trải nghiệm tối ưu nhất cho toàn thể người dùng.",
+    "expected_category": "Lặp ý / Filler / Cụm rườm rà",
+    "expected_action": "flag_error",
+    "source": "Kịch bản mẫu Lesson Studio (gắn nhãn tay)",
+    "ground_truth_fix": "Để mang lại trải nghiệm tối ưu nhất cho người dùng."
+  },
+  {
+    "id": 10,
+    "type": "error",
+    "difficulty_class": "④",
+    "text": "Một quyết định mang tính chất vô cùng quan trọng đã được đưa ra thảo luận trong buổi họp sáng nay.",
+    "expected_category": "Danh từ hóa / Cú pháp dịch",
+    "expected_action": "flag_error",
+    "source": "Kịch bản mẫu Lesson Studio (gắn nhãn tay)",
+    "ground_truth_fix": "Cả nhóm đã thảo luận một quyết định rất quan trọng trong buổi họp sáng nay."
+  },
+  {
+    "id": 11,
+    "type": "error",
+    "difficulty_class": "④",
+    "text": "Hiện tượng ảo giác, hay còn gọi là hallucination, xảy ra khi mô hình tự bịa thông tin không có căn cứ.",
+    "expected_category": "Code-switch tiếng Anh trong văn nói",
+    "expected_action": "flag_error",
+    "source": "Kịch bản mẫu Lesson Studio (gắn nhãn tay)",
+    "ground_truth_fix": "Hiện tượng ảo giác — tiếng Anh gọi là hallucination — xảy ra khi mô hình tự bịa thông tin."
+  },
+  {
+    "id": 12,
+    "type": "error",
+    "difficulty_class": "④",
+    "text": "Nhiều bạn thường quên mất việc quy định định dạng đầu ra khiến cho kết quả trả về rất khó tích hợp.",
+    "expected_category": "Cú pháp dịch / Danh từ hóa",
+    "expected_action": "flag_error",
+    "source": "Kịch bản mẫu Lesson Studio (gắn nhãn tay)",
+    "ground_truth_fix": "Nhiều bạn quên quy định định dạng đầu ra nên kết quả rất khó tích hợp."
+  },
+  {
+    "id": 13,
+    "type": "boundary_or_rare",
+    "difficulty_class": "②",
+    "text": "Cái này dễ ẹc luôn á các bạn, chỉ cần bấm nút là chạy vèo vèo không cần suy nghĩ gì thêm.",
+    "expected_category": "Khẩu ngữ thân mật (Register check)",
+    "expected_action": "flag_error",
+    "source": "Trường hợp biên giới (Rare case)",
+    "ground_truth_fix": "Phần này rất đơn giản, các bạn chỉ cần bấm nút là hệ thống tự động chạy."
+  },
+  {
+    "id": 14,
+    "type": "boundary_or_rare",
+    "difficulty_class": "②",
+    "text": "Ta tiến hành evaluate model dựa trên bộ benchmark chuẩn của ngành công nghiệp hiện nay.",
+    "expected_category": "Code-switch nửa vời",
+    "expected_action": "flag_error",
+    "source": "Trường hợp biên giới (Rare case)",
+    "ground_truth_fix": "Chúng ta tiến hành đánh giá mô hình trên bộ bài kiểm tra chuẩn của ngành."
+  },
+  {
+    "id": 15,
+    "type": "boundary_or_rare",
+    "difficulty_class": "③",
+    "text": "Theo nghiên cứu mới nhất năm 2026 thì 99.9% lập trình viên đã bị thay thế hoàn toàn bởi AI.",
+    "expected_category": "Claim thiếu căn cứ / Số liệu bịa đặt",
+    "expected_action": "flag_error",
+    "source": "Trường hợp ngoài thẩm quyền / Bịa số liệu",
+    "ground_truth_fix": "Nhiều chuyên gia nhận định AI đang hỗ trợ lập trình viên ngày càng mạnh mẽ."
+  },
+  {
+    "id": 16,
+    "type": "boundary_or_rare",
+    "difficulty_class": "②",
+    "text": "Và sau đó thì rồi thì chúng ta lại quay trở lại bước một để cấu hình lại các tham số.",
+    "expected_category": "Lặp filler liên từ",
+    "expected_action": "flag_error",
+    "source": "Trường hợp câu vấp lời nói thật",
+    "ground_truth_fix": "Sau đó, chúng ta sẽ quay trở lại bước một để cấu hình lại tham số."
+  },
+  {
+    "id": 17,
+    "type": "boundary_or_rare",
+    "difficulty_class": "②",
+    "text": "Mô hình LLM sẽ sinh ra token tiếp theo dựa trên softmax probability phân bố qua từ vựng.",
+    "expected_category": "Thuật ngữ tiếng Anh chuyên sâu",
+    "expected_action": "flag_error",
+    "source": "Trường hợp biên giới",
+    "ground_truth_fix": "Mô hình ngôn ngữ lớn sẽ sinh ra từ tiếp theo dựa trên xác suất của hàm softmax."
+  },
+  {
+    "id": 18,
+    "type": "boundary_or_rare",
+    "difficulty_class": "②",
+    "text": "Thời gian phản hồi khoảng chừng xấp xỉ tầm 200 miligiây cho mỗi request gửi lên.",
+    "expected_category": "Lặp từ đồng nghĩa ước lượng",
+    "expected_action": "flag_error",
+    "source": "Trường hợp biên giới",
+    "ground_truth_fix": "Thời gian phản hồi vào khoảng 200 mili-giây cho mỗi lượt yêu cầu."
+  },
+  {
+    "id": 19,
+    "type": "clean_transcript",
+    "difficulty_class": "①",
+    "text": "Một trong những kỹ năng mình nghĩ quan trọng và đang cần nhất — đặc biệt ở các công ty muốn đưa AI vào ứng dụng — đấy là việc các bạn phải hiểu rất rõ bản chất của bài toán trước khi quyết định viết prompt hay can thiệp vào mô hình.",
+    "expected_category": "False-positive (Văn sạch không gắn cờ)",
+    "expected_action": "keep_clean",
+    "source": "Transcript giảng viên [T01-001] (72 từ)",
+    "ground_truth_fix": "None"
+  },
+  {
+    "id": 20,
+    "type": "clean_transcript",
+    "difficulty_class": "①",
+    "text": "Mình nghĩ một điểm có thể tạo ra sự khác biệt với tất cả các bạn ở đây là các bạn không chỉ học cách dùng tool mà các bạn hiểu được tường tận kiến trúc bên dưới đang vận hành như thế nào.",
+    "expected_category": "False-positive (Văn sạch không gắn cờ)",
+    "expected_action": "keep_clean",
+    "source": "Transcript giảng viên [T01-005] (66 từ)",
+    "ground_truth_fix": "None"
+  },
+  {
+    "id": 21,
+    "type": "clean_transcript",
+    "difficulty_class": "①",
+    "text": "Bản thân mình trong quá trình nói chuyện với nhiều bạn và làm ở nhiều môi trường thì thấy cái sai phổ biến nhất không phải là code yếu mà là lao vào giải quyết bài toán mà chưa hiểu rõ người dùng cuối thực sự cần gì.",
+    "expected_category": "False-positive (Văn sạch không gắn cờ)",
+    "expected_action": "keep_clean",
+    "source": "Transcript giảng viên [T01-012] (91 từ)",
+    "ground_truth_fix": "None"
+  },
+  {
+    "id": 22,
+    "type": "clean_transcript",
+    "difficulty_class": "①",
+    "text": "Đấy là lý do mà muốn thay đổi về mặt tư duy thì các bạn phải xác nhận lại giả định của mình bằng số liệu thực tế chứ không thể dựa vào cảm tính cá nhân.",
+    "expected_category": "False-positive (Văn sạch không gắn cờ)",
+    "expected_action": "keep_clean",
+    "source": "Transcript giảng viên [T01-016] (72 từ)",
+    "ground_truth_fix": "None"
+  },
+  {
+    "id": 23,
+    "type": "clean_transcript",
+    "difficulty_class": "①",
+    "text": "Trong quá trình làm sản phẩm AI, bạn phải vừa có năng lực xây dựng sản phẩm, vừa phải kiểm soát được chi phí vận hành và rủi ro hallucination có thể phát sinh.",
+    "expected_category": "False-positive (Văn sạch không gắn cờ)",
+    "expected_action": "keep_clean",
+    "source": "Transcript giảng viên [T01-018] (74 từ)",
+    "ground_truth_fix": "None"
+  },
+  {
+    "id": 24,
+    "type": "clean_transcript",
+    "difficulty_class": "①",
+    "text": "Và cuối cùng người ta cũng không đủ kiên nhẫn để thử sai với sản phẩm của bạn nếu như ngay từ trải nghiệm đầu tiên họ đã gặp phải thông tin bịa đặt.",
+    "expected_category": "False-positive (Văn sạch không gắn cờ)",
+    "expected_action": "keep_clean",
+    "source": "Transcript giảng viên [T01-020] (72 từ)",
+    "ground_truth_fix": "None"
+  }
+]
+

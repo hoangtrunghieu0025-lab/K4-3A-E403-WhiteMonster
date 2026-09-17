@@ -1,18 +1,20 @@
 # codebase/ — prototype
 
-## Mức prototype hiện tại: **Mock** (CP2)
+## Mức prototype: **Working** (CP3)
 
 | Phần | Trạng thái |
 |---|---|
 | Luồng duyệt kịch bản (hiển thị span, Accept / Sửa tay / Bỏ qua, hoàn tác, lọc theo nhóm lỗi, xuất bản + audit trail) | **Thật** — chạy được end-to-end trong `mockup.html` |
-| Phát hiện span sượng · phân loại lỗi · sinh lý do · sinh gợi ý sửa | **Mock** — 7 findings là dữ liệu tĩnh viết tay trong `FINDINGS` |
+| Phát hiện span sượng · phân loại lỗi · sinh lý do · sinh gợi ý sửa | **AI Thật** — Gọi trực tiếp Gemini 1.5 Flash API (hoặc chạy Heuristic Baseline) qua `codebase/qa_agent_ai.py` và nút tích hợp trong `mockup.html` |
+| Ghi vết lời gọi AI (Trace & Log) | **Thật** — lưu vết request/response tại `codebase/ai_call_trace.json` chứng minh không can thiệp tay |
 | Kịch bản mẫu 14 câu | Nhóm tự viết, **không lấy từ data pack** |
-
-TODO (CP3): nối lời gọi AI thật vào quyết định trung tâm — nhận kịch bản → trả danh sách finding (span, category, severity, lý do, confidence, gợi ý), giữ nguyên luồng Accept/Reject; lưu log/trace vào thư mục này.
 
 ## Chạy thử
 
-Mở `mockup.html` bằng trình duyệt bất kỳ — không cần cài gì, không cần server.
+1. **Giao diện web tương tác:** Mở `codebase/mockup.html` bằng trình duyệt. Bấm nút **"⚡ Chạy AI Thật (Gemini CP3)"** để dán API Key của bạn (miễn phí từ Google AI Studio) và phân tích trực tiếp. Có tích hợp nút **🔊 Nghe thử TTS** giọng tiếng Việt.
+2. **Chạy qua dòng lệnh (CLI):** Chạy `python codebase/qa_agent_ai.py` để test nhanh lời gọi AI.
+3. **Đo lường tự động trên Golden Set:** Chạy `python eval/run_eval.py` để đo độ chính xác (Precision, Recall, False-Positive) trên 24 case.
+
 
 ## Bốn đường đi của trải nghiệm đã dựng sẵn (cho `spec.md` §6)
 

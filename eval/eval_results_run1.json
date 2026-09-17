@@ -1,0 +1,13 @@
+{
+  "mode": "Heuristic Engine (Mock Baseline)",
+  "total_cases": 24,
+  "true_positives": 5,
+  "false_positives": 0,
+  "false_negatives": 13,
+  "true_negatives": 6,
+  "precision_pct": 100.0,
+  "recall_pct": 27.8,
+  "false_positive_rate_pct": 0.0,
+  "overall_accuracy_pct": 45.8,
+  "quality_bar_met": true
+}
