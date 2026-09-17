@@ -1,5 +1,7 @@
 # Canvas 4 ô — Checkpoint 1
 
+*(Cập nhật 17/9 sau 3 phỏng vấn Mom Test — bản nộp CP1 lúc 19:30 16/9 ghi người dùng là "biên tập viên Studio team" và quy trình thu giọng người; hỏi lại thì khoá không có đội đó, xem `spec.md` §9.)*
+
 **NHÓM:** WhiteMonster · **Lớp:** 3A · **Phòng:** E403 · **Cụm:** C1
 **TRACK:** C — Lesson Studio · **Đề:** C2 (Vietnamese Spoken-Script QA — agent review kịch bản tiếng Việt)
 **ĐỘI TRƯỞNG:** Hoàng Trung Hiếu — 2A202602945
@@ -9,13 +11,15 @@
 
 ## Ô 1 · NGƯỜI DÙNG & NỖI ĐAU
 
-**JOB:** Biên tập viên / người viết kịch bản của Studio team (và giảng viên duyệt) đang rà lại kịch bản video trước khi chuyển sang thu âm.
+**JOB:** Lab coach của khoá — học viên khoá trước làm video bài giảng: tự viết hoặc để AI sinh kịch bản, rồi dựng video bằng AI **kể cả giọng đọc**. Một người vừa viết, vừa duyệt, vừa xuất bản — không ai soát chéo hộ.
 
-**PAIN:** Kịch bản đúng ngữ pháp nhưng đọc lên bị sượng — câu dịch cứng, sai sắc thái, đứt hơi giữa chừng, số và từ viết tắt chưa chuẩn hoá. Biên tập viên phải đọc thành tiếng cả bài mới phát hiện, và vẫn dễ bỏ sót. Vì quy trình là thu giọng trước rồi dựng hình khớp theo độ dài giọng, một câu lọt xuống khâu sau kéo theo phải thu lại giọng câu đó và dựng lại cảnh đó — đắt hơn nhiều so với sửa ngay ở bước kịch bản. Cách thay thế là nhờ công cụ viết lại cả bài, nhưng như vậy mất giọng văn gốc của tác giả.
+**PAIN:** Kịch bản đúng ngữ pháp nhưng đọc lên bị sượng — câu dịch cứng, sai sắc thái, chồng mệnh đề, số và từ viết tắt chưa chuẩn hoá. Phải đọc dò cả bài mới phát hiện: **45 phút–1 tiếng mỗi bài, 2–10 lần/tuần**, mà vẫn lọt — 3/3 người được phỏng vấn đều từng để sót.
+
+**HẬU QUẢ:** giọng AI đọc trơn tru cả câu sượng — không hụt hơi, không líu lưỡi. **Nghe lại bản đã dựng cũng không phát hiện được**, nên lỗi chỉ lộ khi người học xem và thấy bài giảng nghe như máy đọc. Khâu văn bản là chỗ duy nhất chặn được. Cách thay thế là nhờ công cụ viết lại cả bài, nhưng như vậy mất giọng văn gốc của tác giả.
 
 ## Ô 2 · BẰNG CHỨNG BAN ĐẦU
 
-**MINING (chuẩn B, trên `data/vlearn-pack/` — track C cho phép thay cho khảo sát 20 người):**
+**MINING (chuẩn B, trên `data/vlearn-pack/`):**
 Đo phân bố độ dài câu của **3.665 câu văn nói tự nhiên** trong 6 transcript giảng viên.
 
 | Nguồn | Số câu | Trung vị | p90 | p95 | Dài nhất |
@@ -29,19 +33,19 @@
 **VÍ DỤ NGUYÊN VĂN** (dẫn mã đoạn, đều là câu rất dài nhưng nghe tự nhiên):
 `[T01-001]` 72 từ · `[T01-005]` 66 từ · `[T01-012]` 91 từ · `[T01-016]` 72 từ · `[T01-018]` 74 từ · `[T01-020]` 72 từ.
 
-**PHƯƠNG PHÁP ĐẾM (kiểm lại được):** `eval/mine_sentence_length.py` — lấy mọi đoạn mã `[Txx-NNN]`, bỏ đoạn `[Hoạt động lớp]`, gỡ markdown phía tutor, tách câu theo `. ! ? …`, bỏ mẩu dưới 3 từ, đếm từ theo khoảng trắng. Chạy lại ra đúng số trên. Data pack không commit vào repo theo quy định bảo mật.
+**PHƯƠNG PHÁP ĐẾM:** `eval/mine_sentence_length.py` — lấy mọi đoạn mã `[Txx-NNN]`, bỏ đoạn `[Hoạt động lớp]`, gỡ markdown phía tutor, tách câu theo `. ! ? …`, bỏ mẩu dưới 3 từ, đếm từ theo khoảng trắng. Chạy lại ra đúng số trên. Data pack không commit vào repo theo quy định bảo mật.
 
 **KẾT LUẬN:** số liệu **bác bỏ giả thuyết ban đầu** của nhóm ("câu dài = câu sượng"). Đặt ngưỡng 40 từ sẽ gắn cờ oan 19,1% lời giảng thật — đúng bài toán false positive mà đề C2 nhấn mạnh (*"một câu trơn tru không đủ để kết luận"*). Hệ quả thiết kế: agent **không được** dùng luật độ dài đơn thuần, phải phân loại lỗi và giải thích lý do gắn với ngữ cảnh, và phải đo false positive trên chính 6 câu trên.
 
-**ĐANG LÀM:** phỏng vấn Mom Test ≥3 người, trong đó ≥1 người thuộc Studio team hoặc lab coach (người dùng cuối thật). Khung 7 câu hỏi và bảng log nguyên văn đã dựng sẵn trong [`interview-log.md`](interview-log.md). Mining ở trên chứng minh *lỗi khó phân loại có tồn tại*; phỏng vấn để xác nhận *biên tập viên có thật sự đau vì nó*. Hoàn thành trước CP4.
+**ĐÃ BỔ SUNG 17/9:** 3 phỏng vấn Mom Test, log nguyên văn trong [`interview-log.md`](interview-log.md). **3/3 xác nhận** từng để lọt câu sượng · **0/3 có công cụ soát được tiếng Việt** — Word chỉ bắt chính tả, Grammarly "tiếng Việt thì chịu", AI soát logic chứ không soát độ trôi khi đọc.
 
 ## Ô 3 · LÁT CẮT & AUTOMATION
 
 **LÁT CẮT (một câu):**
-> Một biên tập viên · duyệt một kịch bản ~40 câu trước khi thu âm · AI chỉ đúng câu/đoạn nghe sượng kèm loại lỗi + lý do + gợi ý sửa tối thiểu · biên tập có bản kịch bản đã sạch câu sượng trước khi chuyển thu âm, không phải đọc dò lại cả bài.
+> Một lab coach · duyệt một kịch bản ~40 câu trước khi cho AI dựng video · AI chỉ đúng câu/đoạn nghe sượng kèm loại lỗi + lý do + gợi ý sửa tối thiểu · người duyệt có bản kịch bản đã sạch câu sượng, không phải đọc dò lại cả bài.
 
 **AUTOMATION: Augment** — AI gắn cờ, phân loại, giải thích và gợi ý sửa tối thiểu; người quyết từng chỗ bằng Accept/Reject.
-*Lý do theo cost-of-error:* bỏ sót lỗi hoặc để AI tự sửa làm mất giọng tác giả thì phải thu lại giọng và dựng lại cảnh (đắt); còn gợi ý sai thì rẻ vì biên tập bấm Reject là xong.
+*Lý do theo cost-of-error:* lỗi không lộ ra ở khâu nghe (giọng máy đọc trôi hết) nên phải bắt ở khâu văn bản; để AI tự sửa thì mất giọng tác giả và người dùng bỏ công cụ — *"sợ dùng máy móc nó sửa mất cái 'chất' giọng của mình"* (P1). Gợi ý sai thì rẻ, bấm Bỏ qua là xong.
 
 **NON-GOALS:**
 1. Không tự viết lại hoặc xuất bản toàn bài.
@@ -51,7 +55,7 @@
 
 ## Ô 4 · NGƯỜI THỬ & PHÂN CÔNG
 
-**WILLING USERS:** Nguyễn Đức Thái (2A202602648) và Trần Hồng Sơn (2A20262475) — đã đồng ý cho phỏng vấn và thử prototype trước demo. Đang xin BTC đầu mối thêm ≥1 người thuộc Studio team hoặc lab coach (người dùng cuối thật của C2).
+**WILLING USERS:** Nguyễn Đức Thái (2A202602648) và Trần Hồng Sơn (2A20262475) — đã phỏng vấn 16/9, đồng ý thử prototype. Lab coach (P3) — người dùng cuối thật, đã phỏng vấn. Đang xin thêm 1–2 lab coach nữa.
 
 **PHÂN CÔNG:**
 

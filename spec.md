@@ -190,6 +190,20 @@ TODO: mỗi lớp ①②③④ cần ≥2 case tương ứng trong golden set §
   | Phan Đức Duy | 2A202602397 | **Prototype + demo** — `codebase/` (flow duyệt, accept/reject từng finding), lời gọi AI thật + log/trace; video CP3 và video dự phòng CP5 |
 - **Willing users:** Nguyễn Đức Thái (2A202602648) · Trần Hồng Sơn (2A20262475) — đã phỏng vấn 16/9, đồng ý thử prototype · lab coach (P3) — đã phỏng vấn, tên ở [`interview-log.md`](interview-log.md)
   TODO: xin thêm 1–2 lab coach khác — hiện chỉ P3 ở đúng quy trình AI dựng video của khoá
+- **Kế hoạch vòng validation (CP5) — để kiểm assumption nguy hiểm nhất:**
+
+  **Assumption:** kịch bản do AI viết và AI đọc, nên chủ nhân bài giảng có thể **chấp nhận luôn** giọng văn đó thay vì bỏ công sửa. Cả 3 người nói họ đang bỏ 45'–1 tiếng đọc dò, nhưng đó là lời nói — chưa quan sát được họ có thật sự sửa hay không.
+
+  **Cách kiểm (không hỏi ý kiến, chỉ đo hành vi):** đưa prototype + một kịch bản thật của chính họ, để họ tự duyệt, không hướng dẫn. Đo:
+
+  | Chỉ số | Ý nghĩa nếu thấp |
+  |---|---|
+  | **Tỉ lệ Accept / tổng finding** | Họ không thấy đáng sửa → assumption đúng, lát cắt sai |
+  | **Tỉ lệ Bỏ qua kèm lý do "không phải lỗi"** | False positive quá cao → sửa agent, không sửa lát cắt |
+  | **Có dùng Sửa tay không** | Có → họ quan tâm giọng văn, đúng như P1 Q6 |
+  | **Sau buổi thử có hỏi xin dùng tiếp không** | Tín hiệu thật, mạnh hơn mọi câu khen |
+
+  Ghi vào `validation/` kèm changelog: đổi gì sau mỗi người thử. Kết quả âm vẫn ghi đúng như thế.
 - Multi-prototype: không áp dụng.
 
 ## §9. Changelog
@@ -203,3 +217,4 @@ TODO: mỗi lớp ①②③④ cần ≥2 case tương ứng trong golden set §
 | 17/9 | Bỏ vế "dựng hình khớp độ dài giọng" khỏi lập luận cost-of-error §4 | Không ai trong 3 người nhắc tới việc dựng hình |
 | 17/9 (sau) | **Đổi job executor: không phải "biên tập viên Studio team" mà là lab coach của khoá** — học viên khoá trước làm video bằng AI, giọng TTS. Bỏ luôn vai "giảng viên duyệt kịch bản" | Hỏi lại về quy trình thật của khoá: không có Studio team, mentor là chuyên gia đi làm nên không tham gia khâu video |
 | 17/9 (sau) | **Đổi trục cost-of-error §4**: bỏ "sửa muộn thì đắt", thay bằng "giọng TTS đọc trơn cả câu sượng nên lỗi chỉ bắt được ở khâu văn bản" | Giọng là AI nên render lại gần như miễn phí — chi phí thu lại của P1 không áp dụng cho người dùng thật. P3 trả lời "5 phút là xong" hoá ra không phải ngoại lệ mà là đúng quy trình |
+| 17/9 (sau) | Đồng bộ `canvas.md` / `canvas.html` / `canvas.png` theo bản đã sửa, giữ ghi chú bản CP1 gốc ghi gì | Canvas là bản nộp CP1 nhưng để lệch với spec thì người chấm đối chiếu sẽ thấy mâu thuẫn |

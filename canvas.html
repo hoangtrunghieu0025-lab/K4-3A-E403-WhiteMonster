@@ -68,7 +68,7 @@
 </head>
 <body>
 
-<div class="badge">Mini Hackathon AI · Checkpoint 1</div>
+<div class="badge">Mini Hackathon AI · Checkpoint 1 · cập nhật 17/9 sau 3 phỏng vấn</div>
 <h1>Canvas 4 ô · Nhóm WhiteMonster</h1>
 <div class="sub">Track C — Lesson Studio · Đề C2: Agent QA kịch bản video tiếng Việt</div>
 <div class="meta">
@@ -82,10 +82,10 @@
     <div class="bar"></div>
     <div class="body">
       <div class="label">01 · Người dùng &amp; nỗi đau</div>
-      <h2>Biên tập viên cần kịch bản đọc lên nghe trôi, trước khi thu giọng</h2>
-      <p><b>Job:</b> Biên tập viên / người viết kịch bản của Studio team (và giảng viên duyệt) đang rà lại kịch bản video trước khi chuyển sang thu âm.</p>
-      <p><b>Pain:</b> Kịch bản đúng ngữ pháp nhưng đọc lên bị sượng — câu dịch cứng, sai sắc thái, đứt hơi giữa chừng, số và từ viết tắt chưa chuẩn hoá. Phải đọc thành tiếng cả bài mới phát hiện, và vẫn dễ bỏ sót.</p>
-      <div class="note"><b>Hậu quả:</b> quy trình là thu giọng trước rồi dựng hình khớp theo độ dài giọng — một câu lọt xuống khâu sau kéo theo phải thu lại giọng câu đó và dựng lại cảnh đó. Nhờ công cụ viết lại cả bài thì mất giọng văn gốc của tác giả.</div>
+      <h2>Người làm video cần kịch bản đọc lên nghe trôi, trước khi AI đọc thành giọng</h2>
+      <p><b>Job:</b> Lab coach của khoá — học viên khoá trước làm video bài giảng: tự viết hoặc để AI sinh kịch bản, rồi dựng video bằng AI <b>kể cả giọng đọc</b>. Một người vừa viết, vừa duyệt, vừa xuất bản — không ai soát chéo hộ.</p>
+      <p><b>Pain:</b> Kịch bản đúng ngữ pháp nhưng đọc lên bị sượng — câu dịch cứng, sai sắc thái, chồng mệnh đề, số và từ viết tắt chưa chuẩn hoá. Phải đọc dò cả bài mới phát hiện: <b>45 phút–1 tiếng mỗi bài, 2–10 lần/tuần</b>, mà vẫn lọt — 3/3 người được phỏng vấn đều từng để sót.</p>
+      <div class="note"><b>Hậu quả:</b> giọng AI đọc trơn tru cả câu sượng — không hụt hơi, không líu lưỡi. <b>Nghe lại bản đã dựng cũng không phát hiện được</b>, nên lỗi chỉ lộ khi người học xem và thấy bài giảng nghe như máy đọc. Khâu văn bản là chỗ duy nhất chặn được. Nhờ công cụ viết lại cả bài thì mất giọng văn gốc của tác giả.</div>
     </div>
   </div>
 
@@ -103,7 +103,7 @@
       <p><b>6 ví dụ nguyên văn</b> (câu dài nhưng tự nhiên): <code>[T01-001]</code> 72 từ · <code>[T01-005]</code> 66 · <code>[T01-012]</code> 91 · <code>[T01-016]</code> 72 · <code>[T01-018]</code> 74 · <code>[T01-020]</code> 72.<br>
       <b>Phương pháp đếm:</b> <code>eval/mine_sentence_length.py</code> — chạy lại ra đúng số.</p>
       <div class="note"><b>Kết luận:</b> "câu dài = câu sượng" là SAI. Ngưỡng 40 từ sẽ gắn cờ oan 19,1% lời giảng thật — đúng bài toán false positive của đề C2. Agent phải phân loại + giải thích theo ngữ cảnh, không dùng luật độ dài.<br>
-      <b>Đang làm:</b> phỏng vấn Mom Test ≥3 người (≥1 Studio team/lab coach), khung log sẵn trong <code>interview-log.md</code> — xong trước CP4.</div>
+      <b>Đã bổ sung 17/9:</b> 3 phỏng vấn Mom Test, log nguyên văn trong <code>interview-log.md</code> — 3/3 xác nhận từng để lọt câu sượng, <b>0/3 có công cụ soát được tiếng Việt</b> (Word chỉ bắt chính tả · Grammarly chịu tiếng Việt · AI soát logic chứ không soát độ trôi).</div>
     </div>
   </div>
 
@@ -113,8 +113,8 @@
       <div class="label">03 · Lát cắt &amp; automation</div>
       <h2>Chỉ đúng span sượng, người chốt quyền duyệt</h2>
       <div class="tags"><span class="tag">HIGHLIGHT_SPAN</span><span class="tag">CLASSIFY + EXPLAIN</span><span class="tag">HUMAN ACCEPT/REJECT</span></div>
-      <p><b>Lát cắt:</b> Một biên tập viên · duyệt một kịch bản ~40 câu trước khi thu âm · AI chỉ đúng câu/đoạn nghe sượng kèm loại lỗi + lý do + gợi ý sửa tối thiểu · biên tập có bản kịch bản đã sạch câu sượng trước khi chuyển thu âm, không phải đọc dò lại cả bài.</p>
-      <div class="note"><b>Augment:</b> AI gắn cờ, phân loại, giải thích, gợi ý sửa tối thiểu — người quyết từng chỗ. <i>Cost-of-error:</i> bỏ sót lỗi hoặc AI tự sửa mất giọng tác giả thì phải thu lại giọng + dựng lại cảnh (đắt); gợi ý sai thì rẻ, bấm Reject là xong.</div>
+      <p><b>Lát cắt:</b> Một lab coach · duyệt một kịch bản ~40 câu trước khi cho AI dựng video · AI chỉ đúng câu/đoạn nghe sượng kèm loại lỗi + lý do + gợi ý sửa tối thiểu · người duyệt có bản kịch bản đã sạch câu sượng, không phải đọc dò lại cả bài.</p>
+      <div class="note"><b>Augment:</b> AI gắn cờ, phân loại, giải thích, gợi ý sửa tối thiểu — người quyết từng chỗ. <i>Cost-of-error:</i> lỗi không lộ ra ở khâu nghe nên phải bắt ở khâu văn bản; AI tự sửa thì mất giọng tác giả và người dùng bỏ công cụ — <i>"sợ dùng máy móc nó sửa mất cái 'chất' giọng của mình"</i> (P1). Gợi ý sai thì rẻ, bấm Bỏ qua là xong.</div>
       <p style="margin-top:12px"><b>Non-goals:</b></p>
       <ol>
         <li>Không tự viết lại hoặc xuất bản toàn bài.</li>
@@ -130,7 +130,7 @@
     <div class="body">
       <div class="label">04 · Người thử &amp; phân công</div>
       <h2>Có người thử đã nhận lời, mỗi phần có người chịu trách nhiệm</h2>
-      <p><b>Willing users:</b> Nguyễn Đức Thái (2A202602648) · Trần Hồng Sơn (2A20262475) — đã đồng ý cho phỏng vấn và thử prototype trước demo. Đang xin BTC đầu mối thêm ≥1 người Studio team / lab coach (người dùng cuối thật).</p>
+      <p><b>Willing users:</b> Nguyễn Đức Thái (2A202602648) · Trần Hồng Sơn (2A20262475) — đã phỏng vấn 16/9, đồng ý thử prototype. Lab coach (P3) — người dùng cuối thật, đã phỏng vấn. Đang xin thêm 1–2 lab coach nữa.</p>
       <div class="note people">
         <b>Hoàng Trung Hiếu</b> — 2A202602945 · <i>Đội trưởng, chủ spec:</i> spec §1/§2/§4, nộp form cả 5 mốc, slide, mở đầu thuyết trình.<br>
         <b>Nguyễn Thọ Đạt</b> — 2A202602484 · <i>Research &amp; evidence:</i> phỏng vấn Mom Test, log nguyên văn, §3, validation CP5.<br>
