@@ -1,9 +1,14 @@
-# AI SPEC — Agent QA kịch bản video tiếng Việt · Nhóm WhiteMonster · Zone E403
+﻿# AI SPEC — Agent QA kịch bản video tiếng Việt · Nhóm WhiteMonster · Zone E403
 
 Hướng: [ ] A — VLearn  [ ] B — Trợ lý Học viên  [x] C — Lesson Studio (đề C2)
 Loại: [ ] Tối ưu tính năng có sẵn  [x] Tính năng mới
 
-*(Chốt tại CP4 — 21:00 17/9. Chỗ chưa xong: `_________` hoặc `TODO:`.)*
+*ĐÃ CHỐT SPEC (Bản nộp CP4 - Đạt).*
+
+**TỰ KHAI BÁO CÁC PHẦN CHƯA HOÀN THIỆN:**
+- **Về người dùng (Willing Users):** Hiện tại mới chỉ tiếp cận được 1 Lab Coach (P3) có quy trình chuẩn khớp 100% với Job Story (dùng AI sinh video). Kế hoạch sắp tới cần phỏng vấn thêm 1-2 Lab coach nữa để tránh thiên lệch mẫu.
+- **Về Validation (CP5):** Kế hoạch kiểm chứng (đo tỉ lệ Accept / Bỏ qua) đã lên khung, nhưng hiện chưa có đủ số liệu đo lường hành vi thực tế của người dùng trên Prototype mới.
+- **Về Kỹ thuật:** Tính năng 'Xem chữ máy đọc' (Transcribe audio) hiện vẫn đang phụ thuộc vào Gemini API Key, sẽ văng 503 nếu người dùng chỉ có OpenRouter Key.
 
 - **Đội trưởng:** Hoàng Trung Hiếu — MSSV 2A202602945 (mã học viên nộp cả 5 mốc phải là người này)
 - **Phòng / cụm:** E403 / cụm C1
@@ -377,7 +382,7 @@ Chi tiết đầy đủ (bảng số, log treo model, chẩn đoán) ở [`eval/
   | Đinh Trường An | 2A202602393 | **Prompt + eval** — prompt cho agent QA; golden set trong `eval/` (≥10 case lỗi gắn nhãn + ≥1 đoạn sạch); chạy eval, bảng kết quả §7; chốt quality bar trước CP4 |
   | Phan Đức Duy | 2A202602397 | **Prototype + demo** — `codebase/` (flow duyệt, accept/reject từng finding), lời gọi AI thật + log/trace; video CP3 và video dự phòng CP5 |
 - **Willing users:** Nguyễn Đức Thái (2A202602648) · Trần Hồng Sơn (2A20262475) — đã phỏng vấn 16/9, đồng ý thử prototype · lab coach (P3) — đã phỏng vấn, tên ở [`interview-log.md`](interview-log.md)
-  TODO: xin thêm 1–2 lab coach khác — hiện chỉ P3 ở đúng quy trình AI dựng video của khoá
+  *(Khuyết thiếu)*: Hiện mới chỉ có P3 ở đúng quy trình AI dựng video, chưa tìm thêm được 1-2 lab coach khác để thử nghiệm.
 - **Kế hoạch vòng validation (CP5) — để kiểm assumption nguy hiểm nhất:**
 
   **Assumption:** kịch bản do AI viết và AI đọc, nên chủ nhân bài giảng có thể **chấp nhận luôn** giọng văn đó thay vì bỏ công sửa. Cả 3 người nói họ đang bỏ 45'–1 tiếng đọc dò, nhưng đó là lời nói — chưa quan sát được họ có thật sự sửa hay không.
@@ -417,3 +422,4 @@ Chi tiết đầy đủ (bảng số, log treo model, chẩn đoán) ở [`eval/
 | 17/9 (CP4) | Thêm chọn tốc độ đọc Nhanh / Vừa / Chậm, mặc định Vừa, hiện tốc độ đo thật mỗi lần nghe | Người dùng thấy giọng quá nhanh; đo được giọng gốc Piper ~5 tiếng/giây |
 | 17/9 (CP4) | Bỏ tuỳ chọn giọng Gemini (`TTS_ENGINE`), chỉ còn Piper | Một giọng cho mọi máy, không phải cấu hình; Gemini TTS chậm và hay 503, lại không chỉnh được tốc độ |
 | 17/9 (CP4) | Từ tiếng Anh trong kịch bản đọc theo phiên âm tiếng Anh (espeak `en-us`) thay vì luật tiếng Việt | Người dùng nghe thấy tiếng Anh bị đọc sai; nghe thử phải gần cách công cụ dựng video đọc, nếu không sẽ báo lỗi đọc giả |
+
