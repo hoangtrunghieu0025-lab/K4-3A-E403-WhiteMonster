@@ -85,6 +85,26 @@ Format mỗi object:
 }
 """
 
+MAX_SPAN_RATIO = 3  # AI span không được lệch kích thước quá 3 lần so với ground truth —
+                     # chặn 2 lỗi chấm điểm Duy phát hiện 17/9: span rỗng và span "cả câu"
+                     # đều từng bị tính PASS oan (xem eval/test-log.md).
+
+def _valid_span(span, text):
+    """Span hợp lệ = không rỗng và đúng là substring nguyên văn của text.
+    Trước đây `"" in text` luôn True nên finding rỗng lọt qua Evidence Gate."""
+    return bool(span) and span in text
+
+def _is_hit(ai_span, gt_span):
+    """Khớp hai chiều (như cũ) NHƯNG chặn ăn gian bằng cách trả về span quá khổ
+    (vd nguyên cả câu) hoặc quá vụn — bắt buộc kích thước hai bên gần nhau."""
+    if not ai_span or not gt_span:
+        return False
+    overlap = gt_span in ai_span or ai_span in gt_span
+    if not overlap:
+        return False
+    ratio = max(len(ai_span), len(gt_span)) / min(len(ai_span), len(gt_span))
+    return ratio <= MAX_SPAN_RATIO
+
 def call_ai(text, model=None):
     model = model or MODEL
     headers = {
@@ -152,7 +172,7 @@ def run_eval(model=None, save_report=True, verbose=True, include_extra=True):
 
     # 1. Đo False Positive trên Clean Script
     clean_findings = _call(data["clean_script"])
-    valid_clean = [f for f in clean_findings if f.get("exact_span", "") in data["clean_script"]]
+    valid_clean = [f for f in clean_findings if _valid_span(f.get("exact_span", ""), data["clean_script"])]
     fp_count = len(valid_clean)
     if verbose:
         print(f"   -> Kết quả: Bắt sai {fp_count} lỗi. (Kỳ vọng: 0)")
@@ -175,7 +195,7 @@ def run_eval(model=None, save_report=True, verbose=True, include_extra=True):
 
         valid_findings = []
         for f in findings:
-            if f.get("exact_span", "") in text:
+            if _valid_span(f.get("exact_span", ""), text):
                 valid_findings.append(f)
             else:
                 gate_drops += 1
@@ -183,7 +203,7 @@ def run_eval(model=None, save_report=True, verbose=True, include_extra=True):
         hit = False
         ai_span = "-"
         for vf in valid_findings:
-            if gt_span in vf["exact_span"] or vf["exact_span"] in gt_span:
+            if _is_hit(vf["exact_span"], gt_span):
                 hit = True
                 ai_span = vf["exact_span"]
                 break
@@ -213,7 +233,7 @@ def run_eval(model=None, save_report=True, verbose=True, include_extra=True):
                 no_flag_table += f"| {case['id']} | {case.get('source','-')} | 0 (input rỗng, bỏ qua gọi AI) | ✅ PASS |\n"
                 continue
             findings = _call(text)
-            valid = [f for f in findings if f.get("exact_span", "") in text]
+            valid = [f for f in findings if _valid_span(f.get("exact_span", ""), text)]
             no_flag_fp += len(valid)
             no_flag_table += f"| {case['id']} | {case.get('source','-')} | {len(valid)} | {'✅ PASS' if not valid else '❌ FAIL'} |\n"
 
