@@ -22,6 +22,7 @@ Mở `mockup.html` bằng trình duyệt bất kỳ — không cần cài gì, k
 | **Low-confidence** ② | `F4` (code-switch "cost-of-error") — độ chắc THẤP, **không có nút Áp dụng**, agent nói rõ cần người xác minh |
 | **Failure / không căn cứ** ① | `F6` (claim "tăng gấp đôi hiệu suất") — không có nguồn trong kịch bản, agent từ chối tự sửa claim |
 | **Correction** | Nút **Sửa tay** ở mọi finding — biên tập sửa lại gợi ý trước khi áp dụng; mọi finding đã xử lý đều **Hoàn tác** được |
+| **Ngoài phạm vi** ③ | Nút **"Yêu cầu viết lại cả bài"** trên header — agent từ chối viết lại toàn văn, chỉ nói rõ phạm vi là từng finding |
 
 ## Chỗ neo nguyên tắc HAX/PAIR (cho `spec.md` §4b)
 
@@ -29,7 +30,7 @@ Mở `mockup.html` bằng trình duyệt bất kỳ — không cần cài gì, k
 |---|---|
 | **G1** — làm rõ hệ thống làm được gì | Banner đầu trang: "MOCK · findings là dữ liệu tĩnh, chưa gọi AI thật" + dòng "AI đề xuất — bạn quyết từng chỗ" |
 | **G2** — làm rõ nó làm tốt đến đâu | Mỗi finding có dòng **Độ chắc** (cao / vừa / thấp), và tách riêng "lỗi phát âm, không phải lỗi nội dung" ở `F2` |
-| **G10** — thu hẹp phạm vi khi nghi ngờ | `F4` và `F6`: không đề xuất sửa, hiện khối vàng "Không đủ căn cứ để tự sửa" thay vì đoán liều |
+| **G10** — thu hẹp phạm vi khi nghi ngờ | `F4` và `F6`: không đề xuất sửa, hiện khối vàng "Không đủ căn cứ để tự sửa" thay vì đoán liều · nút "Yêu cầu viết lại cả bài": agent từ chối, chỉ nói rõ phạm vi là từng finding |
 | **G11** — giải thích vì sao | Mỗi finding có mục lý do gắn với ngữ cảnh câu đó, không phải nhãn lỗi chung chung |
 | **G8** — gạt bỏ dễ dàng | Nút **Bỏ qua** trên mọi finding; bỏ qua rồi thì highlight biến mất khỏi kịch bản |
 | **G9** — sửa dễ dàng | Nút **Sửa tay** (sửa ngay trên gợi ý) và **Hoàn tác** trên mọi finding đã xử lý |

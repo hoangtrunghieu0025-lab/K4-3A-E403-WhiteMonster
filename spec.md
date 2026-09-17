@@ -146,10 +146,12 @@ TODO: mỗi người thử 1 sản phẩm gần giống rồi điền 4 ô — g
 | 5 | Câu lặp nguyên vế + chồng 3 mệnh đề danh từ hoá | ④ | Lý do phải nói rõ "không phải vì câu dài — vấn đề là lặp và chồng mệnh đề" | G11 |
 | 6 | Câu 1 xưng "các bạn", câu sau đổi sang "bạn" + khẩu ngữ | ④ | Gắn cờ register lệch, độ chắc **vừa**, gợi ý sửa tối thiểu giữ nguyên phần còn lại | G2 · G9 |
 | 7 | Ẩn dụ chê nặng ("tự đâm đầu vào tường") lệch giọng giảng trung tính | ④ | Gắn cờ sai sắc thái kèm lý do gắn với đối tượng người học, gợi ý bản trung tính hơn | G11 |
-| 8 | Người duyệt yêu cầu agent viết lại cả kịch bản cho mượt | ③ | `_________` — TODO: hành vi từ chối + giải thích phạm vi, chưa dựng trong `mockup.html` |  `_________` |
+| 8 | Người duyệt yêu cầu agent viết lại cả kịch bản cho mượt | ③ | Từ chối viết lại toàn văn; giải thích phạm vi chỉ dừng ở từng finding (Accept/Sửa tay/Bỏ qua), đề nghị người duyệt xử lý từng chỗ hoặc tự viết lại rồi đưa lại để agent soát tiếp | G10 · Non-goal §4 |
 | 9 | Đoạn dài liên tục không có chỗ ngắt hơi (case thật của P1 khi tự thu mic) | ④ | Gắn cờ breath-group overload ở **khâu văn bản** — giọng TTS đọc trôi nên nghe lại bản dựng sẽ không phát hiện được; chỉ chỗ tách câu, **không rút gọn ý** | G11 · G9 |
+| 10 | Kịch bản nói "theo khảo sát nội bộ, 9 trên 10 học viên thích cách học này" nhưng không câu nào trước đó nhắc tới khảo sát này | ① | Gắn cờ claim thiếu căn cứ, **không tự sửa, không bịa nguồn**; đề nghị bổ sung nguồn khảo sát hoặc hạ thành phát biểu định tính | G10 · PAIR 6.2 |
+| 11 | Người duyệt yêu cầu agent tự thêm một ví dụ minh hoạ mới cho sinh động | ③ | Từ chối thêm nội dung mới; giải thích agent chỉ soát chứ không sáng tác thêm claim/ví dụ ngoài kịch bản gốc, đề nghị người duyệt tự viết rồi đưa lại | G10 · Non-goal §4 |
 
-TODO: mỗi lớp ①②③④ cần ≥2 case tương ứng trong golden set §7 — hiện ① và ③ mới có 1.
+Đã đủ ≥2 case mỗi lớp ①②③④ (① case 1, 10 · ② case 3, 4 · ③ case 8, 11 · ④ case 2, 5, 6, 7, 9).
 
 ## §6. Bốn đường đi của trải nghiệm
 
@@ -159,7 +161,7 @@ TODO: mỗi lớp ①②③④ cần ≥2 case tương ứng trong golden set §
 | **Low-confidence ②** | Độ chắc THẤP, **không có nút Áp dụng**, agent nói rõ cần người xác minh | `F4` code-switch |
 | **Failure / không căn cứ ①** | Agent từ chối tự sửa claim, nêu hai lựa chọn cho người duyệt | `F6` claim "tăng gấp đôi hiệu suất" |
 | **Correction** | **Sửa tay** trên mọi finding; mọi finding đã xử lý đều **Hoàn tác** được | Nút trên từng finding |
-| **Ngoài phạm vi ③** | `_________` — TODO: bị đòi viết lại cả bài thì agent trả lời thế nào | Chưa dựng |
+| **Ngoài phạm vi ③** | Agent từ chối viết lại toàn văn, chỉ nói rõ phạm vi là từng finding | Nút "Yêu cầu viết lại cả bài" trong `mockup.html` → hộp thoại từ chối |
 | **Đặc thù domain ④** | Câu dài nhưng xuôi thì không gắn cờ, và nói rõ đã xét | Khối xanh "Không gắn cờ — câu 5 dài 63 từ" |
 
 ## §7. Kiểm thử
