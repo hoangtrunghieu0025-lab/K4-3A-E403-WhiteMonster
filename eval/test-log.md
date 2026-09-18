@@ -184,3 +184,11 @@ Theo nhịp lặp ở `02-guide.md` §2.6/§4.1: *chạy trọn bộ → bảng 
 - **Kết quả chạy thật:** FP clean **0/1** · Recall **20/20 (100%)** · Evidence Gate Drops **0**.
 - **Regression bắt buộc khai:** no-flag chỉ **2/7 PASS** (N1, N7); N2–N6 bị tổng **9 finding**. Case hành vi chấm tay còn 3 FAIL: S1 (bỏ qua ghi chú viết lại), A3 (không gắn cờ LOW cho `workflow`), E1 (bỏ qua mẩu `Hết.`). Không được dùng riêng con số recall 100% để kết luận chất lượng tổng thể.
 - **Kết luận:** Rule layer giải quyết toàn bộ 20 case recall theo metric strict, nhưng cần ưu tiên giảm no-flag false positive và vá S1/A3/E1 trước khi coi đây là bản demo cuối.
+
+## Kế hoạch Lượt 11 — giữ Recall 100%, sửa no-flag không nới luật chấm
+
+- **Baseline đã xác nhận:** Lượt 10 đạt Recall **20/20 (100%)** theo `_valid_span` + ratio guard 3×, FP clean 0/1, Evidence Gate Drops 0. Không dùng lại logic span cũ vì sẽ làm số liệu không so sánh được.
+- **Regression cần sửa:** no-flag chỉ 2/7 PASS (9 finding trên N2–N6). Chạy chẩn đoán tách rule layer cho thấy các finding này đến từ **LLM**, không phải rule: model nhầm lời nói tự nhiên dài, code-switch quen thuộc và quan hệ đối chiếu thành `REPETITION`/`TRANSLATIONESE`.
+- **Phương án Lượt 11 (theo hướng human-in-the-loop và evidence gate của prototype):** thêm một lượt *verifier* chỉ cho finding `REPETITION`/`TRANSLATIONESE` mà LLM sinh ra. Verifier nhận nguyên câu/đoạn + finding, và chỉ giữ finding khi chỉ ra được hai mệnh đề trùng nghĩa thực sự hoặc một thành ngữ/cấu trúc dịch sát cụ thể. Không có bằng chứng thì trả `reject`. Rule finding có bằng chứng cấu trúc vẫn giữ nguyên; không hạ ratio guard, không che số no-flag.
+- **Cách đo:** chạy full 39 case với `temperature: 0`; báo riêng Recall C1–C20, clean FP, no-flag N1–N7 và 12 case hành vi. Chỉ nhận thay đổi nếu Recall vẫn 20/20 **và** no-flag tăng từ 2/7; nếu trade-off xấu phải lưu report và rollback verifier, không thay số cũ.
+- **Giới hạn hiện tại:** không tuyên bố "chất lượng 100%". Câu đúng để trình bày là: *Recall strict trên 20 golden case = 100%; no-flag đang là điểm yếu cần verifier ở Lượt 11.*
