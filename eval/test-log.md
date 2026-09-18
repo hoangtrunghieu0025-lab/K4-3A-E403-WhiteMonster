@@ -166,3 +166,13 @@ Theo nhịp lặp ở `02-guide.md` §2.6/§4.1: *chạy trọn bộ → bảng 
 3. Chạy lại A/B model (`run_model_ab.py`) với logic chấm đã sửa — bảng A/B ở Lượt 7 dùng logic cũ nên **thứ hạng model có thể đổi khi đo lại**.
 4. Cân nhắc đổi model mặc định trong `codebase/app.py` từ `gpt-4o-mini` sang `gpt-4o` — đợi A/B đo lại xong (mục 3), đừng chốt trên số liệu logic cũ.
 5. Thử few-shot đa dạng hơn cho A3 (case ambiguous cuối cùng chưa ổn định).
+
+## Lượt 10 — CP6, Đinh Trường An (đã chạy thật, model gemini-2.5-flash)
+
+- **Vì sao chạy lại:** Cập nhật luật chấm điểm khắt khe hơn để loại trừ AI ăn gian (trả về chuỗi rỗng hoặc copy nguyên đoạn gốc). Chuyển sang model gemini-2.5-flash vì tài khoản OpenRouter cạn credit cho gpt-4o.
+- **Sửa code:** Hàm _is_hit được bọc lại cẩn thận, loại trừ span == text.strip() và bọc 	ry...except xử lý lỗi JSONDecodeError gây sập tiến trình.
+- **Kết quả đo lường (20 case lỗi + 40 câu sạch):**
+  - Recall: **14/20 (70%)** (Mặc dù chấm điểm nghiêm ngặt hơn nhưng Gemini vẫn đạt điểm cao).
+  - False Positive (Sạch): **0/40 câu** (Chặn 100% cảnh báo giả).
+  - Evidence Gate Drops: 0.
+- **Đóng gói làm bằng chứng:** Đã xuất file evaluation_report.lot10.json lưu giữ kết quả cuối cùng để show cho ban giám khảo.
