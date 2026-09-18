@@ -81,17 +81,17 @@ Chi tiết kỹ thuật + chỗ neo từng nguyên tắc HAX: [`codebase/README.
 
 ---
 
-## 3. Việc cần làm tiếp
+## 3. Việc cần làm tiếp *(ghi lúc 17/9 — CP5 đã qua giờ nộp 13:00 18/9, giữ bảng dưới làm lịch sử quyết định, không phải TODO còn treo)*
 
-| Việc | Đề xuất người làm | Hạn |
-|---|---|---|
-| **Chốt model dùng khi demo.** Khối "Đã đo được gì" trên giao diện là số của `gpt-4o`. Demo bằng model khác thì phải chạy lại golden set và sửa khối đó | Hiếu + An | Trước CP5 |
-| ~~Sửa 2 lỗi chấm trong `run_eval.py`~~ **Đã sửa (17/9 tối)** — `_valid_span()` + `_is_hit()` (ratio guard ≤3x). Recall đo lại: 45% (dưới bar 60%) — số cũ 85-95% ở spec §7 lượt 3-7 đã bị thổi phồng, xem `eval/test-log.md` Lượt 8. **Còn treo:** đo lại `no_flag_cases` + case hành vi + S1/S2 bản mới (môi trường mạng treo giữa chừng tối nay, chưa xong) | An | Trước CP5 |
-| **Nhánh `feat/cp3-ai-eval`** sửa trùng `eval/run_eval.py`, `eval/golden_set.json`, `spec.md`, `codebase/README.md` → **đừng merge thẳng**, so với `main` rồi gộp phần cần giữ | Tác giả nhánh | Trước khi merge |
-| **Nghe thử phần đọc tiếng Anh** trên app — nếu nghe tệ hơn cách đọc cũ thì báo Duy gỡ | Ai cũng được | Sớm |
-| **Chuẩn bị máy demo:** cài đủ, tải giọng Piper, điền `.env`, `test_server.py` in OK, soát thử 1 kịch bản | Người demo | Trước dry run CP5 |
-| **Quay video demo dự phòng CP5** trên giao diện mới (1 case chuẩn + 1 case chỗ khó) | Duy | 13:00 18/9 |
-| Xoá `codebase/app.py` và `streamlit` khỏi `requirements.txt` sau khi demo ổn | Duy | Sau CP5 |
+| Việc | Đề xuất người làm | Hạn | Trạng thái tính đến CP5 |
+|---|---|---|---|
+| **Chốt model dùng khi demo.** Khối "Đã đo được gì" trên giao diện là số của `gpt-4o`. Demo bằng model khác thì phải chạy lại golden set và sửa khối đó | Hiếu + An | Trước CP5 | **Xong** — chốt `gpt-4o`, số cuối 65%/50% (Lượt 16, xem `spec.md` §7) |
+| ~~Sửa 2 lỗi chấm trong `run_eval.py`~~ **Đã sửa (17/9 tối)** — `_valid_span()` + `_is_hit()` (ratio guard ≤3x). Recall đo lại: 45% (dưới bar 60%) — số cũ 85-95% ở spec §7 lượt 3-7 đã bị thổi phồng, xem `eval/test-log.md` Lượt 8 | An | Trước CP5 | **Xong** — đo lại `no_flag_cases`/case hành vi/S1-S2 hoàn tất ở Lượt 9-16 |
+| **Nhánh `feat/cp3-ai-eval`** sửa trùng `eval/run_eval.py`, `eval/golden_set.json`, `spec.md`, `codebase/README.md` → **đừng merge thẳng**, so với `main` rồi gộp phần cần giữ | Tác giả nhánh | Trước khi merge | Đã merge (xem lịch sử commit `main`) |
+| **Nghe thử phần đọc tiếng Anh** trên app — nếu nghe tệ hơn cách đọc cũ thì báo Duy gỡ | Ai cũng được | Sớm | Không rõ, không chặn CP5 |
+| **Chuẩn bị máy demo:** cài đủ, tải giọng Piper, điền `.env`, `test_server.py` in OK, soát thử 1 kịch bản | Người demo | Trước dry run CP5 | Xem `dry-run-script.md` |
+| **Quay video demo dự phòng CP5** trên giao diện mới (1 case chuẩn + 1 case chỗ khó) | Duy | 13:00 18/9 | Nộp riêng qua form, không nằm trong repo |
+| Xoá `codebase/app.py` và `streamlit` khỏi `requirements.txt` sau khi demo ổn | Duy | Sau CP5 | Chưa làm — không chặn CP5, để sau |
 
 > **Luật vibe-coding CP6:** ai đứng tên phần nào phải tự giải thích được phần đó. Người phụ trách `codebase/` nên đọc qua `server.py` (khoảng 450 dòng, có chú thích tiếng Việt).
 

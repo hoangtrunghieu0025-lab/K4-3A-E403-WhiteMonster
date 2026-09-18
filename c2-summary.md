@@ -1,5 +1,7 @@
 # C2 — Tổng hợp nghiên cứu đề · Nhóm WhiteMonster
 
+> **ĐÃ LỖI THỜI (viết 16-17/9, giai đoạn lên ý tưởng).** Kiến trúc mô tả trong file này (10 luật đếm được, cấy lỗi ngược) khác với kiến trúc thật đã xây — xem `spec.md` và `codebase/README.md` để biết bản cuối cùng.
+>
 > File nội bộ để cả nhóm cùng nắm đề. Không phải deliverable nộp bài — deliverable là `spec.md`.
 > **Không copy nội dung `data/studio-pack/` vào file này hay vào repo** (quy định bảo mật: chỉ trích ≤2 câu/ví dụ, dẫn đường dẫn thay vì dán dài).
 

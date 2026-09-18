@@ -65,7 +65,7 @@ Kịch bản dán vào
 | Nguyên tắc | Vị trí |
 |---|---|
 | **G1** — làm rõ hệ thống làm được gì | Màn nhập: khối "Cách hệ thống làm việc" (4 bước, gắn nhãn LUẬT/LLM/NGƯỜI) + khối "Không làm" · Màn duyệt: thanh 4 bước kèm số thật của lượt soát |
-| **G2** — làm rõ nó làm tốt đến đâu | Khối "Đã đo được gì" (80–95% · 0/40 · 2/7) · mỗi finding có **Độ chắc** 3 vạch · nhãn "Chỉ ảnh hưởng cách đọc, không phải lỗi nội dung" · khối "Đã xét, không gắn cờ: câu N (x từ)" · "Xem chữ máy đọc": tô chỗ giọng máy đọc khác chữ viết, ghi rõ bản chép cũng có thể nghe nhầm |
+| **G2** — làm rõ nó làm tốt đến đâu | Khối "Đã đo được gì" (65% · 0/40 · 1/7, số chính thức Lượt 16 — xem `spec.md` §7) · mỗi finding có **Độ chắc** 3 vạch · nhãn "Chỉ ảnh hưởng cách đọc, không phải lỗi nội dung" · khối "Đã xét, không gắn cờ: câu N (x từ)" · "Xem chữ máy đọc": tô chỗ giọng máy đọc khác chữ viết, ghi rõ bản chép cũng có thể nghe nhầm |
 | **G8** — gạt bỏ dễ dàng | Nút **Bỏ qua** trên mọi finding, bỏ qua thì chỗ tô màu biến mất |
 | **G9** — sửa dễ dàng | **Sửa tay** trên mọi finding · **Hoàn tác** trên mọi chỗ đã quyết · **Nghe bản sửa của bạn** ngay trong lúc sửa tay |
 | **G10** — thu hẹp phạm vi khi nghi ngờ | Độ chắc thấp: **không có nút Áp dụng**, khối vàng "Chưa đủ căn cứ để tự sửa" · claim không gợi ý: "Không có gợi ý tự sửa" · nút "Viết lại cả bài" → hộp thoại từ chối |

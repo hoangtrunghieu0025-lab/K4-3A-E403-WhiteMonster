@@ -1,5 +1,9 @@
 # eval/manual-grading-worksheet.md — phiếu chấm tay 12 case hành vi (Lượt 9)
 
+> Chấm tay ở Lượt 9 (18/9). Kết quả case hành vi dưới đây (11 PASS · A3 FAIL) vẫn khớp số chính thức mới
+> nhất (Lượt 16) — nhưng **số Recall nhắc tới trong file này (45%) đã cũ**, số hiện tại là 65%/50%, xem
+> `spec.md` §7.
+
 Đo lại sau khi sửa 2 lỗi chấm điểm (Lượt 8) và sửa cách test S1/S2 (thêm field `text` nhúng chỉ thị ngoài phạm vi, giống `security_refusal_cases`). Đây là lần đầu tiên toàn bộ 12 case đều test được đúng ý — không còn case "không đánh giá được".
 
 **Tổng kết: 11 PASS · 1 FAIL (A3).**
@@ -39,4 +43,4 @@
 ## Việc còn lại
 
 - **A3 là case hành vi duy nhất chưa ổn định** qua 5 lượt sửa prompt — thử few-shot bổ sung riêng cho ranh giới content/pronunciation-only ở lượt sau, thay vì chỉ dựa vào 4 ví dụ chung hiện có.
-- **Recall (20 case cấy lỗi) mới là chỗ yếu nhất thật sự — 45%, dưới bar 60%** — ưu tiên cao hơn A3 nhiều, xem `eval/test-log.md` Lượt 9 phần TODO.
+- **Recall (20 case cấy lỗi)** — số tại Lượt 9 là 45%, dưới bar 60%; sau khi tiếp tục sửa prompt và cố định `temperature=0`, số chính thức hiện tại (Lượt 16) là **65% (đo 1 lượt) / 50% (tái lập được 2 lần)** — xem `eval/test-log.md` Lượt 13-16.
