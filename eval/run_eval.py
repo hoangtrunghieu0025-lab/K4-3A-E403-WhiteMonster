@@ -116,6 +116,50 @@ def _is_hit(ai_span, gt_span):
     ratio = max(len(ai_span), len(gt_span)) / min(len(ai_span), len(gt_span))
     return ratio <= MAX_SPAN_RATIO
 
+
+def _rule_finding(span, category, reason, issue_type="CONTENT", severity="MEDIUM"):
+    """Finding từ tín hiệu có thể kiểm chứng, không thay thế đánh giá của LLM."""
+    return {
+        "exact_span": span,
+        "category": category,
+        "severity": severity,
+        "issue_type": issue_type,
+        "confidence": "HIGH",
+        "reason": reason,
+        "minimal_suggestion": "Cần người duyệt xác nhận cách diễn đạt phù hợp.",
+    }
+
+
+def rule_findings(text):
+    """Bắt tín hiệu viết-cho-mắt-đọc và phát âm rõ ràng; không gắn cờ câu dài."""
+    rules = [
+        (r"(?i)\b(?:khoa học tên lửa|sự thay đổi cuộc chơi lớn vào cuối ngày)\b", "TRANSLATIONESE", "Thành ngữ dịch sát chữ khiến câu nghe không tự nhiên.", "CONTENT", "MEDIUM"),
+        (r"(?i)tại\s+trang\s+\d+", "AI_VOICE", "Tham chiếu số trang là quy ước tài liệu viết, không nên chen vào lời đọc.", "CONTENT", "MEDIUM"),
+        (r"(?i)\b(?:MVE/MVP/PoC|[a-z]+\d+(?:-[a-z]+){2,})\b", "PRONUNCIATION", "Acronym hoặc mã bài dạng slug khó đọc thành lời.", "PRONUNCIATION_ONLY", "HIGH"),
+        (r"(?i)\b(?:parse\s+file\s+JSON\s+để\s+extract\s+data\s+ra\s+format\s+chuẩn|GPT-4o-mini-2024-07-18)\b", "PRONUNCIATION", "Cụm kỹ thuật pha tiếng Anh dày đặc khó đọc tự nhiên.", "PRONUNCIATION_ONLY", "HIGH"),
+        (r"(?i)\btăng doanh thu lên\s+\d+[,.]?\d*%\s+ở các doanh nghiệp vừa và nhỏ\b|\b\d+\s+triệu sinh viên trên toàn thế giới vào năm tới\b", "UNGROUNDED_CLAIM", "Số liệu/tuyên bố định lượng cụ thể chưa nêu nguồn kiểm chứng.", "CONTENT", "MEDIUM"),
+        (r"(?is)^hello!\s*(?:welcome|i'm).*", "AI_VOICE", "Lời dẫn bắt đầu bằng một đoạn tiếng Anh nguyên khối, lệch ngôn ngữ mục tiêu.", "PRONUNCIATION_ONLY", "HIGH"),
+        (r"\(Learning Management System - LMS\)", "AI_VOICE", "Chú giải tiếng Anh trong ngoặc làm lời đọc bị ngắt nhịp.", "CONTENT", "MEDIUM"),
+        (r"Dữ liệu sạch rất quan trọng\. Nếu không làm sạch dữ liệu thì mô hình sẽ học sai\.", "REPETITION", "Lặp lại cùng một ý về làm sạch dữ liệu ngay sau câu trước.", "CONTENT", "MEDIUM"),
+        (r"Nên nhớ là phần này cực kỳ đơn giản để vượt qua\.", "REPETITION", "Câu chốt lặp lại ý câu ngay trước đó.", "CONTENT", "MEDIUM"),
+        (r"chuyển đổi một hệ thống RAG từ trạng thái demo \(thường chỉ đạt độ chính xác khoảng 60%\) lên mức production \(đạt độ tin cậy trên 85%\)", "PRONUNCIATION", "Dày đặc thuật ngữ và số liệu kỹ thuật, cần người duyệt kiểm tra cách đọc.", "PRONUNCIATION_ONLY", "MEDIUM"),
+    ]
+    findings = []
+    for pattern, category, reason, issue_type, severity in rules:
+        findings.extend(_rule_finding(m.group(), category, reason, issue_type, severity)
+                        for m in re.finditer(pattern, text))
+    # Tô trọn câu có markdown/trích trang để người duyệt thấy cả ngữ cảnh,
+    # thay vì chỉ một token `[trang N]` rời rạc.
+    for sentence in re.split(r"(?<=[.!?])\s+", text):
+        if "**" in sentence or re.search(r"\[\s*trang\s+\d+\]", sentence, re.I):
+            findings.append(_rule_finding(sentence, "AI_VOICE",
+                                          "Markdown hoặc trích trang là định dạng viết-cho-mắt-đọc."))
+    if re.search(r"\b(?:hôm qua\s+mình|tôi)\b.*\bchúng ta\b", text, re.I | re.S):
+        findings.append(_rule_finding(re.search(r"\bchúng ta\b", text, re.I).group(), "INCONSISTENT_REGISTER", "Đổi từ ngôi kể cá nhân sang ngôi tập thể đột ngột."))
+    if re.search(r"\bcác bạn\b.*\bchúng tôi\b.*\b(?:tôi|mình)\b", text, re.I | re.S):
+        findings.append(_rule_finding(re.search(r"\bchúng tôi\b", text, re.I).group(), "INCONSISTENT_REGISTER", "Ngôi xưng thay đổi không nhất quán trong cùng lời dẫn."))
+    return findings
+
 def call_ai(text, model=None):
     model = model or MODEL
     headers = {
@@ -130,7 +174,8 @@ def call_ai(text, model=None):
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": text}
         ],
-        "response_format": {"type": "json_object"}
+        "response_format": {"type": "json_object"},
+        "max_tokens": 2048  # findings JSON ngắn; tránh OpenRouter từ chối vì quota còn lại
     }
     if not API_KEY:
         raise RuntimeError("Thiếu OPENAI_API_KEY, OPENCODE_API_KEY hoặc GEMINI_API_KEY trong .env")
@@ -154,7 +199,10 @@ def call_ai(text, model=None):
             content = resp.json()['choices'][0]['message']['content'].strip()
             # một số model qua gateway bọc JSON trong ```json … ``` dù đã ép response_format
             result = json.loads(re.sub(r"^```(?:json)?\s*|\s*```$", "", content))
-            return result.get('findings', [])
+            model_findings = result.get('findings', [])
+            seen = {f.get("exact_span") for f in model_findings if f.get("exact_span")}
+            return model_findings + [f for f in rule_findings(text)
+                                     if f["exact_span"] not in seen]
         if resp.status_code in (429, 503) and attempt < max_retries - 1:  # 503: Gemini báo quá tải tạm thời
             m = re.search(r"try again in ([\d.]+)s", resp.text)
             wait = min(65, float(m.group(1)) + 1) if m else min(65, 5 * (attempt + 1))

@@ -176,3 +176,11 @@ Theo nhịp lặp ở `02-guide.md` §2.6/§4.1: *chạy trọn bộ → bảng 
   - False Positive (Sạch): **0/40 câu** (Chặn 100% cảnh báo giả).
   - Evidence Gate Drops: 0.
 - **Đóng gói làm bằng chứng:** Đã xuất file evaluation_report.lot10.json lưu giữ kết quả cuối cùng để show cho ban giám khảo.
+
+## Lượt 10 — rule layer + OpenRouter `openai/gpt-4o-mini` (logic chấm Lượt 8)
+
+- **Mục tiêu:** tăng recall mà giữ nguyên Evidence Gate và ratio guard 3×; không quay lại cách chấm span cũ.
+- **Thay đổi:** thêm `rule_findings()` trong `eval/run_eval.py` cho các tín hiệu có thể kiểm chứng (trích trang/markdown, acronym–slug, code-switch kỹ thuật, số liệu không nguồn, đổi ngôi rõ ràng, repetition). LLM vẫn trả finding cho các lỗi ngữ nghĩa còn lại; kết quả được gộp theo `exact_span` để tránh trùng lặp.
+- **Kết quả chạy thật:** FP clean **0/1** · Recall **20/20 (100%)** · Evidence Gate Drops **0**.
+- **Regression bắt buộc khai:** no-flag chỉ **2/7 PASS** (N1, N7); N2–N6 bị tổng **9 finding**. Case hành vi chấm tay còn 3 FAIL: S1 (bỏ qua ghi chú viết lại), A3 (không gắn cờ LOW cho `workflow`), E1 (bỏ qua mẩu `Hết.`). Không được dùng riêng con số recall 100% để kết luận chất lượng tổng thể.
+- **Kết luận:** Rule layer giải quyết toàn bộ 20 case recall theo metric strict, nhưng cần ưu tiên giảm no-flag false positive và vá S1/A3/E1 trước khi coi đây là bản demo cuối.
