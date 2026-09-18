@@ -5,10 +5,9 @@ slide mất ~11 phút, gấp đôi giới hạn 5 phút). Bấm giờ điện th
 giữa chừng. Ghi lại thời gian thật vào bảng cuối file sau khi đọc xong.
 
 **LƯU Ý SỐ LIỆU:** kịch bản dưới đây dùng số liệu **hiện tại, đã kiểm chứng** (65%/50%, gpt-4o) — KHÔNG
-dùng số "Gemini 70%" hay "GPT-4o Lượt 8: 45%" nếu bản PDF nộp form vẫn chưa kịp sửa. Nếu giám khảo nhìn
-thấy số khác trên slide so với số bạn nói, chủ động nói luôn: *"Số trên slide chưa kịp cập nhật, số đúng
-và mới nhất là [65% hoặc 50%], ghi đầy đủ ở spec.md §7 Lượt 13/16."* Thà tự nói trước còn hơn để giám
-khảo bắt được.
+dùng số "Gemini 70%" hay "GPT-4o Lượt 8: 45%" nếu bản PDF nộp form vẫn chưa kịp sửa. Nếu số trên slide
+khác với số nói ở đây, chủ động giải thích ngay: *"Số trên slide chưa kịp cập nhật, số đúng và mới nhất
+là [65% hoặc 50%], ghi đầy đủ ở spec.md §7."*
 
 ---
 

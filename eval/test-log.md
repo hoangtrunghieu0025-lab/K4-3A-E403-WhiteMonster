@@ -159,7 +159,7 @@ Theo nhịp lặp ở `02-guide.md` §2.6/§4.1: *chạy trọn bộ → bảng 
   - **Tổng: 11/12 PASS**, chỉ A3 FAIL. Việc sửa S1/S2 ở lượt 8 (thêm field `text` nhúng chỉ thị, bỏ cách gửi `scenario` giả) đã giải quyết dứt điểm vấn đề "không đánh giá được" tồn tại suốt 5 lượt liền.
 - **Bức tranh đầy đủ Lượt 8+9:** FP 0/1 ✅ · Recall 9/20 (45%) ❌ dưới bar · Gate Drops 1 · No-flag 4/7 · Case hành vi 11/12. **Hệ thống mạnh nhất ở phần từ chối/bảo mật (③ + SEC), yếu nhất ở recall cấy lỗi cơ bản** — đây là thứ tự ưu tiên sửa cho lượt sau, không phải phần hành vi.
 
-## Lượt 10 — 18/9, sửa 3 lỗ hổng prompt từ đọc kỹ 11 case FAIL của Lượt 8/9 (thực hiện với hỗ trợ của Claude theo yêu cầu nhóm)
+## Lượt 10 — 18/9, sửa 3 lỗ hổng prompt từ đọc kỹ 11 case FAIL của Lượt 8/9
 
 - **Note phụ (không phải lượt đo, chỉ để tránh nhầm số):** An báo đã thử `gemini-2.5-flash` ra 70% (14/20) nhưng chưa ghi log. Kiểm lại code lúc đó (`ffe1a8a`, 17/9 20:18) thì logic chấm dùng **thiếu ratio guard** — cùng lỗ hổng "AI trả cả câu vẫn tính PASS" mà Lượt 8 đã vá. Không so được 70% đó với số dưới đây (khác cả model lẫn thước đo), và cũng không có benchmark nào đối chiếu 2 model bằng cùng 1 logic chấm trong repo.
 - **Cải tiến công cụ trước khi sửa prompt:** `eval/run_eval.py` trước đây khi FAIL chỉ ghi `"-"` vào bảng, không lưu AI thực sự đã trả finding gì — không thể tìm nguyên nhân thật, chỉ đoán. Đã thêm cột debug log nguyên văn `findings` (recall) / finding oan (no-flag) khi FAIL.

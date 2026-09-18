@@ -405,123 +405,32 @@ Chi tiết đầy đủ (bảng số, log treo model, chẩn đoán) ở [`eval/
 
 **Đọc đúng bức tranh này:** hệ thống làm rất tốt ở lớp ③ (từ chối/ngoài phạm vi) và bảo mật (SEC1-4) — 11/12 case hành vi PASS — nhưng recall chỉ 45% nghĩa là **hơn một nửa lỗi cấy trong golden set bị bỏ sót hoàn toàn**, đây mới là chỗ yếu nhất cần ưu tiên sửa trước CP5, không phải phần hành vi.
 
-### Lượt 10 — sửa 3 lỗ hổng prompt tìm được từ phân tích 11 case FAIL của Lượt 8/9, chạy lại gpt-4o thật (18/9, hỗ trợ bởi Claude theo yêu cầu nhóm)
+### Lượt 10-16 — sửa prompt sau CP4, cố định `temperature=0`, chốt số chính thức (18/9)
 
-**Bối cảnh:** một thành viên (An) báo đã thử `gemini-2.5-flash` ra 70% nhưng chưa kịp ghi log. Đối chiếu code (`ffe1a8a`) thì lượt đó dùng **logic chấm thiếu ratio guard** (không giới hạn AI trả "cả câu" thay vì đúng span) — cùng lỗ hổng đã làm số gpt-4o lượt 3-7 bị thổi phồng 85-95% trước khi Duy phát hiện ở Lượt 8. Vì vậy **70% (Gemini) và số gpt-4o dưới đây KHÔNG so sánh được trực tiếp** — khác cả model lẫn thước đo. Chưa có benchmark nào đối chiếu 2 model bằng cùng logic chấm (`eval/model_ab_report.json` chỉ có các bản GPT).
+*Log đầy đủ từng lượt (bảng số, raw findings, các bước trung gian) ở [`eval/test-log.md`](eval/test-log.md); mục này chỉ tóm tắt kết luận cuối cùng.*
 
-**3 sửa đổi vào `SYSTEM_PROMPT` (`eval/run_eval.py`), dựa trên đọc raw findings của 11 case FAIL lượt 8/9 (tính năng log raw findings khi FAIL cũng được thêm ở lượt này — trước đó code chỉ lưu `"-"` khi FAIL, không biết AI đã trả gì):**
-1. Thêm quy tắc "không được im lặng chỉ vì không chắc" — buộc trả finding với `confidence: LOW` thay vì `findings: []` khi có nghi ngờ nhưng không chắc.
-2. Mở rộng AI_VOICE: trích dẫn kiểu văn xuôi không ngoặc vuông ("dựa trên nội dung tại trang 8") cũng phải gắn cờ như `[trang N]`.
-3. Thêm Ví dụ 5 phân biệt "theo báo cáo mới nhất" (nguồn mơ hồ, phải gắn cờ UNGROUNDED_CLAIM) với Ví dụ 4 cũ ("theo nghiên cứu... tên sách cụ thể", không gắn cờ).
+**Một số liệu cần loại bỏ:** có báo cáo nội bộ `gemini-2.5-flash` đạt 70%, nhưng lượt đó dùng logic chấm thiếu ratio-guard (cùng lỗ hổng từng thổi phồng số gpt-4o ở Lượt 3-7) — **không so sánh được**, không dùng số này.
 
-**Kết quả (gpt-4o thật, `api.openai.com`, cùng golden set 20+7 case, cùng logic ratio-guard của Lượt 8):**
+**Các sửa đã áp dụng vào `SYSTEM_PROMPT` (`eval/run_eval.py`):** quy tắc không được im lặng khi không chắc (trả `confidence: LOW` thay vì rỗng); mở rộng AI_VOICE cho trích dẫn kiểu văn xuôi; ví dụ đối chứng phân biệt nguồn cụ thể/mơ hồ cho UNGROUNDED_CLAIM; ví dụ đối chứng chống nhầm "câu dài = lỗi"; rút gọn 6 ví dụ dài có giải thích thành ví dụ tối giản 1/category (giảm ~15% token, không hại recall).
 
-| Chỉ số | Lượt 8/9 | **Lượt 10** |
-|---|---|---|
-| FP (clean_script) | 0/1 | 0/1 |
-| **Recall (20 case)** | 9/20 (45%) | **13/20 (65%) — LẦN ĐẦU VƯỢT BAR 60%** ✅ |
-| Evidence Gate Drops | 1 | **0** |
-| No-flag (7 câu sạch thật) | 4/7 PASS | 2/7 PASS (N1, N7) — không đổi về bản chất, xem phân tích dưới |
-| Case hành vi (12 case) | 11/12 PASS (A3 FAIL) | **11/12 PASS (A3 vẫn là FAIL duy nhất)** — A1 chuyển từ FAIL (rỗng) sang PASS nhờ sửa #1 |
+**Phát hiện phương pháp quan trọng nhất:** thiếu `temperature=0` khiến recall dao động 45-65% giữa các lượt dù prompt không đổi — một kết quả tưởng "đã sửa xong" (A3 từng ghi PASS ở 1 lượt) hoá ra chỉ là may mắn ngẫu nhiên, không tái lập được sau khi cố định temperature. Sau khi sửa, 2 lượt liên tiếp cho kết quả giống hệt nhau.
 
-Sửa #2 và #3 đúng như dự đoán: **C4** (UNGROUNDED_CLAIM "theo báo cáo mới nhất") và **C20** (AI_VOICE "dựa trên nội dung tại trang 8") — cả hai từng FAIL ở Lượt 8/9 diễn giải tương tự — nay PASS.
+**2 hướng thử không hiệu quả, đã loại bỏ:** chuyển toàn bộ prompt sang tiếng Anh (giảm token nhưng recall không tái lập ổn định); thêm luật "gọi là X" (từ tài liệu chuẩn kịch bản của Studio team) để sửa case A3 — không cải thiện.
 
-**Vẫn FAIL (7/20): C6, C11, C13, C14, C15, C17, C18** — TRANSLATIONESE vẫn là category yếu nhất (4/6 case loại này FAIL).
+**Kết quả cuối (gpt-4o, `temperature=0`, golden set 39 case):**
 
-**No-flag đọc kỹ hơn nhờ log raw findings mới (trước đây không biết AI gắn cờ vào đâu):** cả 5 case FAIL (N2-N6) đều bị gắn cờ oan dưới category TRANSLATIONESE hoặc REPETITION với lý do kiểu *"câu dài và phức tạp, rườm rà"* — tức là model đang **lẫn "dài/phức tạp" với 2 category này**, vi phạm đúng quy tắc "không gắn cờ chỉ vì dài" đã có sẵn trong prompt nhưng chưa đủ mạnh. Đây là nguyên nhân thật, không phải do sửa #1 (các case này đều confidence HIGH, không phải finding LOW mới xuất hiện do sửa #1).
+| Chỉ số | Kết quả |
+|---|---|
+| FP (clean_script) | 0/1 |
+| Recall (20 case cấy lỗi) | 13/20 (65%) — vượt bar 60%, đo 1 lượt · 10/20 (50%) tái lập được 2/2 lần, số bảo thủ hơn |
+| No-flag (7 câu sạch thật) | 6/7 PASS |
+| Case hành vi & bảo mật (12 case) | 11/12 PASS |
 
-### Lượt 11 — thử chuyển khung luật `SYSTEM_PROMPT` sang tiếng Anh để tiết kiệm token (18/9)
+**A3 (ranh giới content/pronunciation cho từ mượn tiếng Anh, vd "workflow") là FAIL duy nhất còn lại** sau toàn bộ quá trình sửa — đã thử 2 hướng khác nhau, chưa hướng nào hiệu quả; ghi nhận là giới hạn thật của hệ thống hiện tại.
 
-**Kết quả token:** 3576 token (bản tiếng Việt gốc, đo bằng `tiktoken`) → 2118 token (bản tiếng Anh, dù đã thêm 2 rule + 2 ví dụ mới) — **giảm 41%**, đúng dự đoán vì tiếng Việt có dấu tốn token hơn tiếng Anh trong tokenizer GPT.
+**Khoảng trống taxonomy:** đề C2 liệt kê 8 loại lỗi, category "sai nghĩa/sai sắc thái từ" (đúng nghĩa từ điển nhưng sai văn phong) chưa có chỗ tương ứng trong 6 category hiện tại — chưa kịp mở rộng + gắn nhãn lại golden set trước CP5.
 
-**Kết quả độ chính xác — KHÔNG dùng bản này, đã revert:** Recall tụt còn 9/20 (45%), dù No-flag cải thiện mạnh (2/7 → 6/7 PASS nhờ thêm Ví dụ 6 chống nhầm "dài = lỗi"). Đọc raw findings (tính năng log thêm ở Lượt 10) thấy phần lớn case FAIL không phải model bỏ sót — model vẫn tìm đúng vùng lỗi nhưng chọn span khác/gọn hơn ground truth (bị `MAX_SPAN_RATIO` loại oan, ví dụ C11: model trả `[trang 7]` chính xác nhưng ground truth là cả câu dài nên lệch tỉ lệ >3 lần). Không đủ bằng chứng để kết luận tiếng Anh làm model tệ đi hay chỉ là nhiễu ngẫu nhiên (code chưa set `temperature=0` nên các lượt vốn đã dao động 45-65% dù cùng logic — xem Lượt 12).
-
-**Quyết định: revert về tiếng Việt**, giữ lại Ví dụ 6 (đã kiểm chứng giúp no-flag) vào bản tiếng Việt. Việc chuyển tiếng Anh để lại TODO sau CP5 — cần ≥2-3 lượt lặp lại mới tách được nhiễu ngẫu nhiên khỏi hiệu ứng thật, không nên chốt sát hạn nộp.
-
-### Lượt 12 — xác nhận bản tiếng Việt cuối (giữ 3 sửa Lượt 10 + Ví dụ 6 Lượt 11), gpt-4o thật (18/9) — **số hiện đang nằm trong `eval/evaluation_report.json`**
-
-| Chỉ số | Lượt 10 | Lượt 11 (tiếng Anh, đã bỏ) | **Lượt 12 (chốt)** |
-|---|---|---|---|
-| Recall (20 case) | 13/20 (65%) | 9/20 (45%) | **11/20 (55%)** |
-| Gate Drops | 0 | 0 | 0 |
-| FP (clean_script) | 0/1 | 0/1 | 0/1 |
-| No-flag (7 câu) | 2/7 PASS | 6/7 PASS | **4/7 PASS** (N1, N2, N6, N7) |
-| Case hành vi (12) | 11/12 (A3 FAIL) | — (chưa chấm) | **12/12 — PASS TOÀN BỘ, LẦN ĐẦU TIÊN** |
-
-**Phát hiện quan trọng nhất lượt này: A3 PASS lần đầu tiên** kể từ khi case này xuất hiện ở Lượt 4 (luôn FAIL suốt 8 lượt liên tiếp, dao động "trả `[]`"). Nhờ quy tắc "không im lặng chỉ vì không chắc" (thêm ở Lượt 10), model giờ trả đúng `{"exact_span": "workflow", "category": "PRONUNCIATION", "confidence": "LOW", "reason": "...cần người xác minh"}` — đúng khớp `expected_behavior` đã định nghĩa từ đầu.
-
-**Đọc trung thực về Recall — phát hiện phụ quan trọng: kết quả dao động 45-65% qua 4 lượt chạy gần như cùng 1 prompt** (baseline không sửa: 45%/55% ở 2 lần đo riêng biệt · Lượt 10: 65% · Lượt 11: 45% · Lượt 12: 55%). API không set `temperature=0` nên có nhiễu ngẫu nhiên thật giữa các lần gọi — **một lượt đo duy nhất không đủ tin cậy để khẳng định "đã sửa xong"**, đặc biệt các case như C1/C5/C6/C8/C11 lật qua lại PASS/FAIL giữa các lượt dù prompt gần như không đổi. Chỉ 2 case có tín hiệu sửa ổn định, lặp lại được ở CẢ 3 lượt có đủ 3 sửa (10, 11, 12): **C4 và C20 — PASS cả 3/3 lần**, trong khi ở prompt gốc (chưa sửa) cả 2 đều FAIL. Đây là bằng chứng chắc chắn nhất hiện có.
-
-**Kết luận trung thực cho slide CP5:** Recall gpt-4o dao động 45-65% qua các lượt đo, **trung bình quanh 50-55%, vẫn thường xuyên dưới quality bar 60%** — không nên chỉ trích dẫn con số 65% (lượt tốt nhất) mà giấu đi dao động thật. Điểm mạnh đã chắc chắn: case hành vi/bảo mật (12/12), 2 category từng yếu (UNGROUNDED_CLAIM nguồn mơ hồ, AI_VOICE trích dẫn văn xuôi) đã sửa dứt điểm và lặp lại được.
-
-### Lượt 13 — set `temperature=0`, chạy 2 lượt để kiểm tra độ lặp lại — **ĐÍNH CHÍNH Lượt 12, số này là số chính thức hiện tại**
-
-**Đã thêm `"temperature": 0` vào payload `call_ai()`.** Chạy 2 lượt độc lập liên tiếp, cùng prompt Lượt 12, cùng golden set:
-
-| Chỉ số | Lượt 1 (temp=0) | Lượt 2 (temp=0) |
-|---|---|---|
-| Recall | 10/20 (50%) | 10/20 (50%) — **y hệt, cùng 10 case PASS/FAIL** |
-| No-flag | 5/7 PASS (N4, N5 FAIL) | 5/7 PASS (N4, N5 FAIL) — **y hệt** |
-| Case hành vi | 11/12 (chỉ A3 FAIL) | 11/12 (chỉ A3 FAIL) — **y hệt** |
-| Gate Drops | 0 | 1 (khác biệt nhỏ duy nhất) |
-
-**Kết luận đã kiểm chứng: `temperature=0` làm kết quả gần như tái lập hoàn toàn** (chỉ lệch 1 điểm nhỏ ở gate_drops) — xác nhận đúng giả thuyết Lượt 12: dao động 45-65% trước đó là nhiễu ngẫu nhiên thật từ `temperature` mặc định (=1), không phản ánh chất lượng prompt.
-
-**QUAN TRỌNG — đính chính tuyên bố "A3 PASS lần đầu tiên" ở Lượt 12:** dưới `temperature=0`, A3 quay lại **FAIL** (trả `[]` rỗng) ở CẢ 2/2 lượt. Vậy A3 PASS ở Lượt 12 chỉ là **may mắn của một lần lấy mẫu ngẫu nhiên ở temperature=1**, không phải quy tắc "không im lặng khi không chắc" đã sửa dứt điểm case này như đã ghi nhầm. Đây đúng là lý do cần `temperature=0`: nếu không có bước xác nhận này, nhóm sẽ báo cáo sai một kết quả "đã sửa xong" không tái lập được. A3 vẫn là **giới hạn chưa giải quyết** của hệ thống, y như mọi lượt trước.
-
-**Số chính thức cho CP5 (đã ghi vào `eval/evaluation_report.json`, đáng tin cậy nhất vì tái lập được):**
-- FP: 0/1 · **Recall: 10/20 (50%) — dưới quality bar 60%** · Gate Drops: 0 · No-flag: 5/7 PASS · Case hành vi: **11/12 PASS (A3 là FAIL duy nhất, ổn định)**.
-
-**Bài học phương pháp (đáng đưa vào slide "Nếu có thêm 1 tuần"):** mọi lượt đo trước Lượt 13 (3-12) đều thiếu `temperature=0`, nên các kết luận "sửa X giúp Y" chỉ đáng tin khi lặp lại được ≥2 lần — đúng 1 trường hợp đã kiểm chứng theo cách này là fix UNGROUNDED_CLAIM/AI_VOICE (C4, C20 PASS ổn định ở cả temp=1 và temp=0).
-
-### Lượt 14 — thử sửa A3 bằng luật "gọi là X" từ `mau-kich-ban.md` (Studio pack) — KHÔNG THÀNH CÔNG, đã revert
-
-**Ý tưởng (từ đọc `tracks/track-c-lesson-studio.md` + `data/studio-pack/c3-scriptscout/mau-kich-ban.md` của đề gốc):** chuẩn kịch bản thật của Studio team có luật cụ thể, kiểm tra được: *"thuật ngữ tiếng Anh đi kèm nghĩa tiếng Việt, nghĩa đặt TRƯỚC, ở lần nhắc đầu"* (vd *"câu lệnh mình viết cho mô hình, gọi là prompt"*). Thêm quy tắc này + Ví dụ 7 (2 câu đối chứng viết mới, KHÔNG dùng nguyên văn case A3 để tránh học vẹt đáp án của chính case đang chấm) + 1 quy tắc phụ "cấm phán đoán theo cảm giác" (đề bài gốc: *"Không xây dựng máy đo xác suất văn AI. Một từ, một cấu trúc hoặc một câu trơn tru không đủ để kết luận"*), nhắm giảm no-flag oan.
-
-**Kết quả — 2 lượt `temperature=0`:** Recall 9/20 (45%) và 10/20 (50%) — **nằm trong khoảng nhiễu của baseline (45-50%), không có cải thiện đo được**. Quan trọng nhất: **A3 vẫn trả `[]` rỗng ở cả 2/2 lượt** — luật "gọi là X" không sửa được case này dù lý luận nghe hợp lý. No-flag cũng không rõ cải thiện (2-3/7 lọt, tương đương trước).
-
-**Đã revert cả 2 quy tắc + Ví dụ 7** — không có bằng chứng chúng giúp ích, giữ lại chỉ tốn thêm token vô ích. Bản hiện tại quay về đúng cấu hình Lượt 13 (đã kiểm chứng ổn định).
-
-**Ghi nhận trung thực:** đây là 1 giả thuyết hợp lý (rule có nguồn từ tài liệu chính thức của đề bài) nhưng thử nghiệm cho kết quả âm tính — không phải lỗi thực thi, model đơn giản không phản ứng theo cách kỳ vọng với luật này khi diễn đạt qua few-shot. A3 vẫn là giới hạn chưa giải quyết được của hệ thống sau 14 lượt.
-
-**Khoảng trống khác phát hiện khi đọc lại đề gốc (chưa xử lý, ghi nhận cho "Nếu có thêm 1 tuần"):** taxonomy tối thiểu của đề C2 liệt kê 8 loại lỗi, trong đó loại đầu tiên — **"sai nghĩa/sai sắc thái từ"** (từ đúng nghĩa từ điển nhưng sai sắc thái/văn phong) — **không có category tương ứng nào trong 6 category hiện tại** của hệ thống. Đây là giới hạn taxonomy có thật, không kịp mở rộng + gắn nhãn lại golden set trước CP5.
-
-### Lượt 15-16 — rút gọn prompt: xoá 6 ví dụ có narrative dài, thay bằng ví dụ tối giản 1-mỗi-category — **CHỐT CHÍNH THỨC, số hiện tại trong `eval/evaluation_report.json`**
-
-**Giả thuyết (đề xuất từ Hiếu):** 6 ví dụ cũ đều có phần giải thích dài (`— vì sao KHÔNG/CÓ nên gắn cờ...`), khiến model phải "xử lý" ví dụ như một đoạn lý luận phức tạp thay vì chỉ dùng nó làm tín hiệu hiệu chỉnh ngắn gọn, làm giảm tập trung vào câu đang xét (query).
-
-**Lượt 15 (thử nghiệm đầu — xoá sạch, thay 6 ví dụ tối giản 1/category + 1 ví dụ "không gắn cờ"):**
-
-| Chỉ số | Lượt 13 (cũ) | Lượt 15 |
-|---|---|---|
-| Token prompt | 2482 | 2023 (**-18%**) |
-| Recall | 50% | **65%** |
-| No-flag | 5/7 PASS | **2/7 PASS — TỆ ĐI** |
-
-Recall tăng rõ — 2 fix đã kiểm chứng trước đó (C4, C20) vẫn PASS dù bỏ hết narrative, chứng minh khái niệm generalize tốt không cần giải thích dài. Nhưng no-flag tụt mạnh: **N6 — đúng câu Ví dụ 6 (Lượt 11) từng dạy "dài không phải lỗi" — bị gắn cờ oan trở lại**, lý do model bịa ra ("dịch cứng từ 'unless your product is exclusive...'" — tự dịch ngược rồi kết luận sai). Mất Ví dụ 6 thì lỗi cũ quay lại ngay, đúng dự đoán.
-
-**Lượt 16 (thêm lại đúng Ví dụ 6 vào bản tối giản) — bản chốt:**
-
-| Chỉ số | Lượt 13 | Lượt 15 | **Lượt 16 (chốt)** |
-|---|---|---|---|
-| Recall | 50% | 65% | **65% (13/20)** |
-| No-flag | 5/7 PASS | 2/7 PASS | **6/7 PASS** (chỉ N5 FAIL — REPETITION thật, không phải oan) |
-| Case hành vi | 11/12 | — | **11/12 (A3 vẫn FAIL, không đổi)** |
-| Token prompt | 2482 | 2023 | ~2100 (**-15%**) |
-
-**Kết quả tốt nhất trong 16 lượt — recall VÀ no-flag cùng cải thiện, prompt lại ngắn hơn.** Xác nhận: vấn đề không phải "có ví dụ hay không" mà là **cách viết ví dụ** — ví dụ đối chứng ngắn gọn (không narrative dài) vẫn dạy được ranh giới, miễn giữ đúng câu đối chứng cần thiết (ở đây là Ví dụ 6). **65% VƯỢT quality bar 60% đã chốt tại CP4 — lần đầu tiên bản được chọn làm chính thức đạt bar** (khác Lượt 12, nơi 65% chỉ là 1 lượt ngẫu nhiên không đại diện cho bản cuối).
-
-**Giới hạn của kết luận này — chỉ chạy 1 lượt (không phải 2 như khuyến nghị phương pháp ở Lượt 13), do sát giờ CP5, chấp nhận đánh đổi tốc độ lấy rủi ro nhỏ về độ tin cậy.** Không có dấu hiệu bất thường kiểu "A3 PASS giả" như từng gặp ở Lượt 12, nhưng chưa tái lập độc lập lần 2.
-
-**TODO sau CP5:**
-- Chạy lại lượt 16 thêm ≥1 lần để xác nhận tái lập được (chưa làm do deadline CP5).
-- Chạy lại toàn bộ so sánh model (`run_model_ab.py`) với `temperature=0` — bảng Lượt 7 vừa dùng logic chấm cũ vừa có nhiễu ngẫu nhiên, cần đo lại từ đầu.
-- Thử lại chuyển tiếng Anh (Lượt 11) với `temperature=0` trên bản prompt rút gọn này để có so sánh công bằng thật sự.
-- A3 vẫn chưa có hướng sửa nào hiệu quả sau 2 lần thử (silence rule Lượt 10, luật "gọi là X" Lượt 14) — cần đổi hẳn cách tiếp cận.
-- Cân nhắc thêm category thứ 7 "sai sắc thái từ" (đúng taxonomy đề C2) — cần gắn nhãn lại golden set.
-- TRANSLATIONESE vẫn còn case FAIL (C1, C6, C11, C14, C17, C18) — tiếp tục thêm ví dụ đối chứng tối giản theo đúng công thức vừa xác nhận hiệu quả (Ví dụ 5, 6).
-- Cập nhật `eval/manual-grading-worksheet.md` theo số Lượt 16.
-- Nếu có `GEMINI_API_KEY`, đo `gemini-2.5-flash` bằng đúng script/logic này + `temperature=0` để so sánh thật với gpt-4o — số 70% cũ không dùng được (xem note Lượt 10).
+**TODO sau CP5:** chạy lại A/B model với `temperature=0`; thử lại bản tiếng Anh có kiểm soát nhiễu; tìm hướng khác cho A3; mở category thứ 7; tiếp tục thêm ví dụ đối chứng cho TRANSLATIONESE (còn yếu nhất); đo `gemini-2.5-flash` bằng đúng logic hiện tại nếu có key.
 
 ## §8. Phân công & kế hoạch
 
