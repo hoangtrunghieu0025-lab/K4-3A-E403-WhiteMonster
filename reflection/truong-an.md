@@ -4,7 +4,7 @@
 
 Mình phụ trách kiểm tra và cải thiện evaluator cho hệ thống phát hiện văn phong AI/dịch máy trong kịch bản tiếng Việt. Mình đã đọc lại `test-log.md`, kiểm tra các commit và sửa phần chấm span để không tính sai finding rỗng hoặc span bao trùm cả câu. Mình cũng tham gia thêm rule layer để bắt các tín hiệu có thể kiểm chứng như page reference, markdown, acronym, code-switch, số liệu và repetition.
 
-Kết quả tốt nhất đạt được là recall strict 20/20 (100%), false positive trên tập sạch bằng 0 và Evidence Gate Drops bằng 0. Đồng thời, mình kiểm tra regression no-flag và ghi nhận rằng no-flag mới đạt 2/7, nên không dùng riêng con số recall 100% để kết luận hệ thống đã hoàn thiện.
+Kết quả tốt nhất đạt được là recall strict 20/20 (100%), false positive trên tập sạch bằng 0 và Evidence Gate Drops bằng 0. Đồng thời, mình kiểm tra regression no-flag và ghi nhận rằng no-flag mới đạt 2/7, nên không dùng riêng con số recall 100% để kết luận hệ thống đã hoàn thiện. Kết quả 100% ở trên là từ nhánh thử nghiệm riêng (rule layer), chưa merge vào bản nộp vì đánh đổi no-flag quá cao — bản nộp chính thức của nhóm sử dụng số đo 65%/50% như đã chốt trong `spec.md` và `demo-slides.pdf`.
 
 Ngoài ra, mình chuẩn bị prompt và một bộ 20 testcase recall mới, bao phủ translationese, repetition, code-switch, claim số liệu, tham chiếu trang/hình, nguyên câu tiếng Anh và thuật ngữ kỹ thuật.
 
