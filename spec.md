@@ -573,4 +573,5 @@ Recall tăng rõ — 2 fix đã kiểm chứng trước đó (C4, C20) vẫn PAS
 | 17/9 (CP4) | Thêm chọn tốc độ đọc Nhanh / Vừa / Chậm, mặc định Vừa, hiện tốc độ đo thật mỗi lần nghe | Người dùng thấy giọng quá nhanh; đo được giọng gốc Piper ~5 tiếng/giây |
 | 17/9 (CP4) | Bỏ tuỳ chọn giọng Gemini (`TTS_ENGINE`), chỉ còn Piper | Một giọng cho mọi máy, không phải cấu hình; Gemini TTS chậm và hay 503, lại không chỉnh được tốc độ |
 | 17/9 (CP4) | Từ tiếng Anh trong kịch bản đọc theo phiên âm tiếng Anh (espeak `en-us`) thay vì luật tiếng Việt | Người dùng nghe thấy tiếng Anh bị đọc sai; nghe thử phải gần cách công cụ dựng video đọc, nếu không sẽ báo lỗi đọc giả |
+| 18/9 (CP5) | Chưa sửa gì vào prototype dựa trên 2 lượt validation (Thái, Sơn) — giữ nguyên có lý do | Cả 2 phản hồi chỉ ra khác biệt theo **thể loại kịch bản** (giảng dạy chấp nhận nhiều hơn MC sự kiện), không phải lỗi cụ thể của agent cần vá gấp trước hạn nộp. Ghi nhận làm hướng cải tiến sau CP5 (vd: mức "temperature" hoặc chế độ văn phong theo thể loại, xem TODO `validation/README.md`) thay vì sửa vội không đủ thời gian kiểm chứng lại |
 
