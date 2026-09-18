@@ -6,5 +6,4 @@ Mỗi thành viên tạo file riêng `<ten>.md` trong thư mục này, tự vi�
 - Quyết định nào của nhóm mình không đồng ý, và vì sao vẫn theo
 - Nếu làm lại từ đầu, sẽ đổi gì
 
-TODO: chưa có file nào — 4 thành viên (Hoàng Trung Hiếu, Nguyễn Thọ Đạt, Đinh Trường An, Phan Đức Duy)
-mỗi người tự viết trước hạn CP5.
+Đủ 4 file — Hoàng Trung Hiếu, Nguyễn Thọ Đạt, Đinh Trường An, Phan Đức Duy.

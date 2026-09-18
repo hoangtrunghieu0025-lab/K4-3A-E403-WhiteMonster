@@ -81,7 +81,7 @@ Chi tiết kỹ thuật + chỗ neo từng nguyên tắc HAX: [`codebase/README.
 
 ---
 
-## 3. Việc cần làm tiếp *(ghi lúc 17/9 — CP5 đã qua giờ nộp 13:00 18/9, giữ bảng dưới làm lịch sử quyết định, không phải TODO còn treo)*
+## 3. Việc cần làm tiếp (17/9)
 
 | Việc | Đề xuất người làm | Hạn | Trạng thái tính đến CP5 |
 |---|---|---|---|
