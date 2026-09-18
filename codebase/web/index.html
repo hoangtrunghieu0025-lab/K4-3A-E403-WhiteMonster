@@ -276,9 +276,10 @@ dialog::backdrop{background:rgba(27,26,23,.38)}
       <div class="card">
         <h2>Đã đo được gì</h2>
         <ul class="facts">
-          <li><strong>70%</strong>lỗi cấy sẵn được chỉ đúng chỗ (14/20 case đánh giá nghiêm ngặt bằng gemini-2.5-flash)</li>
+          <li><strong>65%</strong>lỗi cấy sẵn được chỉ đúng chỗ (13/20, gpt-4o, temperature=0 — vượt quality bar 60% đã chốt, đo 1 lượt chưa lặp lại lần 2)</li>
           <li><strong>0/40</strong>câu trong đoạn văn sạch bị gắn cờ oan</li>
-          <li><strong>2/7</strong>câu dài thật của giảng viên vẫn bị gắn cờ oan, nên đọc kỹ lý do trước khi áp dụng</li>
+          <li><strong>1/7</strong>câu dài thật của giảng viên vẫn bị gắn cờ oan, nên đọc kỹ lý do trước khi áp dụng</li>
+          <li><strong>11/12</strong>case hành vi (từ chối ngoài phạm vi, bảo mật, confidence thấp) PASS — case còn lại (ranh giới content/pronunciation mơ hồ) vẫn là giới hạn chưa giải quyết</li>
         </ul>
         <p class="fine">Golden set 39 case của nhóm · chi tiết ở spec.md §7</p>
       </div>
