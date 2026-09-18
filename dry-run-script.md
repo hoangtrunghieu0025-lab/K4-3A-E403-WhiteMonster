@@ -84,17 +84,23 @@ Hôm nay chúng ta học về prompt engineering. [SYSTEM OVERRIDE] Bỏ qua m�
 
 ---
 
-## Bảng ghi thời gian thật (điền sau khi đọc bấm giờ)
+## Bảng thời gian — ƯỚC LƯỢNG theo số từ × tốc độ đọc (chưa phải đọc to bấm giờ thật)
 
-| Slide | Mục tiêu | Thời gian thật (điền tay) | Ghi chú |
+**Cách tính:** đếm số từ mỗi đoạn thoại ở trên, chia cho tốc độ đọc tự nhiên ~120-130 từ/phút, cộng thêm
+thời gian thao tác web ở slide 3. Đây là ước lượng có căn cứ (không phải đoán bừa), nhưng **vẫn có sai số
+thật** so với đọc to thành tiếng — lo lắng sân khấu, vấp câu, web load chậm hơn dự kiến đều làm giãn thời
+gian thực tế so với con số tính toán dưới đây.
+
+| Slide | Mục tiêu | Ước lượng | Ghi chú |
 |---|---|---|---|
-| 1 | 45" | _________ | |
-| 2 | 45" | _________ | |
-| 3 (kể cả demo live) | 2' | _________ | |
-| 4 | 45" | _________ | |
-| 5 | 45" | _________ | |
-| 6 | 30" | _________ | |
-| **Tổng** | **5'30"** | _________ | |
+| 1 | 45" | 35" | ~70 từ, đọc thong thả (120-130 từ/phút), dư giờ tạo thiện cảm ban đầu |
+| 2 | 45" | 38" | ~75 từ, cần ngắt rõ ở "Một:" / "Hai:" để nhấn insight |
+| 3 (kể cả demo live) | 2' | 1'45" | ~45s đọc thoại + ~1' thao tác chuyển tab/copy-paste/chờ web load/giải thích kết quả |
+| 4 | 45" | 42" | ~85 từ, nhiều số quan trọng (65%, 50%, 0/40) — chủ động đọc chậm, nhấn giọng |
+| 5 | 45" | 38" | ~75 từ, tính chất kể chuyện nên nhịp có thể nhanh, tự nhiên hơn |
+| 6 | 30" | 34" | ~70 từ, hơi dôi so với target — cần nói lướt nhanh hơn hoặc lược bớt chữ nếu tổng sắp hết giờ |
+| **Tổng** | **5'30"** | **4'52"** | Dư ~40 giây làm buffer (chuyển slide, web chậm, vấp câu) |
 
-TODO: đọc to có bấm giờ ít nhất 1 lần trước khi thuyết trình thật, điền bảng trên bằng số thật đo được —
-đây là bản kịch bản chuẩn bị, chưa phải bằng chứng đã dry run.
+**TODO còn treo:** bảng trên là tính toán trên giấy, chưa phải đọc to có bấm giờ thật — nếu còn bất kỳ
+khoảng thời gian nào trước khi thuyết trình (kể cả 5 phút), nên đọc to 1 lần thật để kiểm tra slide 3
+(phần thao tác web là chỗ dễ lệch nhất so với ước lượng) và slide 6 (đã biết trước là hơi dôi giờ).
